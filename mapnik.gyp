@@ -40,7 +40,7 @@
           ],
           'common_libraries': [],
           'python_includes':'<(python_root)/include',
-          'python_libs':'<(python_root)/lib'
+          'python_libs':'<(python_root)/libs'
       }, {
           'common_defines': ['SHAPE_MEMORY_MAPPED_FILE','U_CHARSET_IS_UTF8=1'],
           'common_libraries': [
@@ -164,6 +164,9 @@
           '<@(python_includes)'
         ],
         'msvs_settings': {
+          'libraries': [
+             'python27.lib'
+          ],
           'VCLinkerTool': {
             'AdditionalLibraryDirectories': [
                 '<@(python_libs)'
