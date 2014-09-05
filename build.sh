@@ -3,10 +3,7 @@
 set -u
 
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd ${ROOTDIR}
-
-mkdir -p build
-cd build
+#cd ${ROOTDIR}
 
 BASE_PATH=$(pwd)/mapnik-sdk
 
@@ -21,10 +18,12 @@ fi
 export PATH=${BASE_PATH}/bin:$PATH
 export PKG_CONFIG_PATH=${BASE_PATH}/lib/pkgconfig
 
-gyp/gyp ../mapnik.gyp --depth=. -Goutput_dir=.. \
+./run_gyp ./mapnik.gyp \
+  --depth=. -Goutput_dir=.. \
   -Dincludes=${BASE_PATH}/include \
   -Dlibs=${BASE_PATH}/lib \
-  --generator-output=./ -f make \
+  --generator-output=./build/ \
+  -f make \
   --no-duplicate-basename-check
 
-make -C targets/ V=1 -j2
+make -C ./build/ V=1 mapnik -j2
