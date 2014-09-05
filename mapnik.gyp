@@ -16,7 +16,7 @@
       'MAPNIK_THREADSAFE',
       'HAVE_CAIRO',
       'GRID_RENDERER',
-      'SVG_RENDERER'
+      'SVG_RENDERER',
       'BOOST_SPIRIT_USE_PHOENIX_V3=1'
     ],
     'common_includes': [
