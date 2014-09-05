@@ -29,6 +29,7 @@
       '<@(includes)/libxml2',
       '<@(includes)/cairo'
     ],
+    'python_root': '<!(python -c "import sys,ntpath,posixpath;print(sys.prefix).replace(ntpath.sep,posixpath.sep)")',
     "conditions": [
       ["OS=='win'", {
           'common_defines': [
@@ -38,8 +39,8 @@
              'BOOST_COMPILER="14.0"'
           ],
           'common_libraries': [],
-          'python_includes':'<!@(python -c "import sys;print(sys.prefix)")/include',
-          'python_libs':'<!@(python -c "import sys;print(sys.prefix)")/lib'
+          'python_includes':'<(python_root)/include',
+          'python_libs':'<(python_root)/lib'
       }, {
           'common_defines': ['SHAPE_MEMORY_MAPPED_FILE','U_CHARSET_IS_UTF8=1'],
           'common_libraries': [

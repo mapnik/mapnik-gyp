@@ -17,7 +17,7 @@ if NOT EXIST gyp (
 :: run find command and bail on error
 :: this ensures we have the unix find command on path
 :: before trying to run gyp
-find deps/clipper/src/ -name "*.cpp"
+find ../deps/clipper/src/ -name "*.cpp"
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 SET MAPNIK_SDK=%CD%\mapnik-sdk
