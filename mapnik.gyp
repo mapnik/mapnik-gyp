@@ -402,7 +402,14 @@
         "target_name": "conversions_test",
         "type": "executable",
         "sources": [ "../tests/cpp_tests/conversions_test.cpp"],
-        "dependencies": [ "mapnik" ]
+        "dependencies": [ "mapnik" ],
+        "conditions": [
+          ["OS=='win'", {
+             'libraries':[
+                'icuuc.lib'
+            ],
+          }]
+        ]
     },
     {
         "target_name": "exceptions_test",
