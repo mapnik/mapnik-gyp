@@ -164,9 +164,6 @@
           '<@(python_includes)'
         ],
         'msvs_settings': {
-          'libraries': [
-             'python27.lib'
-          ],
           'VCLinkerTool': {
             'AdditionalLibraryDirectories': [
                 '<@(python_libs)'
@@ -181,6 +178,7 @@
                 'libboost_regex-vc140-mt-1_56.lib',
                 'icuuc.lib',
                 'icuin.lib',
+                'python27.lib'
             ],
             'defines':['HAVE_ROUND','HAVE_HYPOT']
           },{

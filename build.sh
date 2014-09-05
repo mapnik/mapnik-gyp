@@ -26,4 +26,4 @@ export PKG_CONFIG_PATH=${BASE_PATH}/lib/pkgconfig
   -f make \
   --no-duplicate-basename-check
 
-make -C ./build/ V=1 mapnik -j2
+make -C ./build/ mapnik -j2
