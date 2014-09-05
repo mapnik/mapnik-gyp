@@ -21,7 +21,7 @@ Then build Mapnik:
 ```sh
 git clone https://github.com/mapnik/mapnik.git
 cd mapnik
-git https://github.com/mapnik/mapnik-gyp.git
+git clone https://github.com/mapnik/mapnik-gyp.git
 cd mapnik-gyp
 build
 ```
