@@ -17,6 +17,7 @@
       'HAVE_CAIRO',
       'GRID_RENDERER',
       'SVG_RENDERER'
+      'BOOST_SPIRIT_USE_PHOENIX_V3=1'
     ],
     'common_includes': [
       '../include', # mapnik
@@ -36,7 +37,8 @@
              'LIBXML_STATIC', # static libxml: libxml2_a.lib
              'BOOST_VARIANT_DO_NOT_USE_VARIADIC_TEMPLATES',
              'BOOST_LIB_TOOLSET="vc140"',
-             'BOOST_COMPILER="14.0"'
+             'BOOST_COMPILER="14.0"',
+             '_WINDOWS'
           ],
           'common_libraries': [],
           'python_includes':'<(python_root)/include',
