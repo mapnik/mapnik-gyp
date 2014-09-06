@@ -5,6 +5,8 @@
   'variables': {
     'includes%':'',
     'libs%':'',
+    'configuration%':'',
+    'platform%':'',
     'common_defines': [
       'BIGINT',
       'BOOST_REGEX_HAS_ICU',

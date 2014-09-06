@@ -26,6 +26,8 @@ SET DEPSDIR=..\..
 CALL gyp\gyp.bat mapnik.gyp --depth=. ^
  -Dincludes=%MAPNIK_SDK%/includes ^
  -Dlibs=%MAPNIK_SDK%/libs ^
+ -Dconfiguration=Release ^
+ -Dplatform=%BUILDPLATFORM% ^
  -f msvs -G msvs_version=2013 ^
  --generator-output=build ^
  --no-duplicate-basename-check

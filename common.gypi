@@ -1,6 +1,7 @@
 {
   "target_defaults": {
-    "default_configuration": "Release",
+    "default_configuration": "<(configuration)",
+    "msvs_configuration_platform": "<(platform)",
     "msbuild_toolset":"v140",
     "msvs_disabled_warnings": [ 4068,4244,4005,4506,4345,4804,4805,4661 ],
     "msvs_settings": {
