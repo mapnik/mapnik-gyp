@@ -290,12 +290,12 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q ..\fonts\dejavu-fonts-ttf-2.33\ttf\*ttf %MAPNIK_SDK%\libs\mapnik\fonts\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 :: move python binding into local testable location
-xcopy /q .\build\Release\_mapnik.pyd bindings\python\mapnik\ /Y
-echo from os.path import normpath,join,dirname > bindings\python\mapnik\paths.py
-echo mapniklibpath = '%MAPNIK_SDK%/libs/mapnik' >> bindings\python\mapnik\paths.py
-echo mapniklibpath = normpath(join(dirname(__file__),mapniklibpath)) >> bindings\python\mapnik\paths.py
-echo inputpluginspath = join(mapniklibpath,'input') >> bindings\python\mapnik\paths.py
-echo fontscollectionpath = join(mapniklibpath,'fonts') >> bindings\python\mapnik\paths.py
+xcopy /q .\build\Release\_mapnik.pyd ..\bindings\python\mapnik\ /Y
+echo from os.path import normpath,join,dirname > ..\bindings\python\mapnik\paths.py
+echo mapniklibpath = '%MAPNIK_SDK%/libs/mapnik' >> ..\bindings\python\mapnik\paths.py
+echo mapniklibpath = normpath(join(dirname(__file__),mapniklibpath)) >> ..\bindings\python\mapnik\paths.py
+echo inputpluginspath = join(mapniklibpath,'input') >> ..\bindings\python\mapnik\paths.py
+echo fontscollectionpath = join(mapniklibpath,'fonts') >> ..\bindings\python\mapnik\paths.py
 echo __all__ = [mapniklibpath,inputpluginspath,fontscollectionpath] >> ..\bindings\python\mapnik\paths.py
 
 :: plugins
