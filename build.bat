@@ -270,7 +270,13 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 ::msbuild /m:2 /t:mapnik /p:BuildInParellel=true .\build\mapnik.sln /p:Configuration=Release
 
-msbuild /m:%NUMBER_OF_PROCESSORS% /p:BuildInParellel=true .\build\mapnik.sln /p:Configuration=Release
+msbuild ^
+/m:%NUMBER_OF_PROCESSORS% ^
+/p:BuildInParellel=true ^
+.\build\mapnik.sln ^
+/p:Configuration=Release ^
+/toolsversion:%TOOLS_VERSION% ^
+/p:Platform=%BUILDPLATFORM%
 
 :: /t:rebuild
 :: /v:diag > build.log
