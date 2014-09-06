@@ -38,7 +38,7 @@
     "cflags_cc": ["-std=c++11"],
     "configurations": {
       "Debug": {
-        "defines": [ "DEBUG" ],
+        "defines": [ "DEBUG","_DEBUG" ],
         "msvs_settings": {
           "VCCLCompilerTool": {
             "RuntimeLibrary": "3",
@@ -92,24 +92,6 @@
           "DEAD_CODE_STRIPPING": "YES",
           "GCC_INLINES_ARE_PRIVATE_EXTERN": "YES"
         }
-      },
-      "Debug_Win32": {
-        'inherit_from': ['Debug'],
-        "msvs_configuration_platform": "Win32",
-        "defines": [ "_DEBUG"],
-      },
-      "Debug_x64": {
-        'inherit_from': ['Debug'],
-        "msvs_configuration_platform": "x64",
-        "defines": [ "_DEBUG"],
-      },
-      "Release_Win32": {
-        'inherit_from': ['Release'],
-        "msvs_configuration_platform": "Win32"
-      },
-      "Release_x64": {
-        'inherit_from': ['Release'],
-        "msvs_configuration_platform": "x64"
       }
     }
   }

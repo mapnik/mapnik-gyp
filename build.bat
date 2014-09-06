@@ -189,7 +189,7 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: bin
 xcopy /q /d %DEPSDIR%\protobuf\vsprojects\Release\protoc.exe %MAPNIK_SDK%\bin /Y
-xcopy /q mapnik-config.bat %MAPNIK_SDK%\bin /Y
+xcopy /q /d mapnik-config.bat %MAPNIK_SDK%\bin /Y
 
 :: headers for plugins
 xcopy /q /d %DEPSDIR%\postgresql\src\interfaces\libpq\libpq-fe.h %MAPNIK_SDK%\includes\ /Y
@@ -271,11 +271,12 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ::msbuild /m:2 /t:mapnik /p:BuildInParellel=true .\build\mapnik.sln /p:Configuration=Release
 
 msbuild ^
-/m:%NUMBER_OF_PROCESSORS% ^
-/p:BuildInParellel=true ^
 .\build\mapnik.sln ^
-/p:Configuration=Release ^
+/nologo ^
+/m:%NUMBER_OF_PROCESSORS% ^
 /toolsversion:%TOOLS_VERSION% ^
+/p:BuildInParellel=true ^
+/p:Configuration=Release ^
 /p:Platform=%BUILDPLATFORM%
 
 :: /t:rebuild
