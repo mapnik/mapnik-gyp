@@ -285,15 +285,17 @@ msbuild ^
 :: /v:diag > build.log
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 :: install mapnik libs
-xcopy /q .\build\Release\mapnik.lib %MAPNIK_SDK%\libs\ /Y
+xcopy /q /d .\build\Release\mapnik.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q .\build\Release\mapnik.dll %MAPNIK_SDK%\libs\ /Y
+xcopy /q /d .\build\Release\mapnik.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
-xcopy /q ..\fonts\dejavu-fonts-ttf-2.33\ttf\*ttf %MAPNIK_SDK%\libs\mapnik\fonts\ /Y
+xcopy /q /d ..\fonts\dejavu-fonts-ttf-2.33\ttf\*ttf %MAPNIK_SDK%\libs\mapnik\fonts\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 :: move python binding into local testable location
-xcopy /q .\build\Release\_mapnik.pyd ..\bindings\python\mapnik\ /Y
+:: * hack from http://stackoverflow.com/a/14488464/2333354
+:: because otherwise xcopy can't tell if its a file or directory and will prompt
+xcopy /q /s /d .\build\Release\_mapnik.pyd ..\bindings\python\mapnik\_mapnik.pyd* /Y
 echo from os.path import normpath,join,dirname > ..\bindings\python\mapnik\paths.py
 echo mapniklibpath = '%MAPNIK_SDK%/libs/mapnik' >> ..\bindings\python\mapnik\paths.py
 echo mapniklibpath = normpath(join(dirname(__file__),mapniklibpath)) >> ..\bindings\python\mapnik\paths.py
@@ -329,8 +331,6 @@ if NOT EXIST get-pip.py (
     C:\Python27\Scripts\pip.exe install nose
     IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 )
-xcopy /i /d /s /q .\build\Release\_mapnik.pyd ..\bindings\python\mapnik\_mapnik.pyd /Y
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 SET GDAL_DATA=%MAPNIK_SDK%\share\gdal
@@ -351,7 +351,7 @@ if NOT EXIST %ICU_DATA% (
 
 if NOT EXIST %MAPNIK_SDK%\share\icu\icudt53l.dat (
     wget --no-check-certificate https://github.com/mapnik/mapnik-packaging/raw/master/osx/icudt53l_only_collator_and_breakiterator.dat
-    xcopy /q icudt53l_only_collator_and_breakiterator.dat %MAPNIK_SDK%\share\icu\icudt53l.dat /Y
+    xcopy /q /d icudt53l_only_collator_and_breakiterator.dat %MAPNIK_SDK%\share\icu\icudt53l.dat* /Y
 )
 
 SET PYTHONPATH=%CD%\..\bindings\python
