@@ -5,6 +5,7 @@
     "msvs_disabled_warnings": [ 4068,4244,4005,4506,4345,4804,4805,4661 ],
     "msvs_settings": {
       "VCCLCompilerTool": {
+        'ObjectFile': '$(IntDir)/%(RelativeDir)/',
         "ExceptionHandling": 1,
         "RuntimeTypeInfo": "true"
       }
@@ -56,16 +57,18 @@
         "defines": [ "NDEBUG" ],
         "msvs_settings": {
           "VCCLCompilerTool": {
-            "RuntimeLibrary": 0,
-            "Optimization": 3,
-            "FavorSizeOrSpeed": 1,
-            "InlineFunctionExpansion": 2,
-            "OmitFramePointers": "true",
-            "EnableIntrinsicFunctions": "true",
-            "AdditionalOptions": [
-              "/MP"
+            'RuntimeLibrary': '2', #0:/MT, 2:/MD,
+            'Optimization': 3, # /Ox, full optimization
+            'FavorSizeOrSpeed': 1, # /Ot, favour speed over size
+            'InlineFunctionExpansion': 2, # /Ob2, inline anything eligible
+            #'WholeProgramOptimization': 'true', # /GL, whole program optimization, needed for LTCG
+            'OmitFramePointers': 'true',
+            #'EnableFunctionLevelLinking': 'true',
+            'EnableIntrinsicFunctions': 'true',
+            'AdditionalOptions': [
+              '/MP', # compile across multiple CPUs
             ],
-            "DebugInformationFormat": "0"
+            'DebugInformationFormat': '0'
           },
           "VCLibrarianTool": {
             "AdditionalOptions": [
@@ -73,9 +76,14 @@
             ],
           },
           "VCLinkerTool": {
-            "LinkTimeCodeGeneration": 1,
-            "LinkIncremental": 2,
-            "GenerateDebugInformation": "false"
+            #'LinkTimeCodeGeneration': 1, # link-time code generation
+            #'OptimizeReferences': 2, # /OPT:REF
+            #'EnableCOMDATFolding': 2, # /OPT:ICF
+            'LinkIncremental': 2, # force incremental linking
+            'GenerateDebugInformation': 'false',
+            'AdditionalOptions': [
+                #'/NODEFAULTLIB:libcmt.lib'
+            ],
           }
         },
         "xcode_settings": {
