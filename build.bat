@@ -134,15 +134,27 @@ xcopy /q /d %DEPSDIR%\harfbuzz-build\harfbuzz.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\freetype\freetype.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\icu\lib\icuuc.lib %MAPNIK_SDK%\libs\ /Y
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\icu\lib\icuin.lib %MAPNIK_SDK%\libs\ /Y
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\icu\bin\icuuc53.dll %MAPNIK_SDK%\libs\ /Y
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\icu\bin\icudt53.dll %MAPNIK_SDK%\libs\ /Y
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\icu\bin\icuin53.dll %MAPNIK_SDK%\libs\ /Y
+if "%BOOSTADDRESSMODEL%"=="64" (
+  xcopy /q /d %DEPSDIR%\icu\lib64\icuuc.lib %MAPNIK_SDK%\libs\ /Y
+  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+  xcopy /q /d %DEPSDIR%\icu\lib64\icuin.lib %MAPNIK_SDK%\libs\ /Y
+  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+  xcopy /q /d %DEPSDIR%\icu\bin64\icuuc53.dll %MAPNIK_SDK%\libs\ /Y
+  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+  xcopy /q /d %DEPSDIR%\icu\bin64\icudt53.dll %MAPNIK_SDK%\libs\ /Y
+  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+  xcopy /q /d %DEPSDIR%\icu\bin64\icuin53.dll %MAPNIK_SDK%\libs\ /Y
+) ELSE (
+  xcopy /q /d %DEPSDIR%\icu\lib\icuuc.lib %MAPNIK_SDK%\libs\ /Y
+  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+  xcopy /q /d %DEPSDIR%\icu\lib\icuin.lib %MAPNIK_SDK%\libs\ /Y
+  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+  xcopy /q /d %DEPSDIR%\icu\bin\icuuc53.dll %MAPNIK_SDK%\libs\ /Y
+  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+  xcopy /q /d %DEPSDIR%\icu\bin\icudt53.dll %MAPNIK_SDK%\libs\ /Y
+  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+  xcopy /q /d %DEPSDIR%\icu\bin\icuin53.dll %MAPNIK_SDK%\libs\ /Y
+)
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\libxml2\win32\bin.msvc\libxml2_a.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
@@ -162,13 +174,19 @@ xcopy /q /d %DEPSDIR%\zlib\zlib.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\proj\src\proj.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\webp\output\release-dynamic\x86\lib\libwebp_dll.lib %MAPNIK_SDK%\libs\ /Y
+xcopy /q /d %DEPSDIR%\webp\output\release-dynamic\%WEBP_PLATFORM%\lib\libwebp_dll.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\webp\output\release-dynamic\x86\bin\libwebp.dll %MAPNIK_SDK%\libs\ /Y
+xcopy /q /d %DEPSDIR%\webp\output\release-dynamic\%WEBP_PLATFORM%\bin\libwebp.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\libpng\projects\vstudio\Release\libpng16.lib %MAPNIK_SDK%\libs\ /Y
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\libpng\projects\vstudio\Release\libpng16.dll %MAPNIK_SDK%\libs\ /Y
+if "%BOOSTADDRESSMODEL%"=="64" (
+  xcopy /q /d %DEPSDIR%\libpng\projects\vstudio\x64\Release\libpng16.lib %MAPNIK_SDK%\libs\ /Y
+  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+  xcopy /q /d %DEPSDIR%\libpng\projects\vstudio\x64\Release\libpng16.dll %MAPNIK_SDK%\libs\ /Y
+) ELSE (
+  xcopy /q /d %DEPSDIR%\libpng\projects\vstudio\Release\libpng16.lib %MAPNIK_SDK%\libs\ /Y
+  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+  xcopy /q /d %DEPSDIR%\libpng\projects\vstudio\Release\libpng16.dll %MAPNIK_SDK%\libs\ /Y
+)
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\jpeg\libjpeg.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
