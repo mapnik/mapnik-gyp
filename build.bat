@@ -346,7 +346,7 @@ if NOT EXIST get-pip.py (
     IF %ERRORLEVEL% NEQ 0 GOTO ERROR
     python get-pip.py
     IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-    C:\Python27\Scripts\pip.exe install nose
+    pip.exe install nose
     IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 )
 
