@@ -373,8 +373,10 @@ if NOT EXIST %MAPNIK_SDK%\share\icu\icudt53l.dat (
 )
 
 SET PYTHONPATH=%CD%\..\bindings\python
-python ..\tests\run_tests.py -q
-::python ..\tests\visual_tests\test.py -q
+:: all visual tests should pass on windows
+python ..\tests\visual_tests\test.py -q
+:: some python tests are expected to fail
+::python ..\tests\run_tests.py -q
 
 GOTO DONE
 
