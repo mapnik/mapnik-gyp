@@ -224,27 +224,27 @@
           ]
         ]
     },
-    {
-        "target_name": "shapeindex",
-        "type": "executable",
-        "sources": [ '../src/box2d.cpp', '<!@(find ../utils/shapeindex/ -name "*.cpp")' ],
-        'include_dirs':['../plugins/input/shape/'],
-        "dependencies": [ "mapnik" ],
-        "conditions": [
-          ["OS=='win'", {
-             'libraries':[
-                'libboost_program_options-vc140-mt-1_56.lib',
-                'libboost_system-vc140-mt-1_56.lib',
-            ],
-          },{
-              'libraries':[
-                '-lboost_system',
-                '-lboost_program_options'
-              ]
-            }
-          ]
-        ]
-    },
+#    {
+#        "target_name": "shapeindex",
+#        "type": "executable",
+#        "sources": [ '../src/box2d.cpp', '<!@(find ../utils/shapeindex/ -name "*.cpp")' ],
+#        'include_dirs':['../plugins/input/shape/'],
+#        "dependencies": [ "mapnik" ],
+#        "conditions": [
+#          ["OS=='win'", {
+#             'libraries':[
+#                'libboost_program_options-vc140-mt-1_56.lib',
+#                'libboost_system-vc140-mt-1_56.lib',
+#            ],
+#          },{
+#              'libraries':[
+#                '-lboost_system',
+#                '-lboost_program_options'
+#              ]
+#            }
+#          ]
+#        ]
+#    },
     {
         "target_name": "shape",
         "type": "loadable_module",
