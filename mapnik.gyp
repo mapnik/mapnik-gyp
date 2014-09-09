@@ -228,6 +228,7 @@
         "target_name": "shapeindex",
         "type": "executable",
         "sources": [ '<!@(find ../utils/shapeindex/ -name "*.cpp")' ],
+        'include_dirs':['../plugins/input/shape'],
         "dependencies": [ "mapnik" ],
         "conditions": [
           ["OS=='win'", {
