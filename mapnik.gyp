@@ -248,7 +248,7 @@
         "target_name": "shape",
         "type": "loadable_module",
         "product_extension": "input",
-        "sources": [ '<!@(find ../plugins/input/shape/ -name "*.cpp")' ],
+        "sources": [ '../../src/box2d.cpp, <!@(find ../plugins/input/shape/ -name "*.cpp")' ],
         "dependencies": [ "mapnik" ],
         "conditions": [
           ["OS=='win'", {
