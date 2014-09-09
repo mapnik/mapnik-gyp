@@ -227,7 +227,7 @@
     {
         "target_name": "shapeindex",
         "type": "executable",
-        "sources": [ '../../src/box2d.cpp', '<!@(find ../utils/shapeindex/ -name "*.cpp")' ],
+        "sources": [ '../src/box2d.cpp', '<!@(find ../utils/shapeindex/ -name "*.cpp")' ],
         'include_dirs':['../plugins/input/shape/'],
         "dependencies": [ "mapnik" ],
         "conditions": [
