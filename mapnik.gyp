@@ -227,8 +227,8 @@
     {
         "target_name": "shapeindex",
         "type": "executable",
-        "sources": [ '<!@(find ../utils/shapeindex/ -name "*.cpp")' ],
-        'include_dirs':['../plugins/input/shape'],
+        "sources": [ '../../src/box2d.cpp', '<!@(find ../utils/shapeindex/ -name "*.cpp")' ],
+        'include_dirs':['../plugins/input/shape/'],
         "dependencies": [ "mapnik" ],
         "conditions": [
           ["OS=='win'", {
@@ -249,7 +249,7 @@
         "target_name": "shape",
         "type": "loadable_module",
         "product_extension": "input",
-        "sources": [ '../../src/box2d.cpp, <!@(find ../plugins/input/shape/ -name "*.cpp")' ],
+        "sources": [ '<!@(find ../plugins/input/shape/ -name "*.cpp")' ],
         "dependencies": [ "mapnik" ],
         "conditions": [
           ["OS=='win'", {
