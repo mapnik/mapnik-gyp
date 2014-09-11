@@ -308,6 +308,10 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d .\build\Release\mapnik.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
+:: install additional bins
+xcopy /q /d .\build\Release\shapeindex.exe %MAPNIK_SDK%\bin\ /Y
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
 xcopy /q /d ..\fonts\dejavu-fonts-ttf-2.33\ttf\*ttf %MAPNIK_SDK%\libs\mapnik\fonts\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 :: move python binding into local testable location
