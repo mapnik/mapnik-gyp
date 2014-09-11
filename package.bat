@@ -1,0 +1,33 @@
+@echo off
+SETLOCAL
+SET EL=0
+SET MAPNIKGYPDIR=%CD%
+echo ------ packaging mapnik sdk -----
+
+cd ..
+FOR /F "tokens=*" %%i in ('git describe') do SET GITVERSION=%%i
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+CD %MAPNIKGYPDIR%
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+ECHO mapnik %GITVERSION%
+
+SET PKGNAME=mapnik-win-sdk-x%TARGET_ARCH%-%GITVERSION%.7z
+ECHO packaging to %PKGNAME%
+
+IF EXIST %PKGNAME% DEL %PKGNAME%
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+7z a -mx9 %PKGNAME% mapnik-sdk
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+
+GOTO DONE
+
+:ERROR
+SET EL=%ERRORLEVEL%
+echo ----------ERROR NODE_MAPNIK --------------
+
+:DONE
+CD %MAPNIKGYPDIR%
+EXIT /b %EL%
