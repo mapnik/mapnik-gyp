@@ -18,12 +18,13 @@ fi
 export PATH=${BASE_PATH}/bin:$PATH
 export PKG_CONFIG_PATH=${BASE_PATH}/lib/pkgconfig
 
-./run_gyp ./mapnik.gyp \
+./gyp/gyp ./mapnik.gyp \
   --depth=. -Goutput_dir=.. \
   -Dincludes=${BASE_PATH}/include \
+  -Dconfiguration=Release \
   -Dlibs=${BASE_PATH}/lib \
-  --generator-output=./build/ \
+  --generator-output=./unix-build/ \
   -f make \
   --no-duplicate-basename-check
 
-make -C ./build/ mapnik -j2 V=1
+make -C ./unix-build/ mapnik -j2 V=1
