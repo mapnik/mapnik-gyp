@@ -66,11 +66,6 @@
       'defines': [
         '<@(common_defines)'
       ],
-      "conditions": [
-        ["OS=='win'", {
-           'defines': ['MAPNIK_EXPORTS'],
-        }]
-      ],
       'include_dirs':[
           '<@(common_includes)'
       ]
@@ -83,11 +78,6 @@
       ],
       'defines': [
         '<@(common_defines)'
-      ],
-      "conditions": [
-        ["OS=='win'", {
-           'defines': ['MAPNIK_EXPORTS'],
-        }]
       ],
       'include_dirs':[
           '<@(common_includes)'
