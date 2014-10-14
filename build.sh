@@ -58,7 +58,7 @@ if [[ $COVERITY == true ]];then
     --form description="Mapnik 3.x alpha build" \
     https://scan.coverity.com/builds?project=mapnik%2Fmapnik
 else
-  if [[ ! -f ninja ]]; then
+  if [[ ! -d ninja ]]; then
       git clone git://github.com/martine/ninja.git
       ./bootstrap.py
       cd ../
@@ -71,5 +71,5 @@ else
       -Dconfiguration=Release \
       -Dlibs=${BASE_PATH}/lib \
       --no-duplicate-basename-check
-  ninja/ninja -C out/Release/
+   ninja/ninja -C out/Release/
 fi

@@ -58,13 +58,57 @@
   },
   'targets': [
     {
+      'target_name': 'mapnik_wkt',
+      'type': 'static_library',
+      'sources': [
+        '<!@(find ../src/wkt/ -name "*.cpp")'
+      ],
+      'defines': [
+        '<@(common_defines)'
+      ],
+      "conditions": [
+        ["OS=='win'", {
+           'defines': ['MAPNIK_EXPORTS'],
+        }]
+      ],
+      'include_dirs':[
+          '<@(common_includes)'
+      ]
+    },
+    {
+      'target_name': 'mapnik_json',
+      'type': 'static_library',
+      'sources': [
+        '<!@(find ../src/json/ -name "*.cpp")'
+      ],
+      'defines': [
+        '<@(common_defines)'
+      ],
+      "conditions": [
+        ["OS=='win'", {
+           'defines': ['MAPNIK_EXPORTS'],
+        }]
+      ],
+      'include_dirs':[
+          '<@(common_includes)'
+      ]
+    },
+    {
       'target_name': 'mapnik',
       'product_name': 'mapnik',
       'type': 'shared_library',
+      'dependencies': [ 'mapnik_wkt', 'mapnik_json' ],
       'sources': [
         '<!@(find ../deps/agg/src/ -name "*.cpp")',
         '<!@(find ../deps/clipper/src/ -name "*.cpp")',
-        '<!@(find ../src -name "*.cpp")'
+        '<!@(find ../src/agg/ -name "*.cpp")',
+        '<!@(find ../src/cairo/ -name "*.cpp")',
+        '<!@(find ../src/grid/ -name "*.cpp")',
+        '<!@(find ../src/group/ -name "*.cpp")',
+        '<!@(find ../src/renderer_common/ -name "*.cpp")',
+        '<!@(find ../src/svg/ -name "*.cpp")',
+        '<!@(find ../src/text/ -name "*.cpp")',
+        '<!@(find ../src/ -name "*.cpp" -maxdepth 1)'
       ],
       'xcode_settings': {
         'SDKROOT': 'macosx',
