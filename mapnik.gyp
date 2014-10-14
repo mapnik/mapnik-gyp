@@ -72,7 +72,8 @@
         'PUBLIC_HEADERS_FOLDER_PATH': 'include',
         'OTHER_CPLUSPLUSFLAGS':[
           '-ftemplate-depth-300'
-        ]
+        ],
+        'DYLIB_INSTALL_NAME_BASE': '@loader_path'
       },
       'msvs_settings': {
         'VCLinkerTool': {
@@ -174,6 +175,12 @@
             ]
           }
         },
+        "xcode_settings": {
+          "WARNING_CFLAGS": [
+            "-Wno-missing-field-initializers"
+          ],
+          'DYLIB_INSTALL_NAME_BASE': '@rpath'
+        },
         "conditions": [
           ["OS=='win'", {
              'libraries':[
@@ -193,9 +200,6 @@
           ],
           [ 'OS=="mac"', {
             'libraries': [ '-undefined dynamic_lookup' ],
-            'xcode_settings': {
-              'DYLIB_INSTALL_NAME_BASE': '@rpath'
-            },
           }]
         ]
     },
@@ -418,6 +422,8 @@
                 'libboost_filesystem-vc140-mt-1_56.lib',
                'libboost_system-vc140-mt-1_56'
             ],
+          } , {
+            'libraries': [ '-lboost_system','-lboost_filesystem']
           }]
         ]
     },
@@ -431,6 +437,8 @@
              'libraries':[
                 'icuuc.lib'
             ],
+          } , {
+            'libraries': [ '-lboost_system','-lboost_filesystem']
           }]
         ]
     },
@@ -445,6 +453,8 @@
                 'libboost_filesystem-vc140-mt-1_56.lib',
                'libboost_system-vc140-mt-1_56'
             ],
+          } , {
+            'libraries': [ '-lboost_system','-lboost_filesystem']
           }]
         ]
     },
@@ -459,6 +469,8 @@
                 'libboost_filesystem-vc140-mt-1_56.lib',
                'libboost_system-vc140-mt-1_56'
             ],
+          } , {
+            'libraries': [ '-lboost_system','-lboost_filesystem']
           }]
         ]
     },
@@ -474,6 +486,8 @@
                 'libboost_filesystem-vc140-mt-1_56.lib',
                'libboost_system-vc140-mt-1_56'
             ],
+          } , {
+            'libraries': [ '-lboost_system','-lboost_filesystem']
           }]
         ]
     },
@@ -488,6 +502,8 @@
                 'libboost_filesystem-vc140-mt-1_56.lib',
                'libboost_system-vc140-mt-1_56'
             ],
+          } , {
+            'libraries': [ '-lboost_system','-lboost_filesystem']
           }]
         ]
     },
@@ -502,6 +518,8 @@
                 'libboost_filesystem-vc140-mt-1_56.lib',
                'libboost_system-vc140-mt-1_56'
             ],
+          } , {
+            'libraries': [ '-lboost_system','-lboost_filesystem']
           }]
         ]
     },
@@ -521,6 +539,8 @@
              'libraries':[
                 'libboost_system-vc140-mt-1_56.lib'
             ],
+          } , {
+            'libraries': [ '-lboost_system','-lboost_filesystem']
           }]
         ]
     },
