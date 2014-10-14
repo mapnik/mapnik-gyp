@@ -97,7 +97,6 @@
       'target_name': 'mapnik',
       'product_name': 'mapnik',
       'type': 'shared_library',
-      'dependencies': [ 'mapnik_wkt', 'mapnik_json' ],
       'sources': [
         '<!@(find ../deps/agg/src/ -name "*.cpp")',
         '<!@(find ../deps/clipper/src/ -name "*.cpp")',
@@ -208,7 +207,7 @@
         "type": "loadable_module",
         "product_extension": "pyd",
         "sources": [ '<!@(find ../bindings/python/ -name "*.cpp")' ],
-        "dependencies": [ "mapnik" ],
+        "dependencies": [ "mapnik", 'mapnik_wkt', 'mapnik_json' ],
         'include_dirs': [
           '<@(python_includes)'
         ],
@@ -319,7 +318,7 @@
         "type": "loadable_module",
         "product_extension": "input",
         "sources": [ '<!@(find ../plugins/input/csv/ -name "*.cpp")' ],
-        "dependencies": [ "mapnik" ],
+        "dependencies": [ "mapnik", 'mapnik_wkt', 'mapnik_json' ],
         "conditions": [
           ["OS=='win'", {
              'libraries':[
