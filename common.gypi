@@ -78,7 +78,7 @@
           },
           "VCLibrarianTool": {
             "AdditionalOptions": [
-              "/LTCG"
+              #"/LTCG"
             ],
           },
           "VCLinkerTool": {
