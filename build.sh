@@ -4,9 +4,6 @@ set -u
 
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-mkdir active
-cd active
-
 BASE_PATH="$(pwd)/mapnik-sdk"
 
 if [[ $(uname -s) == 'Darwin' ]]; then
@@ -37,8 +34,7 @@ fi
 
 # mapnik itself
 if [[ ! -d ../src/wkt/ ]]; then
-    git clone http://github.com/mapnik/mapnik
-    cd ../
+    git clone http://github.com/mapnik/mapnik ../
 fi
 
 # gyp
