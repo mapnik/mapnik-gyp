@@ -23,6 +23,6 @@ git clone https://github.com/mapnik/mapnik.git
 cd mapnik
 git clone https://github.com/mapnik/mapnik-gyp.git
 cd mapnik-gyp
-./build  # or .\build on windows
+./build.sh  # or .\build on windows
 ```
 
