@@ -49,11 +49,22 @@
       }, {
           'common_defines': ['SHAPE_MEMORY_MAPPED_FILE','U_CHARSET_IS_UTF8=1'],
           'common_libraries': [
-            '-Wl,-search_paths_first',
             '-L<@(libs)'
           ],
           'python_includes':'/usr/include/python2.7',
           'python_libs':'/usr/lib/python2.7'
+      }],
+      ["OS=='mac'", {
+          'common_libraries': [
+            '-Wl,-search_paths_first'
+          ]
+      }],
+      ["OS=='linux'", {
+          'common_libraries': [
+            '-pthread',
+            '-ldl',
+            '-lrt'
+          ]
       }]
     ]
   },
