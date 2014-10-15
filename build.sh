@@ -5,12 +5,42 @@ set -u
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 #cd ${ROOTDIR}
 
-BASE_PATH=$(pwd)/mapnik-sdk
+BASE_PATH="$(pwd)/mapnik-sdk"
 
-if [[ ! -d mapnik-sdk ]]; then
-    ln -s ~/projects/mapnik-packaging/osx/out/build-cpp11-libcpp-x86_64-macosx ${BASE_PATH}
+if [[ $(uname -s) == 'Darwin' ]]; then
+    SLUG="mapnik-macosx-sdk-v2.2.0-2196-g6b1c4d0-lto"
+else
+    SLUG="mapnik-linux-sdk-v2.2.0-2196-g6b1c4d0"
 fi
 
+# mapnik sdk
+LOCAL_SDK="$HOME/projects/mapnik-package-lto/osx/out/dist/${SLUG}"
+
+echo "looking for ${LOCAL_SDK}"
+if [[ -d ${LOCAL_SDK} ]]; then
+    echo "found ${LOCAL_SDK}"
+    rm -f ./mapnik-sdk
+    ln -s ${LOCAL_SDK} ${BASE_PATH}
+elif [[ ! -d ${BASE_PATH} ]]; then
+    if [[ ! -f ${SLUG}.tar.bz2 ]]; then
+        echo "downloading https://mapnik.s3.amazonaws.com/dist/dev/${SLUG}.tar.bz2"
+        wget https://mapnik.s3.amazonaws.com/dist/dev/${SLUG}.tar.bz2
+    fi
+    if [[ ! -f ${SLUG} ]]; then
+        echo  "untarring ${SLUG}.tar.bz2"
+        tar xf ${SLUG}.tar.bz2
+    fi
+    ln -s ./${SLUG} ${BASE_PATH}
+fi
+
+# mapnik itself
+if [[ ! -d ../src/wkt/ ]]; then
+    cd ../
+    git clone http://github.com/mapnik/mapnik
+    cd ../
+fi
+
+# gyp
 if [[ ! -d gyp ]]; then
     git clone https://chromium.googlesource.com/external/gyp.git gyp
 fi
@@ -71,5 +101,5 @@ else
       -Dconfiguration=Release \
       -Dlibs=${BASE_PATH}/lib \
       --no-duplicate-basename-check
-   ninja/ninja -C out/Release/
+   time ninja/ninja -l 2 -C out/Release/
 fi

@@ -28,6 +28,7 @@
       '../deps/clipper/include/', # clipper
       '../', # boost shim
       '<@(includes)/',
+      '<@(includes)/gdal',
       '<@(includes)/freetype2',
       '<@(includes)/libxml2',
       '<@(includes)/cairo'
@@ -127,7 +128,6 @@
            'libraries':[
               'libboost_filesystem-vc140-mt-1_56.lib',
               'libboost_regex-vc140-mt-1_56.lib',
-              'libboost_thread-vc140-mt-1_56.lib',
               'libboost_system-vc140-mt-1_56.lib',
               'libpng16.lib',
               'proj.lib',
@@ -149,7 +149,6 @@
             'libraries':[
               '-lboost_filesystem',
               '-lboost_regex',
-              '-lboost_thread',
               '-lboost_system',
               '-lcairo',
               '-lpixman-1',
@@ -227,7 +226,7 @@
             'defines':['HAVE_ROUND','HAVE_HYPOT']
           },{
               'libraries':[
-                '-lboost_thread'
+                #'-lboost_thread'
               ]
             }
           ],
@@ -246,13 +245,11 @@
              'libraries':[
                 'libboost_program_options-vc140-mt-1_56.lib',
                 'libboost_filesystem-vc140-mt-1_56.lib',
-                'libboost_thread-vc140-mt-1_56.lib',
                 'libboost_system-vc140-mt-1_56.lib',
                 'icuuc.lib'
             ],
           },{
               'libraries':[
-                '-lboost_thread',
                 '-lboost_system',
                 '-lboost_filesystem',
                 '-lboost_program_options'
@@ -291,16 +288,10 @@
         "conditions": [
           ["OS=='win'", {
              'libraries':[
-                'libboost_thread-vc140-mt-1_56.lib',
-                'libboost_system-vc140-mt-1_56.lib',
-                'icuuc.lib'
+                #'libboost_system-vc140-mt-1_56.lib',
+               # 'icuuc.lib'
             ],
-          },{
-              'libraries':[
-                '-lboost_thread'
-              ]
-            }
-          ]
+          }]
         ]
     },
     {
@@ -312,16 +303,10 @@
         "conditions": [
           ["OS=='win'", {
              'libraries':[
-                'libboost_thread-vc140-mt-1_56.lib',
                 'libboost_system-vc140-mt-1_56.lib',
                 'icuuc.lib'
             ],
-          },{
-              'libraries':[
-                '-lboost_thread'
-              ]
-            }
-          ]
+          }]
         ]
     },
     {
@@ -342,13 +327,14 @@
             'libraries': [
                 'gdal_i.lib',
                 'libexpat.lib',
-                'libboost_thread-vc140-mt-1_56.lib',
                 'libboost_system-vc140-mt-1_56.lib',
                 'icuuc.lib',
                 'odbccp32.lib'
             ]
           } , {
-            'libraries': [ '<!@(gdal-config --libs)', '<!@(gdal-config --dep-libs)']
+            'libraries': [
+                '-lgdal'
+             ]
           }]
        ]
     },
@@ -363,13 +349,14 @@
             'libraries': [
                 'gdal_i.lib',
                 'libexpat.lib',
-                'libboost_thread-vc140-mt-1_56.lib',
                 'libboost_system-vc140-mt-1_56.lib',
                 'icuuc.lib',
                 'odbccp32.lib'
             ]
           } , {
-            'libraries': [ '<!@(gdal-config --libs)', '<!@(gdal-config --dep-libs)']
+            'libraries': [
+                '-lgdal'
+             ]
           }]
        ]
     },
@@ -393,7 +380,8 @@
             ]
           } , {
             'libraries': [
-                '<!@(pkg-config libpq --libs --static)',
+                '-lpq',
+                '-lpthread',
                 '-lboost_regex'
             ]
           }]
@@ -417,7 +405,10 @@
                 'ws2_32.lib',
             ]
           } , {
-            'libraries': [ '<!@(pkg-config libpq --libs --static)']
+            'libraries': [
+                '-lpq',
+                '-lpthread'
+            ]
           }]
         ]
     },
@@ -434,7 +425,21 @@
                   'icuuc.lib',
             ]
           } , {
-            'libraries': [ '<!@(pkg-config sqlite3 --libs)']
+            'libraries': [ '-lsqlite3']
+          }]
+        ]
+    },
+    {
+        "target_name": "geojson",
+        "type": "loadable_module",
+        "dependencies": [ "mapnik", 'mapnik_json' ],
+        "product_extension": "input",
+        "sources": [ '<!@(find ../plugins/input/geojson/ -name "*.cpp")' ],
+        'conditions': [
+          ['OS=="win"', {
+            'libraries': [
+                'icuuc.lib',
+            ]
           }]
         ]
     },
@@ -589,46 +594,18 @@
         "sources": [ "../tests/cpp_tests/wkb_formats_test.cpp"],
         "dependencies": [ "mapnik" ]
     },
-       {
-           "target_name": "test_rendering",
-           "type": "executable",
-           "sources": [ "../benchmark/test_rendering.cpp" ],
-           "dependencies": [ "mapnik" ],
-           "conditions": [
-             ["OS=='win'", {
-                'libraries':[
-                   'libboost_thread-vc140-mt-1_56.lib',
-                   'libboost_system-vc140-mt-1_56'
-               ]
-             },{
-                 'libraries':[
-                   '-lboost_thread'
-                 ]
-               }
-             ]
+   {
+       "target_name": "test_rendering",
+       "type": "executable",
+       "sources": [ "../benchmark/test_rendering.cpp" ],
+       "dependencies": [ "mapnik" ],
+       "conditions": [
+         ["OS=='win'", {
+            'libraries':[
+               'libboost_system-vc140-mt-1_56'
            ]
-       },
-
+         }]
+       ]
+   }
   ],
-  'conditions': [
-    # won't link yet on windows
-    ["OS!='win'", {
-       'targets': [
-    {
-        "target_name": "geojson",
-        "type": "loadable_module",
-        "product_extension": "input",
-        "sources": [ '<!@(find ../plugins/input/geojson/ -name "*.cpp")' ],
-        "dependencies": [ "mapnik" ],
-        'conditions': [
-          ['OS=="win"', {
-            'libraries': [
-                'icuuc.lib',
-            ]
-          }]
-        ]
-    },
-    ]}
-    ]
-  ]
 }
