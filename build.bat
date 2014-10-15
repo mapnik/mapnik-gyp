@@ -326,7 +326,7 @@ echo fontscollectionpath = join(mapniklibpath,'fonts') >> ..\bindings\python\map
 echo __all__ = [mapniklibpath,inputpluginspath,fontscollectionpath] >> ..\bindings\python\mapnik\paths.py
 
 :: plugins
-xcopy  /q .\build\lib\mapnik\*input %MAPNIK_SDK%\libs\mapnik\input\ /Y
+xcopy  /q .\build\lib\mapnik\input\*.input %MAPNIK_SDK%\libs\mapnik\input\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: install mapnik headers
