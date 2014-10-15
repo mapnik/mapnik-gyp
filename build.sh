@@ -95,5 +95,9 @@ else
       -Dconfiguration=Release \
       -Dlibs=${BASE_PATH}/lib \
       --no-duplicate-basename-check
-   time ninja/ninja -C out/Release/
+   # serial build of memory intensive things first
+   time ninja/ninja -C out/Release/ -j1 mapnik_wkt
+   time ninja/ninja -C out/Release/ -j1 mapnik_json
+   # remainder of mapnik
+   time ninja/ninja -C out/Release/ -j4 -l 1
 fi
