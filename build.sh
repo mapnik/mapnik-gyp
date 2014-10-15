@@ -90,6 +90,7 @@ if [[ $COVERITY == true ]];then
 else
   if [[ ! -d ninja ]]; then
       git clone git://github.com/martine/ninja.git
+      cd ninja
       ./bootstrap.py
       cd ../
   fi
