@@ -2,6 +2,8 @@
 
 GYP build system for Mapnik 3.x.
 
+[![Build Status](https://travis-ci.org/mapnik/mapnik-gyp.svg?branch=master)](https://travis-ci.org/mapnik/mapnik-gyp)
+
 ### Depends
 
   - Mapnik SDK
