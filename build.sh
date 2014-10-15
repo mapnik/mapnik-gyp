@@ -3,7 +3,9 @@
 set -u
 
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-#cd ${ROOTDIR}
+
+mkdir active
+cd active
 
 BASE_PATH="$(pwd)/mapnik-sdk"
 
@@ -35,7 +37,6 @@ fi
 
 # mapnik itself
 if [[ ! -d ../src/wkt/ ]]; then
-    cd ../
     git clone http://github.com/mapnik/mapnik
     cd ../
 fi
@@ -48,7 +49,7 @@ fi
 export PATH=${BASE_PATH}/bin:$PATH
 export PKG_CONFIG_PATH=${BASE_PATH}/lib/pkgconfig
 
-rm -rf unix-build
+rm -rf ./unix-build
 rm -rf ./Release
 
 export CC=/usr/bin/clang
