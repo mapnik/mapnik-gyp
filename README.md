@@ -23,8 +23,6 @@ git clone https://github.com/mapnik/mapnik.git
 cd mapnik
 git clone https://github.com/mapnik/mapnik-gyp.git
 cd mapnik-gyp
-build
+./build  # or .\build on windows
 ```
-
-NOTE: currently paths to mapnik-deps are hardcoded - this will be fixed in the future.
 
