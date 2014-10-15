@@ -301,8 +301,7 @@
         "conditions": [
           ["OS=='win'", {
              'libraries':[
-                #'libboost_system-vc140-mt-1_56.lib',
-               # 'icuuc.lib'
+                'icuuc.lib'
             ],
           }]
         ]
