@@ -204,6 +204,7 @@
     },
     {
         "target_name": "_mapnik",
+        "product_prefix":"",
         "type": "loadable_module",
         "product_extension": "pyd",
         "sources": [ '<!@(find ../bindings/python/ -name "*.cpp")' ],
@@ -292,6 +293,7 @@
     },
     {
         "target_name": "shape",
+        "product_prefix":"",
         "type": "loadable_module",
         "product_extension": "input",
         "sources": [ '<!@(find ../plugins/input/shape/ -name "*.cpp")' ],
@@ -307,6 +309,7 @@
     },
     {
         "target_name": "csv",
+        "product_prefix":"",
         "type": "loadable_module",
         "product_extension": "input",
         "sources": [ '<!@(find ../plugins/input/csv/ -name "*.cpp")' ],
@@ -322,6 +325,7 @@
     },
     {
         "target_name": "raster",
+        "product_prefix":"",
         "type": "loadable_module",
         "product_extension": "input",
         "sources": [ '<!@(find ../plugins/input/raster/ -name "*.cpp")' ],
@@ -329,6 +333,7 @@
     },
     {
         "target_name": "gdal",
+        "product_prefix":"",
         "type": "loadable_module",
         "product_extension": "input",
         "sources": [ '<!@(find ../plugins/input/gdal/ -name "*.cpp")' ],
@@ -351,6 +356,7 @@
     },
     {
         "target_name": "ogr",
+        "product_prefix":"",
         "type": "loadable_module",
         "product_extension": "input",
         "sources": [ '<!@(find ../plugins/input/ogr/ -name "*.cpp")' ],
@@ -373,6 +379,7 @@
     },
     {
         "target_name": "postgis",
+        "product_prefix":"",
         "type": "loadable_module",
         "product_extension": "input",
         "sources": [ '<!@(find ../plugins/input/postgis/ -name "*.cpp")' ],
@@ -400,6 +407,7 @@
     },
     {
         "target_name": "pgraster",
+        "product_prefix":"",
         "type": "loadable_module",
         "product_extension": "input",
         "sources": [ '<!@(find ../plugins/input/pgraster/ -name "*.cpp")' ],
@@ -425,6 +433,7 @@
     },
     {
         "target_name": "sqlite",
+        "product_prefix":"",
         "type": "loadable_module",
         "product_extension": "input",
         "sources": [ '<!@(find ../plugins/input/sqlite/ -name "*.cpp")' ],
@@ -442,6 +451,7 @@
     },
     {
         "target_name": "geojson",
+        "product_prefix":"",
         "type": "loadable_module",
         "dependencies": [ "mapnik", 'mapnik_json' ],
         "product_extension": "input",
