@@ -33,7 +33,7 @@
       "<@(includes)/libxml2",
       "<@(includes)/cairo"
     ],
-    "python_root": "<!(python -c 'import sys,ntpath,posixpath;print(sys.prefix).replace(ntpath.sep,posixpath.sep)')",
+    "python_root": '<!(python -c "import sys,ntpath,posixpath;print(sys.prefix).replace(ntpath.sep,posixpath.sep)")', # note: single quotes needed for windows
     "conditions": [
       ["OS=='win'",
         {
