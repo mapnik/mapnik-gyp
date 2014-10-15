@@ -33,6 +33,7 @@
       "<@(includes)/libxml2",
       "<@(includes)/cairo"
     ],
+    "python_version": "2.7",
     "python_root": '<!(python -c "import sys,ntpath,posixpath;print(sys.prefix).replace(ntpath.sep,posixpath.sep)")', # note: single quotes needed for windows
     "conditions": [
       ["OS=='win'",
@@ -40,8 +41,8 @@
           "common_defines": [
             "LIBXML_STATIC", # static libxml: libxml2_a.lib
             "BOOST_VARIANT_DO_NOT_USE_VARIADIC_TEMPLATES",
-            "BOOST_LIB_TOOLSET='vc140'",
-            "BOOST_COMPILER='14.0'",
+            'BOOST_LIB_TOOLSET="vc140"',
+            'BOOST_COMPILER="14.0"',
             "_WINDOWS"
           ],
           "common_libraries": [],
@@ -53,8 +54,8 @@
           "common_libraries": [
             "-L<@(libs)"
           ],
-          "python_includes":"/usr/include/python2.7",
-          "python_libs":"/usr/lib/python2.7"
+          "python_includes":"/usr/include/python<(python_version)",
+          "python_libs":"/usr/lib/python<(python_version)"
         }
       ],
       ["OS=='mac'",
@@ -106,6 +107,7 @@
       "target_name": "mapnik",
       "product_name": "mapnik",
       "type": "shared_library",
+      "product_dir":"lib",
       "sources": [
         "<!@(find ../deps/agg/src/ -name '*.cpp')",
         "<!@(find ../deps/clipper/src/ -name '*.cpp')",
@@ -214,10 +216,21 @@
     {
       "target_name": "_mapnik",
       "product_prefix":"",
+      "product_dir":"lib/python<(python_version)/mapnik/",
       "type": "loadable_module",
       "product_extension": "pyd",
       "sources": [ "<!@(find ../bindings/python/ -name '*.cpp')" ],
       "dependencies": [ "mapnik", "mapnik_wkt", "mapnik_json" ],
+      "copies": [
+        {
+          "files": [ "../bindings/python/mapnik/__init__.py" ],
+          "destination": "lib/python<(python_version)/mapnik/"
+        },
+        {
+          "files": [ "../bindings/python/mapnik/printing.py" ],
+          "destination": "lib/python<(python_version)/mapnik/"
+        }
+      ],
       "include_dirs": [
         "<@(python_includes)"
       ],
@@ -243,6 +256,7 @@
               "libboost_regex-vc140-mt-1_56.lib",
               "icuuc.lib",
               "icuin.lib",
+              "boost_python-vc140-mt-1_56.lib",
               "python27.lib"
             ],
             "defines":["HAVE_ROUND","HAVE_HYPOT"]
@@ -263,6 +277,7 @@
     {
       "target_name": "nik2img",
       "type": "executable",
+      "product_dir":"bin",
       "sources": [ "<!@(find ../utils/nik2img/ -name '*.cpp')" ],
       "dependencies": [ "mapnik" ],
       "conditions": [
@@ -288,6 +303,7 @@
     {
       "target_name": "shapeindex",
       "type": "executable",
+      "product_dir":"bin",
       "sources": [ "<!@(find ../utils/shapeindex/ -name '*.cpp')" ],
       "include_dirs":["../plugins/input/shape/"],
       "dependencies": [ "mapnik" ],
@@ -312,6 +328,7 @@
       "target_name": "shape",
       "product_prefix":"",
       "type": "loadable_module",
+      "product_dir": "lib/mapnik/input",
       "product_extension": "input",
       "sources": [ "<!@(find ../plugins/input/shape/ -name '*.cpp')" ],
       "dependencies": [ "mapnik" ],
@@ -329,6 +346,7 @@
       "target_name": "csv",
       "product_prefix":"",
       "type": "loadable_module",
+      "product_dir": "lib/mapnik/input",
       "product_extension": "input",
       "sources": [ "<!@(find ../plugins/input/csv/ -name '*.cpp')" ],
       "dependencies": [ "mapnik", "mapnik_wkt", "mapnik_json" ],
@@ -347,6 +365,7 @@
       "target_name": "raster",
       "product_prefix":"",
       "type": "loadable_module",
+      "product_dir": "lib/mapnik/input",
       "product_extension": "input",
       "sources": [ "<!@(find ../plugins/input/raster/ -name '*.cpp')" ],
       "dependencies": [ "mapnik" ]
@@ -355,6 +374,7 @@
       "target_name": "gdal",
       "product_prefix":"",
       "type": "loadable_module",
+      "product_dir": "lib/mapnik/input",
       "product_extension": "input",
       "sources": [ "<!@(find ../plugins/input/gdal/ -name '*.cpp')" ],
       "dependencies": [ "mapnik" ],
@@ -381,6 +401,7 @@
       "target_name": "ogr",
       "product_prefix":"",
       "type": "loadable_module",
+      "product_dir": "lib/mapnik/input",
       "product_extension": "input",
       "sources": [ "<!@(find ../plugins/input/ogr/ -name '*.cpp')" ],
       "dependencies": [ "mapnik" ],
@@ -407,6 +428,7 @@
       "target_name": "postgis",
       "product_prefix":"",
       "type": "loadable_module",
+      "product_dir": "lib/mapnik/input",
       "product_extension": "input",
       "sources": [ "<!@(find ../plugins/input/postgis/ -name '*.cpp')" ],
       "dependencies": [ "mapnik" ],
@@ -438,6 +460,7 @@
       "target_name": "pgraster",
       "product_prefix":"",
       "type": "loadable_module",
+      "product_dir": "lib/mapnik/input",
       "product_extension": "input",
       "sources": [ "<!@(find ../plugins/input/pgraster/ -name '*.cpp')" ],
       "dependencies": [ "mapnik" ],
@@ -467,6 +490,7 @@
       "target_name": "sqlite",
       "product_prefix":"",
       "type": "loadable_module",
+      "product_dir": "lib/mapnik/input",
       "product_extension": "input",
       "sources": [ "<!@(find ../plugins/input/sqlite/ -name '*.cpp')" ],
       "dependencies": [ "mapnik" ],
@@ -487,12 +511,14 @@
     {
       "target_name": "agg_blend_src_over_test",
       "type": "executable",
+      "product_dir":"test",
       "sources": [ "../tests/cpp_tests/agg_blend_src_over_test.cpp"],
       "dependencies": [ "mapnik" ]
     },
     {
       "target_name": "clipping_test",
       "type": "executable",
+      "product_dir":"test",
       "sources": [ "../tests/cpp_tests/clipping_test.cpp"],
       "dependencies": [ "mapnik" ],
       "conditions": [
@@ -512,6 +538,7 @@
     {
       "target_name": "conversions_test",
       "type": "executable",
+      "product_dir":"test",
       "sources": [ "../tests/cpp_tests/conversions_test.cpp"],
       "dependencies": [ "mapnik" ],
       "conditions": [
@@ -530,6 +557,7 @@
     {
       "target_name": "exceptions_test",
       "type": "executable",
+      "product_dir":"test",
       "sources": [ "../tests/cpp_tests/exceptions_test.cpp"],
       "dependencies": [ "mapnik" ],
       "conditions": [
@@ -549,6 +577,7 @@
     {
       "target_name": "font_registration_test",
       "type": "executable",
+      "product_dir":"test",
       "sources": [ "../tests/cpp_tests/font_registration_test.cpp"],
       "dependencies": [ "mapnik" ],
       "conditions": [
@@ -568,6 +597,7 @@
     {
       "target_name": "fontset_runtime_test",
       "type": "executable",
+      "product_dir":"test",
       "sources": [ "../tests/cpp_tests/fontset_runtime_test.cpp"],
       "dependencies": [ "mapnik" ],
       "conditions": [
@@ -588,6 +618,7 @@
     {
       "target_name": "geometry_converters_test",
       "type": "executable",
+      "product_dir":"test",
       "sources": [ "../tests/cpp_tests/geometry_converters_test.cpp"],
       "dependencies": [ "mapnik" ],
       "conditions": [
@@ -607,6 +638,7 @@
     {
       "target_name": "image_io_test",
       "type": "executable",
+      "product_dir":"test",
       "sources": [ "../tests/cpp_tests/image_io_test.cpp"],
       "dependencies": [ "mapnik" ],
       "conditions": [
@@ -626,12 +658,14 @@
     {
       "target_name": "label_algo_test",
       "type": "executable",
+      "product_dir":"test",
       "sources": [ "../tests/cpp_tests/label_algo_test.cpp"],
       "dependencies": [ "mapnik" ]
     },
     {
       "target_name": "map_request_test",
       "type": "executable",
+      "product_dir":"test",
       "sources": [ "../tests/cpp_tests/map_request_test.cpp"],
       "dependencies": [ "mapnik" ],
       "conditions": [
@@ -650,12 +684,14 @@
     {
       "target_name": "params_test",
       "type": "executable",
+      "product_dir":"test",
       "sources": [ "../tests/cpp_tests/params_test.cpp"],
       "dependencies": [ "mapnik" ]
     },
     {
       "target_name": "wkb_formats_test",
       "type": "executable",
+      "product_dir":"test",
       "sources": [ "../tests/cpp_tests/wkb_formats_test.cpp"],
       "dependencies": [ "mapnik" ]
     },
@@ -676,7 +712,7 @@
     }
   ],
   "conditions": [
-    # won"t link yet on windows
+    # won't link yet on windows: https://github.com/mapnik/mapnik/issues/2537
     ["OS!='win'",
       {
         "targets": [
@@ -684,6 +720,7 @@
             "target_name": "geojson",
             "product_prefix":"",
             "type": "loadable_module",
+            "product_dir": "lib/mapnik/input",
             "dependencies": [ "mapnik", "mapnik_json" ],
             "product_extension": "input",
             "sources": [ "<!@(find ../plugins/input/geojson/ -name '*.cpp')" ],
