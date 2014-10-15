@@ -40,6 +40,8 @@
       "-std=c++11",
       "-Wno-c++11-narrowing", # works around boost gil bug
       "-fPIC" # so that we can link agg into libmapnik.so
+      "-Wno-unsequenced",
+      "-Wno-redeclared-class-member"
     ],
     "configurations": {
       "Debug": {
