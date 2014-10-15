@@ -47,7 +47,8 @@
           ],
           "common_libraries": [],
           "python_includes":"<(python_root)/include",
-          "python_libs":"<(python_root)/libs"
+          "python_libs":"<(python_root)/libs",
+          "python_module_extension": "pyd"
         },
         {
           "common_defines": ["SHAPE_MEMORY_MAPPED_FILE","U_CHARSET_IS_UTF8=1"],
@@ -55,7 +56,8 @@
             "-L<@(libs)"
           ],
           "python_includes":"/usr/include/python<(python_version)",
-          "python_libs":"/usr/lib/python<(python_version)"
+          "python_libs":"/usr/lib/python<(python_version)",
+          "python_module_extension": "so"
         }
       ],
       ["OS=='mac'",
@@ -218,17 +220,17 @@
       "product_prefix":"",
       "product_dir":"lib/python<(python_version)/mapnik/",
       "type": "loadable_module",
-      "product_extension": "pyd",
+      "product_extension": "<(python_module_extension)",
       "sources": [ "<!@(find ../bindings/python/ -name '*.cpp')" ],
       "dependencies": [ "mapnik", "mapnik_wkt", "mapnik_json" ],
       "copies": [
         {
           "files": [ "../bindings/python/mapnik/__init__.py" ],
-          "destination": "lib/python<(python_version)/mapnik/"
+          "destination": "<(PRODUCT_DIR)/lib/python<(python_version)/mapnik/"
         },
         {
           "files": [ "../bindings/python/mapnik/printing.py" ],
-          "destination": "lib/python<(python_version)/mapnik/"
+          "destination": "<(PRODUCT_DIR)/lib/python<(python_version)/mapnik/"
         }
       ],
       "include_dirs": [
@@ -263,7 +265,9 @@
           },
           {
             "libraries":[
-                #"-lboost_thread"
+                "-lboost_python-<(python_version)",
+                "-lboost_thread",
+                "-lboost_system",
             ]
           }
         ],
