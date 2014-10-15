@@ -6,7 +6,7 @@
     "msvs_disabled_warnings": [ 4068,4244,4005,4506,4345,4804,4805,4661 ],
     "msvs_settings": {
       "VCCLCompilerTool": {
-        'ObjectFile': '$(IntDir)/%(RelativeDir)/',
+        "ObjectFile": "$(IntDir)/%(RelativeDir)/",
         "ExceptionHandling": 1,
         "RuntimeTypeInfo": "true"
       }
@@ -37,9 +37,9 @@
       ]
     },
     "cflags_cc": [
-        "-std=c++11",
-        "-Wno-c++11-narrowing", # works around boost gil bug
-        "-fPIC" # so that we can link agg into libmapnik.so
+      "-std=c++11",
+      "-Wno-c++11-narrowing", # works around boost gil bug
+      "-fPIC" # so that we can link agg into libmapnik.so
     ],
     "configurations": {
       "Debug": {
@@ -62,19 +62,19 @@
         "defines": [ "NDEBUG" ],
         "msvs_settings": {
           "VCCLCompilerTool": {
-            'RuntimeLibrary': '2', #0:/MT, 2:/MD,
-            'Optimization': 3, # /Ox, full optimization
-            'FavorSizeOrSpeed': 1, # /Ot, favour speed over size
-            'InlineFunctionExpansion': 2, # /Ob2, inline anything eligible
-            #'WholeProgramOptimization': 'true', # /GL, whole program optimization, needed for LTCG
-            'OmitFramePointers': 'true',
-            #'EnableFunctionLevelLinking': 'true',
-            'EnableIntrinsicFunctions': 'true',
-            'AdditionalOptions': [
-              '/MP', # compile across multiple CPUs
-              '/bigobj', #compiling: x86 fatal error C1128: number of sections exceeded object file format limit: compile with /bigobj
+            "RuntimeLibrary": "2", #0:/MT, 2:/MD,
+            "Optimization": 3, # /Ox, full optimization
+            "FavorSizeOrSpeed": 1, # /Ot, favour speed over size
+            "InlineFunctionExpansion": 2, # /Ob2, inline anything eligible
+            #"WholeProgramOptimization": "true", # /GL, whole program optimization, needed for LTCG
+            "OmitFramePointers": "true",
+            #"EnableFunctionLevelLinking": "true",
+            "EnableIntrinsicFunctions": "true",
+            "AdditionalOptions": [
+              "/MP", # compile across multiple CPUs
+              "/bigobj", #compiling: x86 fatal error C1128: number of sections exceeded object file format limit: compile with /bigobj
             ],
-            'DebugInformationFormat': '0'
+            "DebugInformationFormat": "0"
           },
           "VCLibrarianTool": {
             "AdditionalOptions": [
@@ -82,13 +82,13 @@
             ],
           },
           "VCLinkerTool": {
-            #'LinkTimeCodeGeneration': 1, # link-time code generation
-            #'OptimizeReferences': 2, # /OPT:REF
-            #'EnableCOMDATFolding': 2, # /OPT:ICF
-            'LinkIncremental': 2, # force incremental linking
-            'GenerateDebugInformation': 'false',
-            'AdditionalOptions': [
-                #'/NODEFAULTLIB:libcmt.lib'
+            #"LinkTimeCodeGeneration": 1, # link-time code generation
+            #"OptimizeReferences": 2, # /OPT:REF
+            #"EnableCOMDATFolding": 2, # /OPT:ICF
+            "LinkIncremental": 2, # force incremental linking
+            "GenerateDebugInformation": "false",
+            "AdditionalOptions": [
+                #"/NODEFAULTLIB:libcmt.lib"
             ],
           }
         },
