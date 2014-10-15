@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -u
+#set -u
 
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -32,11 +32,6 @@ elif [[ ! -d ${BASE_PATH} ]]; then
     ln -s ./${SLUG} ${BASE_PATH}
 fi
 
-# mapnik itself
-if [[ ! -d ../src/wkt/ ]]; then
-    git clone http://github.com/mapnik/mapnik ../
-fi
-
 # gyp
 if [[ ! -d gyp ]]; then
     git clone https://chromium.googlesource.com/external/gyp.git gyp
@@ -48,12 +43,11 @@ export PKG_CONFIG_PATH=${BASE_PATH}/lib/pkgconfig
 rm -rf ./unix-build
 rm -rf ./Release
 
-export CC=/usr/bin/clang
-export CXX=/usr/bin/clang++
-
 COVERITY=false
 
 if [[ $COVERITY == true ]];then
+  #export CC=/usr/bin/clang
+  #export CXX=/usr/bin/clang++
   ./gyp/gyp ./mapnik.gyp \
     --depth=. \
     -f make \
@@ -87,6 +81,8 @@ if [[ $COVERITY == true ]];then
 else
   if [[ ! -d ninja ]]; then
       git clone git://github.com/martine/ninja.git
+  fi
+  if [[ ! -f ninja/ninja ]]; then
       cd ninja
       ./bootstrap.py
       cd ../
@@ -99,5 +95,5 @@ else
       -Dconfiguration=Release \
       -Dlibs=${BASE_PATH}/lib \
       --no-duplicate-basename-check
-   time ninja/ninja -l 2 -C out/Release/
+   time ninja/ninja -C out/Release/
 fi

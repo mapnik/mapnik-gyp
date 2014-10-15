@@ -33,7 +33,8 @@
         "-Wno-c++11-extra-semi",
         "-Wno-variadic-macros",
         "-Wno-c++11-extensions",
-        "-Wno-unused-const-variable"
+        "-Wno-unused-const-variable",
+        "-Wno-c++11-narrowing" # works around boost gil bug
       ]
     },
     "cflags_cc": ["-std=c++11"],

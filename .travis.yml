@@ -13,4 +13,10 @@ before_script:
  - true
 
 script:
+ - cd ..
+ - git init .
+ - git remote add origin http://github.com/mapnik/mapnik
+ - git fetch
+ - git checkout master
+ - cd mapnik-gyp
  - . build.sh
