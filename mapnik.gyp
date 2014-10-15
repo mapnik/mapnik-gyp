@@ -449,21 +449,6 @@
         ]
     },
     {
-        "target_name": "geojson",
-        "product_prefix":"",
-        "type": "loadable_module",
-        "dependencies": [ "mapnik", 'mapnik_json' ],
-        "product_extension": "input",
-        "sources": [ '<!@(find ../plugins/input/geojson/ -name "*.cpp")' ],
-        'conditions': [
-          ['OS=="win"', {
-            'libraries': [
-                'icuuc.lib',
-            ]
-          }]
-        ]
-    },
-    {
         "target_name": "agg_blend_src_over_test",
         "type": "executable",
         "sources": [ "../tests/cpp_tests/agg_blend_src_over_test.cpp"],
@@ -628,4 +613,26 @@
        ]
    }
   ],
+  'conditions': [
+    # won't link yet on windows
+    ["OS!='win'", {
+       'targets': [
+          {
+              "target_name": "geojson",
+              "product_prefix":"",
+              "type": "loadable_module",
+              "dependencies": [ "mapnik", 'mapnik_json' ],
+              "product_extension": "input",
+              "sources": [ '<!@(find ../plugins/input/geojson/ -name "*.cpp")' ],
+              'conditions': [
+                ['OS=="win"', {
+                  'libraries': [
+                      'icuuc.lib',
+                  ]
+                }]
+              ]
+          }
+       ]
+    }]
+  ]
 }
