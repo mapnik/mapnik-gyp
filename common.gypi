@@ -23,7 +23,6 @@
         "-Wno-parentheses",
         "-Wno-char-subscripts",
         "-Wno-unused-parameter",
-        "-Wno-c++11-narrowing",
         "-Wno-c++11-long-long",
         "-Wno-unsequenced",
         "-Wno-sign-compare",
@@ -37,7 +36,10 @@
         "-Wno-c++11-narrowing" # works around boost gil bug
       ]
     },
-    "cflags_cc": ["-std=c++11"],
+    "cflags_cc": [
+        "-std=c++11",
+        "-Wno-c++11-narrowing" # works around boost gil bug
+    ],
     "configurations": {
       "Debug": {
         "defines": [ "DEBUG","_DEBUG" ],
