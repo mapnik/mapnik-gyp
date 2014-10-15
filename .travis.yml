@@ -1,0 +1,16 @@
+language: cpp
+
+compiler:
+ - clang
+
+before_install:
+  - true
+
+install:
+ - true
+
+before_script:
+ - true
+
+script:
+ - . build.sh
