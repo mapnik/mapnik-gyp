@@ -305,11 +305,11 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 :: install mapnik libs
 xcopy /q /d .\build\Release\mapnik.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d .\build\Release\mapnik.dll %MAPNIK_SDK%\libs\ /Y
+xcopy /q /d .\build\lib\mapnik.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: install additional bins
-xcopy /q /d .\build\Release\shapeindex.exe %MAPNIK_SDK%\bin\ /Y
+xcopy /q /d .\build\bin\shapeindex.exe %MAPNIK_SDK%\bin\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 xcopy /q /d ..\fonts\dejavu-fonts-ttf-2.33\ttf\*ttf %MAPNIK_SDK%\libs\mapnik\fonts\ /Y
@@ -317,7 +317,7 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 :: move python binding into local testable location
 :: * hack from http://stackoverflow.com/a/14488464/2333354
 :: because otherwise xcopy can't tell if its a file or directory and will prompt
-xcopy /q /s /d .\build\Release\_mapnik.pyd ..\bindings\python\mapnik\_mapnik.pyd* /Y
+xcopy /q /s /d .\build\lib\python2.7\mapnik\_mapnik.pyd ..\bindings\python\mapnik\_mapnik.pyd* /Y
 echo from os.path import normpath,join,dirname > ..\bindings\python\mapnik\paths.py
 echo mapniklibpath = '%MAPNIK_SDK%/libs/mapnik' >> ..\bindings\python\mapnik\paths.py
 echo mapniklibpath = normpath(join(dirname(__file__),mapniklibpath)) >> ..\bindings\python\mapnik\paths.py
@@ -326,7 +326,7 @@ echo fontscollectionpath = join(mapniklibpath,'fonts') >> ..\bindings\python\map
 echo __all__ = [mapniklibpath,inputpluginspath,fontscollectionpath] >> ..\bindings\python\mapnik\paths.py
 
 :: plugins
-xcopy  /q .\build\Release\*input %MAPNIK_SDK%\libs\mapnik\input\ /Y
+xcopy  /q .\build\lib\mapnik\*input %MAPNIK_SDK%\libs\mapnik\input\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: install mapnik headers
@@ -342,7 +342,7 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 :: run tests
 SET PATH=%MAPNIK_SDK%\libs;%PATH%
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-for %%t in (build\Release\*test.exe) do ( call %%t -d %CD%\.. )
+for %%t in (build\test\*test.exe) do ( call %%t -d %CD%\.. )
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 if NOT EXIST get-pip.py (
