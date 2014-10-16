@@ -302,6 +302,13 @@ msbuild ^
 :: /t:rebuild
 :: /v:diag > build.log
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+:: install command line tools
+xcopy /q /d .\build\bin\nik2img.exe %MAPNIK_SDK%\bin /Y
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+xcopy /q /d .\build\bin\shapeindex.exe %MAPNIK_SDK%\bin /Y
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
 :: install mapnik libs
 xcopy /q /d .\build\Release\mapnik.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
