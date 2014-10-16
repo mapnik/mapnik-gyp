@@ -7,9 +7,9 @@ export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BASE_PATH="$(pwd)/mapnik-sdk"
 
 if [[ $(uname -s) == 'Darwin' ]]; then
-    SLUG="mapnik-macosx-sdk-v2.2.0-2196-g6b1c4d0-lto"
+    SLUG="mapnik-macosx-sdk-v2.2.0-2235-gb907634-lto"
 else
-    SLUG="mapnik-linux-sdk-v2.2.0-2196-g6b1c4d0"
+    SLUG="mapnik-linux-sdk-v2.2.0-2235-gb907634"
 fi
 
 # mapnik sdk
