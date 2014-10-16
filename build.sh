@@ -96,8 +96,8 @@ else
       -Dlibs=${BASE_PATH}/lib \
       --no-duplicate-basename-check
    # serial build of memory intensive things first
-   time ninja/ninja -C out/Release/ -j1 mapnik_wkt
-   time ninja/ninja -C out/Release/ -j1 mapnik_json
+   time ninja/ninja -C out/Release/ mapnik_wkt -j2  -l 2
+   time ninja/ninja -C out/Release/ mapnik_json -j2  -l 2
    # remainder of mapnik
-   time ninja/ninja -C out/Release/ -j8 -l 2
+   time ninja/ninja -C out/Release/ -j10 -l 2
 fi
