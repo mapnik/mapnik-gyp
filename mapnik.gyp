@@ -329,6 +329,42 @@
       ]
     },
     {
+      "target_name": "geojson",
+      "product_prefix":"",
+      "type": "loadable_module",
+      "product_dir": "lib/mapnik/input",
+      "dependencies": [ "mapnik", "mapnik_json" ],
+      "product_extension": "input",
+      "sources": [ "<!@(find ../plugins/input/geojson/ -name '*.cpp')" ],
+      "conditions": [
+        ["OS=='win'",
+          {
+            "libraries": [
+              "icuuc.lib",
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "target_name": "topojson",
+      "product_prefix":"",
+      "type": "loadable_module",
+      "product_dir": "lib/mapnik/input",
+      "dependencies": [ "mapnik", "mapnik_json" ],
+      "product_extension": "input",
+      "sources": [ "<!@(find ../plugins/input/topojson/ -name '*.cpp')" ],
+      "conditions": [
+        ["OS=='win'",
+          {
+            "libraries": [
+              "icuuc.lib",
+            ]
+          }
+        ]
+      ]
+    },
+    {
       "target_name": "shape",
       "product_prefix":"",
       "type": "loadable_module",
@@ -714,32 +750,5 @@
         ]
       ]
     }
-  ],
-  "conditions": [
-    # won't link yet on windows: https://github.com/mapnik/mapnik/issues/2537
-    ["OS!='win'",
-      {
-        "targets": [
-          {
-            "target_name": "geojson",
-            "product_prefix":"",
-            "type": "loadable_module",
-            "product_dir": "lib/mapnik/input",
-            "dependencies": [ "mapnik", "mapnik_json" ],
-            "product_extension": "input",
-            "sources": [ "<!@(find ../plugins/input/geojson/ -name '*.cpp')" ],
-            "conditions": [
-              ["OS=='win'",
-                {
-                  "libraries": [
-                    "icuuc.lib",
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
-      }
-    ]
   ]
 }
