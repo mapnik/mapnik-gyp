@@ -13,8 +13,9 @@ before_install:
 install:
  - sudo apt-get purge -qq -y libtiff* libjpeg* libpng3
  - sudo apt-get autoremove -y -qq
- - createdb template_postgis
- - psql -c "CREATE EXTENSION postgis" template_postgis
+ # depends on image libraries...
+ #- createdb template_postgis
+ #- psql -c "CREATE EXTENSION postgis" template_postgis
 
 before_script:
  - cd ..
