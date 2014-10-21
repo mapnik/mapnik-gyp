@@ -8,5 +8,5 @@ else
 fi
 export PYTHONPATH="${CURRENT_DIR}/out/Release/lib/python2.7/":$PYTHONPATH
 export MAPNIK_FONT_DIRECTORY="${CURRENT_DIR}/../fonts/dejavu-fonts-ttf-2.34/ttf/"
-export MAPNIK_INPUT_PLUGINS_DIRECTORY="${CURRENT_DIR}/out/Release/lib/plugins/input/"
+export MAPNIK_INPUT_PLUGINS_DIRECTORY="${CURRENT_DIR}/out/Release/lib/mapnik/input/"
 export PATH="${CURRENT_DIR}/out/Release/bin/":${PATH}
