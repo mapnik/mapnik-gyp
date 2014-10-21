@@ -140,16 +140,15 @@ SET ICU_PATH_POSTFIX=
 SET ICU_FILE_POSTFIX=
 if %BOOSTADDRESSMODEL% EQU 64 (SET ICU_PATH_POSTFIX=64)
 IF %BUILD_TYPE% EQU Debug (SET ICU_FILE_POSTFIX=d)
-
-xcopy /q /d %DEPSDIR%\icu\lib%ICU_PATH_POSTFIX%\icuuc%ICU_FILE_POSTFIX%.lib %MAPNIK_SDK%\libs\ /Y
+echo f | xcopy /q /d %DEPSDIR%\icu\lib%ICU_PATH_POSTFIX%\icuuc%ICU_FILE_POSTFIX%.lib %MAPNIK_SDK%\libs\icuuc.lib /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\icu\lib%ICU_PATH_POSTFIX%\icuin%ICU_FILE_POSTFIX%.lib %MAPNIK_SDK%\libs\ /Y
+echo f | xcopy /q /d %DEPSDIR%\icu\lib%ICU_PATH_POSTFIX%\icuin%ICU_FILE_POSTFIX%.lib %MAPNIK_SDK%\libs\icuin.lib /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\icu\bin%ICU_PATH_POSTFIX%\icuuc53%ICU_FILE_POSTFIX%.dll %MAPNIK_SDK%\libs\ /Y
+echo f | xcopy /q /d %DEPSDIR%\icu\bin%ICU_PATH_POSTFIX%\icuuc53%ICU_FILE_POSTFIX%.dll %MAPNIK_SDK%\libs\icuuc53.dll /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\icu\bin%ICU_PATH_POSTFIX%\icudt53.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\icu\bin%ICU_PATH_POSTFIX%\icuin53%ICU_FILE_POSTFIX%.dll %MAPNIK_SDK%\libs\ /Y
+echo f | xcopy /q /d %DEPSDIR%\icu\bin%ICU_PATH_POSTFIX%\icuin53%ICU_FILE_POSTFIX%.dll %MAPNIK_SDK%\libs\icuin53.dll /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 
@@ -174,32 +173,55 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 SET WEBP_FILE_SUFFIX=
 IF %BUILD_TYPE% EQU Debug (SET WEBP_FILE_SUFFIX=_debug)
-xcopy /q /d %DEPSDIR%\webp\output\release-dynamic\%WEBP_PLATFORM%\lib\libwebp%WEBP_FILE_SUFFIX%_dll.lib %MAPNIK_SDK%\libs\ /Y
+echo f | xcopy /q /d %DEPSDIR%\webp\output\%BUILD_TYPE%-dynamic\%WEBP_PLATFORM%\lib\libwebp%WEBP_FILE_SUFFIX%_dll.lib %MAPNIK_SDK%\libs\libwebp_dll.lib /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\webp\output\release-dynamic\%WEBP_PLATFORM%\bin\libwebp%WEBP_FILE_SUFFIX%.dll %MAPNIK_SDK%\libs\ /Y
+echo f | xcopy /q /d %DEPSDIR%\webp\output\%BUILD_TYPE%-dynamic\%WEBP_PLATFORM%\bin\libwebp%WEBP_FILE_SUFFIX%.dll %MAPNIK_SDK%\libs\libwebp.dll /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 if "%BOOSTADDRESSMODEL%"=="64" (
-  xcopy /q /d %DEPSDIR%\libpng\projects\vstudio\x64\Release\libpng16.lib %MAPNIK_SDK%\libs\ /Y
+  xcopy /q /d %DEPSDIR%\libpng\projects\vstudio\x64\%BUILD_TYPE%\libpng16.lib %MAPNIK_SDK%\libs\ /Y
   IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-  xcopy /q /d %DEPSDIR%\libpng\projects\vstudio\x64\Release\libpng16.dll %MAPNIK_SDK%\libs\ /Y
+  xcopy /q /d %DEPSDIR%\libpng\projects\vstudio\x64\%BUILD_TYPE%\libpng16.dll %MAPNIK_SDK%\libs\ /Y
 ) ELSE (
-  xcopy /q /d %DEPSDIR%\libpng\projects\vstudio\Release\libpng16.lib %MAPNIK_SDK%\libs\ /Y
+  xcopy /q /d %DEPSDIR%\libpng\projects\vstudio\%BUILD_TYPE%\libpng16.lib %MAPNIK_SDK%\libs\ /Y
   IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-  xcopy /q /d %DEPSDIR%\libpng\projects\vstudio\Release\libpng16.dll %MAPNIK_SDK%\libs\ /Y
+  xcopy /q /d %DEPSDIR%\libpng\projects\vstudio\%BUILD_TYPE%\libpng16.dll %MAPNIK_SDK%\libs\ /Y
 )
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\jpeg\libjpeg.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\cairo\src\release\cairo-static.lib %MAPNIK_SDK%\libs\ /Y
+xcopy /q /d %DEPSDIR%\cairo\src\%BUILD_TYPE%\cairo-static.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\cairo\src\release\cairo.lib %MAPNIK_SDK%\libs\ /Y
+xcopy /q /d %DEPSDIR%\cairo\src\%BUILD_TYPE%\cairo.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\cairo\src\release\cairo.dll %MAPNIK_SDK%\libs\ /Y
+xcopy /q /d %DEPSDIR%\cairo\src\%BUILD_TYPE%\cairo.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /i /d /s /q %DEPSDIR%\boost_1_56_0\stage\lib\* %MAPNIK_SDK%\libs\ /Y
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\protobuf\vsprojects\Release\libprotobuf-lite.lib %MAPNIK_SDK%\libs\ /Y
+
+IF %BUILD_TYPE% EQU Release (
+  xcopy /i /d /s /q %DEPSDIR%\boost_1_56_0\stage\lib\* %MAPNIK_SDK%\libs\ /Y
+  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+) ELSE (
+  echo f | xcopy /y /d /q %DEPSDIR%\boost_1_56_0\stage\lib\boost_python-vc140-mt-gd-1_56.dll %MAPNIK_SDK%\libs\boost_python-vc140-mt-1_56.dll
+  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+  echo f | xcopy /y /d /q %DEPSDIR%\boost_1_56_0\stage\lib\boost_python-vc140-mt-gd-1_56.lib %MAPNIK_SDK%\libs\boost_python-vc140-mt-1_56.lib
+  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+  echo f | xcopy /y /d /q %DEPSDIR%\boost_1_56_0\stage\lib\libboost_chrono-vc140-mt-gd-1_56.lib %MAPNIK_SDK%\libs\libboost_chrono-vc140-mt-1_56.lib
+  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+  echo f | xcopy /y /d /q %DEPSDIR%\boost_1_56_0\stage\lib\libboost_date_time-vc140-mt-gd-1_56.lib %MAPNIK_SDK%\libs\libboost_date_time-vc140-mt-1_56.lib
+  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+  echo f | xcopy /y /d /q %DEPSDIR%\boost_1_56_0\stage\lib\libboost_filesystem-vc140-mt-gd-1_56.lib %MAPNIK_SDK%\libs\libboost_filesystem-vc140-mt-1_56.lib
+  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+  echo f | xcopy /y /d /q %DEPSDIR%\boost_1_56_0\stage\lib\libboost_program_options-vc140-mt-gd-1_56.lib %MAPNIK_SDK%\libs\libboost_program_options-vc140-mt-1_56.lib
+  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+  echo f | xcopy /y /d /q %DEPSDIR%\boost_1_56_0\stage\lib\libboost_regex-vc140-mt-gd-1_56.lib %MAPNIK_SDK%\libs\libboost_regex-vc140-mt-1_56.lib
+  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+  echo f | xcopy /y /d /q %DEPSDIR%\boost_1_56_0\stage\lib\libboost_system-vc140-mt-gd-1_56.lib %MAPNIK_SDK%\libs\libboost_system-vc140-mt-1_56.lib
+  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+  echo f | xcopy /y /d /q %DEPSDIR%\boost_1_56_0\stage\lib\libboost_thread-vc140-mt-gd-1_56.lib %MAPNIK_SDK%\libs\libboost_thread-vc140-mt-1_56.lib
+  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+)
+
+xcopy /q /d %DEPSDIR%\protobuf\vsprojects\%BUILD_TYPE%\libprotobuf-lite.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: data
@@ -209,7 +231,7 @@ xcopy /i /d /s /q %DEPSDIR%\gdal\data %MAPNIK_SDK%\share\gdal
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: bin
-xcopy /q /d %DEPSDIR%\protobuf\vsprojects\Release\protoc.exe %MAPNIK_SDK%\bin /Y
+xcopy /q /d %DEPSDIR%\protobuf\vsprojects\%BUILD_TYPE%\protoc.exe %MAPNIK_SDK%\bin\ /Y
 xcopy /q /d mapnik-config.bat %MAPNIK_SDK%\bin /Y
 
 :: headers for plugins
@@ -267,10 +289,13 @@ xcopy /q /d %DEPSDIR%\gdal\port\cpl_config.h %MAPNIK_SDK%\includes\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: libs for plugins
-xcopy /q /d %DEPSDIR%\postgresql\src\interfaces\libpq\Release\libpq.lib %MAPNIK_SDK%\libs\ /Y
+SET LIBPQ_FILE_SUFFIX=
+IF %BUILD_TYPE% EQU Debug (SET LIBPQ_FILE_SUFFIX=d)
+echo f | xcopy /q /d %DEPSDIR%\postgresql\src\interfaces\libpq\%BUILD_TYPE%\libpq%LIBPQ_FILE_SUFFIX%.lib %MAPNIK_SDK%\libs\libpq.lib /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\postgresql\src\interfaces\libpq\Release\libpq.dll %MAPNIK_SDK%\libs\ /Y
+echo f | xcopy /q /d %DEPSDIR%\postgresql\src\interfaces\libpq\%BUILD_TYPE%\libpq%LIBPQ_FILE_SUFFIX%.dll %MAPNIK_SDK%\libs\libpq.dll /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
 xcopy /q /d %DEPSDIR%\sqlite\sqlite3.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\gdal\gdal_i.lib %MAPNIK_SDK%\libs\ /Y
@@ -281,9 +306,9 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ::IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\gdal\gdal111.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\expat\win32\bin\Release\libexpat.lib %MAPNIK_SDK%\libs\ /Y
+xcopy /q /d %DEPSDIR%\expat\win32\bin\%BUILD_TYPE%\libexpat.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\expat\win32\bin\Release\libexpat.dll %MAPNIK_SDK%\libs\ /Y
+xcopy /q /d %DEPSDIR%\expat\win32\bin\%BUILD_TYPE%\libexpat.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: detect trouble with mimatched linking
@@ -297,7 +322,7 @@ msbuild ^
 /m:%NUMBER_OF_PROCESSORS% ^
 /toolsversion:%TOOLS_VERSION% ^
 /p:BuildInParellel=true ^
-/p:Configuration=Release ^
+/p:Configuration=%BUILD_TYPE% ^
 /p:Platform=%BUILDPLATFORM%
 
 :: /t:rebuild
@@ -311,7 +336,7 @@ xcopy /q /d .\build\bin\shapeindex.exe %MAPNIK_SDK%\bin /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: install mapnik libs
-xcopy /q /d .\build\Release\mapnik.lib %MAPNIK_SDK%\libs\ /Y
+xcopy /q /d .\build\%BUILD_TYPE%\mapnik.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d .\build\lib\mapnik.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR

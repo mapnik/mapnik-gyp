@@ -50,9 +50,14 @@
           "VCCLCompilerTool": {
             "RuntimeLibrary": "3",
             "Optimization": 0,
+            "FavorSizeOrSpeed": 1, # /Ot, favour speed over size
             "MinimalRebuild": "false",
-            "OmitFramePointers": "false",
-            "BasicRuntimeChecks": 3
+            "OmitFramePointers": "true",
+            "BasicRuntimeChecks": 3,
+            "AdditionalOptions": [
+              "/MP", # compile across multiple CPUs
+              "/bigobj", #compiling: x86 fatal error C1128: number of sections exceeded object file format limit: compile with /bigobj
+            ],
           }
         },
         "xcode_settings": {
