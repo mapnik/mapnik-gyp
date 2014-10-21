@@ -34,7 +34,7 @@ fi
 
 # gyp
 if [[ ! -d gyp ]]; then
-    git clone https://chromium.googlesource.com/external/gyp.git gyp
+    git clone --depth=1 https://chromium.googlesource.com/external/gyp.git gyp
 fi
 
 export PATH=${BASE_PATH}/bin:$PATH
@@ -80,7 +80,7 @@ if [[ $COVERITY == true ]];then
     https://scan.coverity.com/builds?project=mapnik%2Fmapnik
 else
   if [[ ! -d ninja ]]; then
-      git clone git://github.com/martine/ninja.git
+      git clone --depth=1 git://github.com/martine/ninja.git
   fi
   if [[ ! -f ninja/ninja ]]; then
       cd ninja
