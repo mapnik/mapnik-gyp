@@ -7,6 +7,6 @@ else
     export LD_LIBRARY_PATH="${CURRENT_DIR}/out/Release/lib/":${LD_LIBRARY_PATH}
 fi
 export PYTHONPATH="${CURRENT_DIR}/out/Release/lib/python2.7/":$PYTHONPATH
-export MAPNIK_FONT_DIRECTORY="${CURRENT_DIR}/../fonts/dejavu-fonts-ttf-2.33/ttf/"
+export MAPNIK_FONT_DIRECTORY="${CURRENT_DIR}/../fonts/dejavu-fonts-ttf-2.34/ttf/"
 export MAPNIK_INPUT_PLUGINS_DIRECTORY="${CURRENT_DIR}/out/Release/lib/plugins/input/"
 export PATH="${CURRENT_DIR}/out/Release/bin/":${PATH}

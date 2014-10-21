@@ -99,5 +99,5 @@ else
    time ninja/ninja -C out/Release/ mapnik_wkt -j2  -l 2
    time ninja/ninja -C out/Release/ mapnik_json -j2  -l 2
    # remainder of mapnik
-   time ninja/ninja -C out/Release/ -j10 -l 2
+   time ninja/ninja -C out/Release/ -j12 -l 2
 fi
