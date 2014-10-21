@@ -171,10 +171,14 @@ xcopy /q /d %DEPSDIR%\zlib\zlib.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\proj\src\proj.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\webp\output\release-dynamic\%WEBP_PLATFORM%\lib\libwebp_dll.lib %MAPNIK_SDK%\libs\ /Y
+
+SET WEBP_FILE_SUFFIX=
+IF %BUILD_TYPE% EQU Debug (SET WEBP_FILE_SUFFIX=_debug)
+xcopy /q /d %DEPSDIR%\webp\output\release-dynamic\%WEBP_PLATFORM%\lib\libwebp%WEBP_FILE_SUFFIX%_dll.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\webp\output\release-dynamic\%WEBP_PLATFORM%\bin\libwebp.dll %MAPNIK_SDK%\libs\ /Y
+xcopy /q /d %DEPSDIR%\webp\output\release-dynamic\%WEBP_PLATFORM%\bin\libwebp%WEBP_FILE_SUFFIX%.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
 if "%BOOSTADDRESSMODEL%"=="64" (
   xcopy /q /d %DEPSDIR%\libpng\projects\vstudio\x64\Release\libpng16.lib %MAPNIK_SDK%\libs\ /Y
   IF %ERRORLEVEL% NEQ 0 GOTO ERROR
