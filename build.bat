@@ -134,28 +134,25 @@ xcopy /q /d %DEPSDIR%\harfbuzz-build\harfbuzz.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\freetype\freetype.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-if "%BOOSTADDRESSMODEL%"=="64" (
-  xcopy /q /d %DEPSDIR%\icu\lib64\icuuc.lib %MAPNIK_SDK%\libs\ /Y
-  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-  xcopy /q /d %DEPSDIR%\icu\lib64\icuin.lib %MAPNIK_SDK%\libs\ /Y
-  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-  xcopy /q /d %DEPSDIR%\icu\bin64\icuuc53.dll %MAPNIK_SDK%\libs\ /Y
-  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-  xcopy /q /d %DEPSDIR%\icu\bin64\icudt53.dll %MAPNIK_SDK%\libs\ /Y
-  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-  xcopy /q /d %DEPSDIR%\icu\bin64\icuin53.dll %MAPNIK_SDK%\libs\ /Y
-) ELSE (
-  xcopy /q /d %DEPSDIR%\icu\lib\icuuc.lib %MAPNIK_SDK%\libs\ /Y
-  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-  xcopy /q /d %DEPSDIR%\icu\lib\icuin.lib %MAPNIK_SDK%\libs\ /Y
-  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-  xcopy /q /d %DEPSDIR%\icu\bin\icuuc53.dll %MAPNIK_SDK%\libs\ /Y
-  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-  xcopy /q /d %DEPSDIR%\icu\bin\icudt53.dll %MAPNIK_SDK%\libs\ /Y
-  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-  xcopy /q /d %DEPSDIR%\icu\bin\icuin53.dll %MAPNIK_SDK%\libs\ /Y
-)
+
+
+SET ICU_PATH_POSTFIX=
+SET ICU_FILE_POSTFIX=
+if %BOOSTADDRESSMODEL% EQU 64 (SET ICU_PATH_POSTFIX=64)
+IF %BUILD_TYPE% EQU Debug (SET ICU_FILE_POSTFIX=d)
+
+xcopy /q /d %DEPSDIR%\icu\lib%ICU_PATH_POSTFIX%\icuuc%ICU_FILE_POSTFIX%.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+xcopy /q /d %DEPSDIR%\icu\lib%ICU_PATH_POSTFIX%\icuin%ICU_FILE_POSTFIX%.lib %MAPNIK_SDK%\libs\ /Y
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+xcopy /q /d %DEPSDIR%\icu\bin%ICU_PATH_POSTFIX%\icuuc53%ICU_FILE_POSTFIX%.dll %MAPNIK_SDK%\libs\ /Y
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+xcopy /q /d %DEPSDIR%\icu\bin%ICU_PATH_POSTFIX%\icudt53%ICU_FILE_POSTFIX%.dll %MAPNIK_SDK%\libs\ /Y
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+xcopy /q /d %DEPSDIR%\icu\bin%ICU_PATH_POSTFIX%\icuin53%ICU_FILE_POSTFIX%.dll %MAPNIK_SDK%\libs\ /Y
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+
 xcopy /q /d %DEPSDIR%\libxml2\win32\bin.msvc\libxml2_a.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\libxml2\win32\bin.msvc\libxml2_a_dll.lib %MAPNIK_SDK%\libs\ /Y
