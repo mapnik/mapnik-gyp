@@ -20,9 +20,6 @@
         "-Wall",
         "-Wextra",
         "-pedantic",
-        "-Wno-parentheses",
-        "-Wno-char-subscripts",
-        "-Wno-unused-parameter",
         "-Wno-c++11-long-long",
         "-Wno-unsequenced",
         "-Wno-sign-compare",
@@ -33,14 +30,16 @@
         "-Wno-variadic-macros",
         "-Wno-c++11-extensions",
         "-Wno-unused-const-variable",
+        "-Wno-unknown-pragmas",
         "-Wno-c++11-narrowing" # works around boost gil bug
       ]
     },
     "cflags_cc": [
       "-std=c++11",
-      "-Wno-c++11-narrowing", # works around boost gil bug
       "-fPIC", # so that we can link agg into libmapnik.so
+      "-Wno-c++11-narrowing", # works around boost gil bug
       "-Wno-unsequenced",
+      "-Wno-unknown-pragmas",
       "-Wno-redeclared-class-member"
     ],
     "configurations": {
