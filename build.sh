@@ -43,7 +43,13 @@ export PKG_CONFIG_PATH=${BASE_PATH}/lib/pkgconfig
 rm -rf ./unix-build
 rm -rf ./Release
 
-COVERITY=false
+if [[ "${COVERITY:-unset_val}" == "unset_val" ]]; then
+    COVERITY=false
+fi
+
+if [[ "${CONFIGURATION:-unset_val}" == "unset_val" ]]; then
+    CONFIGURATION="Release"
+fi
 
 if [[ $COVERITY == true ]];then
   #export CC=/usr/bin/clang
@@ -53,7 +59,7 @@ if [[ $COVERITY == true ]];then
     -f make \
     --generator-output=./unix-build \
     -Dincludes=${BASE_PATH}/include \
-    -Dconfiguration=Release \
+    -Dconfiguration=${CONFIGURATION} \
     -Dlibs=${BASE_PATH}/lib \
     --no-duplicate-basename-check
 
@@ -92,7 +98,7 @@ else
       --depth=. \
       -f ninja \
       -Dincludes=${BASE_PATH}/include \
-      -Dconfiguration=Release \
+      -Dconfiguration=${CONFIGURATION} \
       -Dlibs=${BASE_PATH}/lib \
       --no-duplicate-basename-check
    # serial build of memory intensive things first

@@ -2,6 +2,12 @@ language: cpp
 
 compiler:
  - clang
+ - gcc
+
+env:
+  matrix:
+   - CONFIGURATION=Release
+   - CONFIGURATION=Debug
 
 addons:
   postgresql: "9.3"
@@ -27,4 +33,4 @@ before_script:
 
 script:
  - . build.sh
- - ./test.sh
+ #- ./test.sh
