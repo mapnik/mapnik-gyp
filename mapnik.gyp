@@ -60,7 +60,7 @@
                   "boost_program_options_lib":"boost_program_options-vc140-mt-1_56.lib",
                   "webp_lib":"libwebp_dll.lib",
                   "icuuc_lib":"icuuc.lib",
-                  "icuin_lib":"icuind.lib"
+                  "icuin_lib":"icuin.lib"
               }
             ]
           ],
@@ -590,7 +590,7 @@
           {
             "libraries":[
               "<(boost_filesystem_lib)",
-              "libboost_system-vc140-mt-1_56"
+              "<(boost_system_lib)"
             ],
           } ,
           {
@@ -629,7 +629,7 @@
           {
             "libraries":[
               "<(boost_filesystem_lib)",
-              "libboost_system-vc140-mt-1_56"
+              "<(boost_system_lib)"
             ],
           } ,
           {
@@ -649,7 +649,7 @@
           {
             "libraries":[
               "<(boost_filesystem_lib)",
-              "libboost_system-vc140-mt-1_56"
+              "<(boost_system_lib)"
             ],
           } ,
           {
@@ -670,7 +670,7 @@
             "libraries":[
               "<(icuuc_lib)",
               "<(boost_filesystem_lib)",
-              "libboost_system-vc140-mt-1_56"
+              "<(boost_system_lib)"
             ],
           } ,
           {
@@ -690,7 +690,7 @@
           {
             "libraries":[
               "<(boost_filesystem_lib)",
-              "libboost_system-vc140-mt-1_56"
+              "<(boost_system_lib)"
             ],
           } ,
           {
@@ -710,7 +710,7 @@
           {
             "libraries":[
               "<(boost_filesystem_lib)",
-              "libboost_system-vc140-mt-1_56"
+              "<(boost_system_lib)"
             ],
           } ,
           {
@@ -768,7 +768,7 @@
         ["OS=='win'",
           {
             "libraries":[
-              "libboost_system-vc140-mt-1_56"
+              "<(boost_system_lib)"
             ]
           }
         ]
