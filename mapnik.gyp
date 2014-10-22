@@ -44,9 +44,9 @@
                   "boost_filesystem_lib":"libboost_filesystem-vc140-mt-gd-1_56.lib",
                   "boost_regex_lib":"libboost_regex-vc140-mt-gd-1_56.lib",
                   "boost_system_lib":"libboost_system-vc140-mt-gd-1_56.lib",
+                  "boost_thread_lib":"libboost_thread-vc140-mt-gd-1_56.lib",
+                  "boost_program_options_lib":"libboost_program_options-vc140-mt-gd-1_56.lib",
                   "boost_python_lib":"boost_python-vc140-mt-gd-1_56.lib",
-                  "boost_thread_lib":"boost_thread-vc140-mt-gd-1_56.lib",
-                  "boost_program_options_lib":"boost_program_options-vc140-mt-gd-1_56.lib",
                   "webp_lib":"libwebp_debug_dll.lib",
                   "icuuc_lib":"icuucd.lib",
                   "icuin_lib":"icuind.lib"
@@ -55,9 +55,9 @@
                   "boost_filesystem_lib":"libboost_filesystem-vc140-mt-1_56.lib",
                   "boost_regex_lib":"libboost_regex-vc140-mt-1_56.lib",
                   "boost_system_lib":"libboost_system-vc140-mt-1_56.lib",
+                  "boost_thread_lib":"libboost_thread-vc140-mt-1_56.lib",
+                  "boost_program_options_lib":"libboost_program_options-vc140-mt-1_56.lib",
                   "boost_python_lib":"boost_python-vc140-mt-1_56.lib",
-                  "boost_thread_lib":"boost_thread-vc140-mt-1_56.lib",
-                  "boost_program_options_lib":"boost_program_options-vc140-mt-1_56.lib",
                   "webp_lib":"libwebp_dll.lib",
                   "icuuc_lib":"icuuc.lib",
                   "icuin_lib":"icuin.lib"
