@@ -3,7 +3,6 @@
     "./common.gypi"
   ],
   "variables": {
-    "buildtype_debug%":"0",
     "includes%":"",
     "libs%":"",
     "configuration%":"",
@@ -150,7 +149,7 @@
           {
             "defines": ["MAPNIK_EXPORTS"],
             "conditions": [
-              ["buildtype_debug==1",
+              ["configuration=='Debug'",
                 {
                   "libraries":[
                     "libboost_filesystem-vc140-mt-gd-1_56.lib",
