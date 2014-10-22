@@ -40,9 +40,6 @@ fi
 export PATH=${BASE_PATH}/bin:$PATH
 export PKG_CONFIG_PATH=${BASE_PATH}/lib/pkgconfig
 
-rm -rf ./unix-build
-rm -rf ./Release
-
 if [[ "${COVERITY:-unset_val}" == "unset_val" ]]; then
     COVERITY=false
 fi
@@ -50,6 +47,9 @@ fi
 if [[ "${CONFIGURATION:-unset_val}" == "unset_val" ]]; then
     CONFIGURATION="Release"
 fi
+
+rm -rf ./unix-build
+rm -rf ./${CONFIGURATION}
 
 if [[ $COVERITY == true ]];then
   #export CC=/usr/bin/clang
@@ -102,8 +102,8 @@ else
       -Dlibs=${BASE_PATH}/lib \
       --no-duplicate-basename-check
    # serial build of memory intensive things first
-   time ninja/ninja -C out/Release/ mapnik_wkt -j2  -l 2
-   time ninja/ninja -C out/Release/ mapnik_json -j2  -l 2
+   time ninja/ninja -C out/${CONFIGURATION}/ mapnik_wkt -j2  -l 2 -v
+   time ninja/ninja -C out/${CONFIGURATION}/ mapnik_json -j2  -l 2 -v
    # remainder of mapnik
-   time ninja/ninja -C out/Release/ -j12 -l 2
+   time ninja/ninja -C out/${CONFIGURATION}/ -j12 -l 2 -v
 fi
