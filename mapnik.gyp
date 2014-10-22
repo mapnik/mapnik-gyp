@@ -50,7 +50,7 @@
                   "webp_lib":"libwebp_debug_dll.lib",
                   "icuuc_lib":"icuucd.lib",
                   "icuin_lib":"icuind.lib",
-                  "pq_lib":"libpq.lib"
+                  "pq_lib":"libpqd.lib"
               },
               {
                   "boost_filesystem_lib":"libboost_filesystem-vc140-mt-1_56.lib",
@@ -61,8 +61,8 @@
                   "boost_python_lib":"boost_python-vc140-mt-1_56.lib",
                   "webp_lib":"libwebp_dll.lib",
                   "icuuc_lib":"icuuc.lib",
-                  "icuin_lib":"icuind.lib",
-                  "pq_lib":"libpqd.lib"
+                  "icuin_lib":"icuin.lib",
+                  "pq_lib":"libpq.lib"
               }
             ]
           ],
