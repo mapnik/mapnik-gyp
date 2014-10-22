@@ -46,6 +46,7 @@
     "configurations": {
       "Debug": {
         "defines": [ "DEBUG","_DEBUG" ],
+        "buildtype_debug": "1",
         "msvs_settings": {
           "VCCLCompilerTool": {
             "RuntimeLibrary": "3",

@@ -3,6 +3,7 @@
     "./common.gypi"
   ],
   "variables": {
+    "buildtype_debug%":"0",
     "includes%":"",
     "libs%":"",
     "configuration%":"",
@@ -148,25 +149,52 @@
         ["OS=='win'",
           {
             "defines": ["MAPNIK_EXPORTS"],
-            "libraries":[
-              "libboost_filesystem-vc140-mt-1_56.lib",
-              "libboost_regex-vc140-mt-1_56.lib",
-              "libboost_system-vc140-mt-1_56.lib",
-              "libpng16.lib",
-              "proj.lib",
-              "libtiff_i.lib",
-              "libwebp_dll.lib",
-              #"libxml2.lib", #dynamic
-              "libxml2_a.lib", #static
-              # needed if libxml2 is static
-              "ws2_32.lib",
-              "libjpeg.lib",
-              "icuuc.lib",
-              "icuin.lib",
-              "freetype.lib",
-              "zlib.lib",
-              "cairo.lib",
-              "harfbuzz.lib"
+            "conditions": [
+              ["buildtype_debug==1",
+                {
+                  "libraries":[
+                    "libboost_filesystem-vc140-mt-gd-1_56.lib",
+                    "libboost_regex-vc140-mt-gd-1_56.lib",
+                    "libboost_system-vc140-mt-gd-1_56.lib",
+                    "libpng16.lib",
+                    "proj.lib",
+                    "libtiff_i.lib",
+                    "libwebp_debug_dll.lib",
+                    #"libxml2.lib", #dynamic
+                    "libxml2_a.lib", #static
+                    # needed if libxml2 is static
+                    "ws2_32.lib",
+                    "libjpeg.lib",
+                    "icuucd.lib",
+                    "icuind.lib",
+                    "freetype.lib",
+                    "zlib.lib",
+                    "cairo.lib",
+                    "harfbuzz.lib"
+                  ]
+                }, {
+                  "libraries":[
+                    "libboost_filesystem-vc140-mt-1_56.lib",
+                    "libboost_regex-vc140-mt-1_56.lib",
+                    "libboost_system-vc140-mt-1_56.lib",
+                    "libpng16.lib",
+                    "proj.lib",
+                    "libtiff_i.lib",
+                    "libwebp_dll.lib",
+                    #"libxml2.lib", #dynamic
+                    "libxml2_a.lib", #static
+                    # needed if libxml2 is static
+                    "ws2_32.lib",
+                    "libjpeg.lib",
+                    "icuuc.lib",
+                    "icuin.lib",
+                    "freetype.lib",
+                    "zlib.lib",
+                    "cairo.lib",
+                    "harfbuzz.lib"
+                  ]
+                }
+              ]
             ]
           },
           {
