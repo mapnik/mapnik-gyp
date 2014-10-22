@@ -140,15 +140,15 @@ SET ICU_PATH_POSTFIX=
 SET ICU_FILE_POSTFIX=
 if %BOOSTADDRESSMODEL% EQU 64 (SET ICU_PATH_POSTFIX=64)
 IF %BUILD_TYPE% EQU Debug (SET ICU_FILE_POSTFIX=d)
-echo f | xcopy /q /d %DEPSDIR%\icu\lib%ICU_PATH_POSTFIX%\icuuc%ICU_FILE_POSTFIX%.lib %MAPNIK_SDK%\libs\icuuc.lib /Y
+xcopy /q /d %DEPSDIR%\icu\lib%ICU_PATH_POSTFIX%\icuuc%ICU_FILE_POSTFIX%.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-echo f | xcopy /q /d %DEPSDIR%\icu\lib%ICU_PATH_POSTFIX%\icuin%ICU_FILE_POSTFIX%.lib %MAPNIK_SDK%\libs\icuin.lib /Y
+xcopy /q /d %DEPSDIR%\icu\lib%ICU_PATH_POSTFIX%\icuin%ICU_FILE_POSTFIX%.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-echo f | xcopy /q /d %DEPSDIR%\icu\bin%ICU_PATH_POSTFIX%\icuuc53%ICU_FILE_POSTFIX%.dll %MAPNIK_SDK%\libs\icuuc53.dll /Y
+xcopy /q /d %DEPSDIR%\icu\bin%ICU_PATH_POSTFIX%\icuuc53%ICU_FILE_POSTFIX%.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\icu\bin%ICU_PATH_POSTFIX%\icudt53.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-echo f | xcopy /q /d %DEPSDIR%\icu\bin%ICU_PATH_POSTFIX%\icuin53%ICU_FILE_POSTFIX%.dll %MAPNIK_SDK%\libs\icuin53.dll /Y
+xcopy /q /d %DEPSDIR%\icu\bin%ICU_PATH_POSTFIX%\icuin53%ICU_FILE_POSTFIX%.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 
@@ -173,9 +173,9 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 SET WEBP_FILE_SUFFIX=
 IF %BUILD_TYPE% EQU Debug (SET WEBP_FILE_SUFFIX=_debug)
-echo f | xcopy /q /d %DEPSDIR%\webp\output\%BUILD_TYPE%-dynamic\%WEBP_PLATFORM%\lib\libwebp%WEBP_FILE_SUFFIX%_dll.lib %MAPNIK_SDK%\libs\libwebp_dll.lib /Y
+xcopy /q /d %DEPSDIR%\webp\output\%BUILD_TYPE%-dynamic\%WEBP_PLATFORM%\lib\libwebp%WEBP_FILE_SUFFIX%_dll.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-echo f | xcopy /q /d %DEPSDIR%\webp\output\%BUILD_TYPE%-dynamic\%WEBP_PLATFORM%\bin\libwebp%WEBP_FILE_SUFFIX%.dll %MAPNIK_SDK%\libs\libwebp.dll /Y
+xcopy /q /d %DEPSDIR%\webp\output\%BUILD_TYPE%-dynamic\%WEBP_PLATFORM%\bin\libwebp%WEBP_FILE_SUFFIX%.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 if "%BOOSTADDRESSMODEL%"=="64" (
@@ -196,31 +196,8 @@ xcopy /q /d %DEPSDIR%\cairo\src\%BUILD_TYPE%\cairo.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\cairo\src\%BUILD_TYPE%\cairo.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-
-IF %BUILD_TYPE% EQU Release (
-  xcopy /i /d /s /q %DEPSDIR%\boost_1_56_0\stage\lib\* %MAPNIK_SDK%\libs\ /Y
-  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-) ELSE (
-  echo f | xcopy /y /d /q %DEPSDIR%\boost_1_56_0\stage\lib\boost_python-vc140-mt-gd-1_56.dll %MAPNIK_SDK%\libs\boost_python-vc140-mt-1_56.dll
-  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-  echo f | xcopy /y /d /q %DEPSDIR%\boost_1_56_0\stage\lib\boost_python-vc140-mt-gd-1_56.lib %MAPNIK_SDK%\libs\boost_python-vc140-mt-1_56.lib
-  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-  echo f | xcopy /y /d /q %DEPSDIR%\boost_1_56_0\stage\lib\libboost_chrono-vc140-mt-gd-1_56.lib %MAPNIK_SDK%\libs\libboost_chrono-vc140-mt-1_56.lib
-  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-  echo f | xcopy /y /d /q %DEPSDIR%\boost_1_56_0\stage\lib\libboost_date_time-vc140-mt-gd-1_56.lib %MAPNIK_SDK%\libs\libboost_date_time-vc140-mt-1_56.lib
-  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-  echo f | xcopy /y /d /q %DEPSDIR%\boost_1_56_0\stage\lib\libboost_filesystem-vc140-mt-gd-1_56.lib %MAPNIK_SDK%\libs\libboost_filesystem-vc140-mt-1_56.lib
-  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-  echo f | xcopy /y /d /q %DEPSDIR%\boost_1_56_0\stage\lib\libboost_program_options-vc140-mt-gd-1_56.lib %MAPNIK_SDK%\libs\libboost_program_options-vc140-mt-1_56.lib
-  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-  echo f | xcopy /y /d /q %DEPSDIR%\boost_1_56_0\stage\lib\libboost_regex-vc140-mt-gd-1_56.lib %MAPNIK_SDK%\libs\libboost_regex-vc140-mt-1_56.lib
-  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-  echo f | xcopy /y /d /q %DEPSDIR%\boost_1_56_0\stage\lib\libboost_system-vc140-mt-gd-1_56.lib %MAPNIK_SDK%\libs\libboost_system-vc140-mt-1_56.lib
-  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-  echo f | xcopy /y /d /q %DEPSDIR%\boost_1_56_0\stage\lib\libboost_thread-vc140-mt-gd-1_56.lib %MAPNIK_SDK%\libs\libboost_thread-vc140-mt-1_56.lib
-  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-)
-
+xcopy /i /d /s /q %DEPSDIR%\boost_1_56_0\stage\lib\* %MAPNIK_SDK%\libs\ /Y
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\protobuf\vsprojects\%BUILD_TYPE%\libprotobuf-lite.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
@@ -291,9 +268,9 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 :: libs for plugins
 SET LIBPQ_FILE_SUFFIX=
 IF %BUILD_TYPE% EQU Debug (SET LIBPQ_FILE_SUFFIX=d)
-echo f | xcopy /q /d %DEPSDIR%\postgresql\src\interfaces\libpq\%BUILD_TYPE%\libpq%LIBPQ_FILE_SUFFIX%.lib %MAPNIK_SDK%\libs\libpq.lib /Y
+xcopy /q /d %DEPSDIR%\postgresql\src\interfaces\libpq\%BUILD_TYPE%\libpq%LIBPQ_FILE_SUFFIX%.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-echo f | xcopy /q /d %DEPSDIR%\postgresql\src\interfaces\libpq\%BUILD_TYPE%\libpq%LIBPQ_FILE_SUFFIX%.dll %MAPNIK_SDK%\libs\libpq.dll /Y
+xcopy /q /d %DEPSDIR%\postgresql\src\interfaces\libpq\%BUILD_TYPE%\libpq%LIBPQ_FILE_SUFFIX%.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 xcopy /q /d %DEPSDIR%\sqlite\sqlite3.lib %MAPNIK_SDK%\libs\ /Y
