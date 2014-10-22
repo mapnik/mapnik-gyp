@@ -38,6 +38,32 @@
     "conditions": [
       ["OS=='win'",
         {
+          "conditions": [
+            ["configuration=='Debug'",
+              {
+                  "boost_filesystem_lib":"libboost_filesystem-vc140-mt-gd-1_56.lib",
+                  "boost_regex_lib":"libboost_regex-vc140-mt-gd-1_56.lib",
+                  "boost_system_lib":"libboost_system-vc140-mt-gd-1_56.lib",
+                  "boost_python_lib":"boost_python-vc140-mt-gd-1_56.lib",
+                  "boost_thread_lib":"boost_thread-vc140-mt-gd-1_56.lib",
+                  "boost_program_options_lib":"boost_program_options-vc140-mt-gd-1_56.lib",
+                  "webp_lib":"libwebp_debug_dll.lib",
+                  "icuuc_lib":"icuucd.lib",
+                  "icuin_lib":"icuind.lib"
+              },
+              {
+                  "boost_filesystem_lib":"libboost_filesystem-vc140-mt-1_56.lib",
+                  "boost_regex_lib":"libboost_regex-vc140-mt-1_56.lib",
+                  "boost_system_lib":"libboost_system-vc140-mt-1_56.lib",
+                  "boost_python_lib":"boost_python-vc140-mt-1_56.lib",
+                  "boost_thread_lib":"boost_thread-vc140-mt-1_56.lib",
+                  "boost_program_options_lib":"boost_program_options-vc140-mt-1_56.lib",
+                  "webp_lib":"libwebp_dll.lib",
+                  "icuuc_lib":"icuuc.lib",
+                  "icuin_lib":"icuind.lib"
+              }
+            ]
+          ],
           "common_defines": [
             "LIBXML_STATIC", # static libxml: libxml2_a.lib
             "BOOST_VARIANT_DO_NOT_USE_VARIADIC_TEMPLATES",
@@ -148,52 +174,23 @@
         ["OS=='win'",
           {
             "defines": ["MAPNIK_EXPORTS"],
-            "conditions": [
-              ["configuration=='Debug'",
-                {
-                  "libraries":[
-                    "libboost_filesystem-vc140-mt-gd-1_56.lib",
-                    "libboost_regex-vc140-mt-gd-1_56.lib",
-                    "libboost_system-vc140-mt-gd-1_56.lib",
-                    "libpng16.lib",
-                    "proj.lib",
-                    "libtiff_i.lib",
-                    "libwebp_debug_dll.lib",
-                    #"libxml2.lib", #dynamic
-                    "libxml2_a.lib", #static
-                    # needed if libxml2 is static
-                    "ws2_32.lib",
-                    "libjpeg.lib",
-                    "icuucd.lib",
-                    "icuind.lib",
-                    "freetype.lib",
-                    "zlib.lib",
-                    "cairo.lib",
-                    "harfbuzz.lib"
-                  ]
-                }, {
-                  "libraries":[
-                    "libboost_filesystem-vc140-mt-1_56.lib",
-                    "libboost_regex-vc140-mt-1_56.lib",
-                    "libboost_system-vc140-mt-1_56.lib",
-                    "libpng16.lib",
-                    "proj.lib",
-                    "libtiff_i.lib",
-                    "libwebp_dll.lib",
-                    #"libxml2.lib", #dynamic
-                    "libxml2_a.lib", #static
-                    # needed if libxml2 is static
-                    "ws2_32.lib",
-                    "libjpeg.lib",
-                    "icuuc.lib",
-                    "icuin.lib",
-                    "freetype.lib",
-                    "zlib.lib",
-                    "cairo.lib",
-                    "harfbuzz.lib"
-                  ]
-                }
-              ]
+            "libraries":[
+              "<(boost_filesystem_lib)",
+              "<(boost_regex_lib)",
+              "<(boost_system_lib)",
+              "<(webp_lib)",
+              "<(icuuc_lib)",
+              "<(icuin_lib)",
+              "libpng16.lib",
+              "proj.lib",
+              "libtiff_i.lib",
+              "libxml2_a.lib",
+              "ws2_32.lib",
+              "libjpeg.lib",
+              "freetype.lib",
+              "zlib.lib",
+              "cairo.lib",
+              "harfbuzz.lib"
             ]
           },
           {
@@ -280,12 +277,12 @@
         ["OS=='win'",
           {
             "libraries":[
-              "libboost_thread-vc140-mt-1_56.lib",
-              "libboost_system-vc140-mt-1_56.lib",
-              "libboost_regex-vc140-mt-1_56.lib",
-              "icuuc.lib",
-              "icuin.lib",
-              "boost_python-vc140-mt-1_56.lib",
+              "<(boost_thread_lib)",
+              "<(boost_system_lib)",
+              "<(boost_regex_lib)",
+              "<(icuuc_lib)",
+              "<(icuin_lib)",
+              "<(boost_python_lib)",
               "python27.lib"
             ],
             "defines":["HAVE_ROUND","HAVE_HYPOT"]
@@ -315,10 +312,10 @@
         ["OS=='win'",
           {
             "libraries":[
-              "libboost_program_options-vc140-mt-1_56.lib",
-              "libboost_filesystem-vc140-mt-1_56.lib",
-              "libboost_system-vc140-mt-1_56.lib",
-              "icuuc.lib"
+              "<(boost_program_options_lib)",
+              "<(boost_filesystem_lib)",
+              "<(boost_system_lib)",
+              "<(icuuc_lib)"
             ],
           },
           {
@@ -342,8 +339,8 @@
         ["OS=='win'",
           {
             "libraries":[
-              "libboost_program_options-vc140-mt-1_56.lib",
-              "libboost_system-vc140-mt-1_56.lib",
+              "<(boost_program_options_lib)",
+              "<(boost_system_lib)",
             ],
           },
           {
@@ -367,7 +364,7 @@
         ["OS=='win'",
           {
             "libraries": [
-              "icuuc.lib",
+              "<(icuuc_lib)",
             ]
           }
         ]
@@ -385,7 +382,7 @@
         ["OS=='win'",
           {
             "libraries": [
-              "icuuc.lib",
+              "<(icuuc_lib)",
             ]
           }
         ]
@@ -403,7 +400,7 @@
         ["OS=='win'",
           {
             "libraries":[
-              "icuuc.lib"
+              "<(icuuc_lib)"
             ],
           }
         ]
@@ -421,8 +418,8 @@
         ["OS=='win'",
           {
             "libraries":[
-              "libboost_system-vc140-mt-1_56.lib",
-              "icuuc.lib"
+              "<(boost_system_lib)",
+              "<(icuuc_lib)"
             ],
           }
         ]
@@ -451,8 +448,8 @@
             "libraries": [
               "gdal_i.lib",
               "libexpat.lib",
-              "libboost_system-vc140-mt-1_56.lib",
-              "icuuc.lib",
+              "<(boost_system_lib)",
+              "<(icuuc_lib)",
               "odbccp32.lib"
             ]
           } ,
@@ -478,8 +475,8 @@
             "libraries": [
               "gdal_i.lib",
               "libexpat.lib",
-              "libboost_system-vc140-mt-1_56.lib",
-              "icuuc.lib",
+              "<(boost_system_lib)",
+              "<(icuuc_lib)",
               "odbccp32.lib"
             ]
           } ,
@@ -508,9 +505,9 @@
               "advapi32.lib",
               "shfolder.lib",
               "secur32.lib",
-              "icuuc.lib",
+              "<(icuuc_lib)",
               "ws2_32.lib",
-              "libboost_regex-vc140-mt-1_56.lib"
+              "<(boost_regex_lib)"
             ]
           } ,
           {
@@ -540,7 +537,7 @@
               "advapi32.lib",
               "shfolder.lib",
               "secur32.lib",
-              "icuuc.lib",
+              "<(icuuc_lib)",
               "ws2_32.lib",
             ]
           } ,
@@ -566,7 +563,7 @@
           {
             "libraries": [
               "sqlite3.lib",
-              "icuuc.lib",
+              "<(icuuc_lib)",
             ]
           } ,
           {
@@ -592,7 +589,7 @@
         ["OS=='win'",
           {
             "libraries":[
-              "libboost_filesystem-vc140-mt-1_56.lib",
+              "<(boost_filesystem_lib)",
               "libboost_system-vc140-mt-1_56"
             ],
           } ,
@@ -612,7 +609,7 @@
         ["OS=='win'",
           {
             "libraries":[
-              "icuuc.lib"
+              "<(icuuc_lib)"
             ],
           } ,
           {
@@ -631,7 +628,7 @@
         ["OS=='win'",
           {
             "libraries":[
-              "libboost_filesystem-vc140-mt-1_56.lib",
+              "<(boost_filesystem_lib)",
               "libboost_system-vc140-mt-1_56"
             ],
           } ,
@@ -651,7 +648,7 @@
         ["OS=='win'",
           {
             "libraries":[
-              "libboost_filesystem-vc140-mt-1_56.lib",
+              "<(boost_filesystem_lib)",
               "libboost_system-vc140-mt-1_56"
             ],
           } ,
@@ -671,8 +668,8 @@
         ["OS=='win'",
           {
             "libraries":[
-              "icuuc.lib",
-              "libboost_filesystem-vc140-mt-1_56.lib",
+              "<(icuuc_lib)",
+              "<(boost_filesystem_lib)",
               "libboost_system-vc140-mt-1_56"
             ],
           } ,
@@ -692,7 +689,7 @@
         ["OS=='win'",
           {
             "libraries":[
-              "libboost_filesystem-vc140-mt-1_56.lib",
+              "<(boost_filesystem_lib)",
               "libboost_system-vc140-mt-1_56"
             ],
           } ,
@@ -712,7 +709,7 @@
         ["OS=='win'",
           {
             "libraries":[
-              "libboost_filesystem-vc140-mt-1_56.lib",
+              "<(boost_filesystem_lib)",
               "libboost_system-vc140-mt-1_56"
             ],
           } ,
@@ -739,7 +736,7 @@
         ["OS=='win'",
           {
             "libraries":[
-              "libboost_system-vc140-mt-1_56.lib"
+              "<(boost_system_lib)"
             ],
           } ,
           {
