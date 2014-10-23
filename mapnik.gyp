@@ -33,7 +33,8 @@
       "<@(includes)/libxml2",
       "<@(includes)/cairo"
     ],
-    "python_version": "2.7",
+    "python_version": '<!(python -c "import sys;print(\'%s.%s\' % (sys.version_info.major,sys.version_info.minor))")',
+    "python_version2": '<!(python -c "import sys;print(\'%s%s\' % (sys.version_info.major,sys.version_info.minor))")',
     "python_root": '<!(python -c "import sys,ntpath,posixpath;print(sys.prefix).replace(ntpath.sep,posixpath.sep)")', # note: single quotes needed for windows
     "conditions": [
       ["OS=='win'",
@@ -84,7 +85,7 @@
             "-L<@(libs)"
           ],
           "python_includes":"/usr/include/python<(python_version)",
-          "python_libs":"/usr/lib/python<(python_version)",
+          "python_libs":"<(python_root)/lib",
           "python_module_extension": "so"
         }
       ],
@@ -285,7 +286,7 @@
               "<(icuuc_lib)",
               "<(icuin_lib)",
               "<(boost_python_lib)",
-              "python27.lib"
+              "python<(python_version2).lib"
             ],
             "defines":["HAVE_ROUND","HAVE_HYPOT"]
           },
@@ -498,20 +499,37 @@
       "product_extension": "input",
       "sources": [ "<!@(find ../plugins/input/python/ -name '*.cpp')" ],
       "dependencies": [ "mapnik" ],
+      "include_dirs": [
+        "<@(python_includes)"
+      ],
+      "msvs_settings": {
+        "VCLinkerTool": {
+          "AdditionalLibraryDirectories": [
+            "<@(python_libs)"
+          ]
+        }
+      },
       "conditions": [
         ["OS=='win'",
           {
-            "libraries": [
+            "libraries":[
+              "<(boost_thread_lib)",
               "<(boost_system_lib)",
-              "<(boost_python_lib)",
+              "<(boost_regex_lib)",
               "<(icuuc_lib)",
-            ]
-          } ,
+              "<(icuin_lib)",
+              "<(boost_python_lib)",
+              "python<(python_version2).lib"
+            ],
+            "defines":["HAVE_ROUND","HAVE_HYPOT"]
+          },
           {
-            "libraries": [
-              "-lboost_system",
-              "-lboost_python-<(python_version)",
-              "-licuuc"
+            "libraries":[
+                "-lboost_python-<(python_version)",
+                "-lboost_thread",
+                "-lboost_system",
+                "-L<@(python_libs)",
+                "-lpython<(python_version)"
             ]
           }
         ]
