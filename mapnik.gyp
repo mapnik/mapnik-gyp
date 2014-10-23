@@ -491,6 +491,33 @@
       ]
     },
     {
+      "target_name": "python",
+      "product_prefix":"",
+      "type": "loadable_module",
+      "product_dir": "lib/mapnik/input",
+      "product_extension": "input",
+      "sources": [ "<!@(find ../plugins/input/python/ -name '*.cpp')" ],
+      "dependencies": [ "mapnik" ],
+      "conditions": [
+        ["OS=='win'",
+          {
+            "libraries": [
+              "<(boost_system_lib)",
+              "<(boost_python_lib)",
+              "<(icuuc_lib)",
+            ]
+          } ,
+          {
+            "libraries": [
+              "-lboost_system",
+              "-lboost_python-<(python_version)",
+              "-licuuc"
+            ]
+          }
+        ]
+      ]
+    },
+    {
       "target_name": "postgis",
       "product_prefix":"",
       "type": "loadable_module",

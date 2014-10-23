@@ -46,6 +46,18 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 
 :: includes
+SET PYTHON_DIR=%ROOTDIR%\tmp-bin\python2-x86-32
+if %BOOSTADDRESSMODEL% EQU 64 (
+  SET PYTHON_DIR=%ROOTDIR%\tmp-bin\python2
+)
+::xcopy /Q /D /Y %PYTHON_INCLUDE_DIR%\*.* %MAPNIK_SDK%\includes\python
+xcopy /Q /D /Y %PYTHON_DIR%\include\*.* %MAPNIK_SDK%\includes\
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+::SET INCLUDE=%MAPNIK_SDK%\includes\python;%INCLUDE%
+xcopy /Q /D /Y %PYTHON_DIR%\libs\python27.lib %MAPNIK_SDK%\libs\
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+
 xcopy /q /d %DEPSDIR%\harfbuzz-build\harfbuzz\hb-version.h %MAPNIK_SDK%\includes\harfbuzz\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\harfbuzz\src\hb.h %MAPNIK_SDK%\includes\harfbuzz\ /Y
@@ -201,6 +213,15 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\protobuf\vsprojects\%BUILD_TYPE%\libprotobuf-lite.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
+:: pdb
+REM IF %BUILD_TYPE% EQU Debug (
+REM   ECHO %MAPNIK_SDK%\libs\ > EXCLUDES.TXT
+REM   xcopy /Y /S /exclude:EXCLUDES.TXT %DEPSDIR%\*.pdb %MAPNIK_SDK%\libs\
+REM   REM DEL EXCLUDES.TXT
+REM )
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+
 :: data
 xcopy /i /d /s /q %DEPSDIR%\proj\nad %MAPNIK_SDK%\share\proj /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
@@ -292,6 +313,8 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ::dumpbin /directives %MAPNIK_SDK%\libs\*lib | grep LIBCMT
 
 ::msbuild /m:2 /t:mapnik /p:BuildInParellel=true .\build\mapnik.sln /p:Configuration=Release
+
+ECHO INCLUDE %INCLUDE%
 
 msbuild ^
 .\build\mapnik.sln ^
