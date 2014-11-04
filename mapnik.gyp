@@ -733,7 +733,27 @@
       "type": "executable",
       "product_dir":"test",
       "sources": [ "../tests/cpp_tests/geometry_converters_test.cpp"],
-      "dependencies": [ "mapnik" ],
+      "dependencies": [ "mapnik", "mapnik_wkt" ],
+      "conditions": [
+        ["OS=='win'",
+          {
+            "libraries":[
+              "<(boost_filesystem_lib)",
+              "<(boost_system_lib)"
+            ],
+          } ,
+          {
+            "libraries": [ "-lboost_system","-lboost_filesystem"]
+          }
+        ]
+      ]
+    },
+    {
+      "target_name": "simplify_converters_test",
+      "type": "executable",
+      "product_dir":"test",
+      "sources": [ "../tests/cpp_tests/simplify_converters_test.cpp"],
+      "dependencies": [ "mapnik", "mapnik_wkt" ],
       "conditions": [
         ["OS=='win'",
           {
