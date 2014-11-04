@@ -83,7 +83,7 @@ xcopy /q /d %DEPSDIR%\harfbuzz\src\hb-face.h %MAPNIK_SDK%\includes\harfbuzz\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\harfbuzz\src\hb-deprecated.h %MAPNIK_SDK%\includes\harfbuzz\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /i /d /s /q %DEPSDIR%\boost_1_56_0\boost %MAPNIK_SDK%\includes\boost /Y
+xcopy /i /d /s /q %DEPSDIR%\boost\boost %MAPNIK_SDK%\includes\boost /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /i /d /s /q %DEPSDIR%\icu\include\unicode %MAPNIK_SDK%\includes\unicode /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
@@ -207,7 +207,7 @@ xcopy /q /d %DEPSDIR%\cairo\src\%BUILD_TYPE%\cairo.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\cairo\src\%BUILD_TYPE%\cairo.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /i /d /s /q %DEPSDIR%\boost_1_56_0\stage\lib\* %MAPNIK_SDK%\libs\ /Y
+xcopy /i /d /s /q %DEPSDIR%\boost\stage\lib\* %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\protobuf\vsprojects\%BUILDPLATFORM%\%BUILD_TYPE%\libprotobuf-lite.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR

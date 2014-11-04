@@ -33,6 +33,8 @@
       "<@(includes)/libxml2",
       "<@(includes)/cairo"
     ],
+    "boost_version":"1_57",
+    "boost_toolset":"vc140",
     "python_version": '<!(python -c "import sys;print(\'%s.%s\' % (sys.version_info.major,sys.version_info.minor))")',
     "python_version2": '<!(python -c "import sys;print(\'%s%s\' % (sys.version_info.major,sys.version_info.minor))")',
     "python_root": '<!(python -c "import sys,ntpath,posixpath;print(sys.prefix).replace(ntpath.sep,posixpath.sep)")', # note: single quotes needed for windows
@@ -42,24 +44,24 @@
           "conditions": [
             ["configuration=='Debug'",
               {
-                  "boost_filesystem_lib":"libboost_filesystem-vc140-mt-gd-1_56.lib",
-                  "boost_regex_lib":"libboost_regex-vc140-mt-gd-1_56.lib",
-                  "boost_system_lib":"libboost_system-vc140-mt-gd-1_56.lib",
-                  "boost_thread_lib":"libboost_thread-vc140-mt-gd-1_56.lib",
-                  "boost_program_options_lib":"libboost_program_options-vc140-mt-gd-1_56.lib",
-                  "boost_python_lib":"boost_python-vc140-mt-gd-1_56.lib",
+                  "boost_filesystem_lib":"libboost_filesystem-<(boost_toolset)-mt-gd-<(boost_version).lib",
+                  "boost_regex_lib":"libboost_regex-<(boost_toolset)-mt-gd-<(boost_version).lib",
+                  "boost_system_lib":"libboost_system-<(boost_toolset)-mt-gd-<(boost_version).lib",
+                  "boost_thread_lib":"libboost_thread-<(boost_toolset)-mt-gd-<(boost_version).lib",
+                  "boost_program_options_lib":"libboost_program_options-<(boost_toolset)-mt-gd-<(boost_version).lib",
+                  "boost_python_lib":"boost_python-<(boost_toolset)-mt-gd-<(boost_version).lib",
                   "webp_lib":"libwebp_debug_dll.lib",
                   "icuuc_lib":"icuucd.lib",
                   "icuin_lib":"icuind.lib",
                   "pq_lib":"libpqd.lib"
               },
               {
-                  "boost_filesystem_lib":"libboost_filesystem-vc140-mt-1_56.lib",
-                  "boost_regex_lib":"libboost_regex-vc140-mt-1_56.lib",
-                  "boost_system_lib":"libboost_system-vc140-mt-1_56.lib",
-                  "boost_thread_lib":"libboost_thread-vc140-mt-1_56.lib",
-                  "boost_program_options_lib":"libboost_program_options-vc140-mt-1_56.lib",
-                  "boost_python_lib":"boost_python-vc140-mt-1_56.lib",
+                  "boost_filesystem_lib":"libboost_filesystem-<(boost_toolset)-mt-<(boost_version).lib",
+                  "boost_regex_lib":"libboost_regex-<(boost_toolset)-mt-<(boost_version).lib",
+                  "boost_system_lib":"libboost_system-<(boost_toolset)-mt-<(boost_version).lib",
+                  "boost_thread_lib":"libboost_thread-<(boost_toolset)-mt-<(boost_version).lib",
+                  "boost_program_options_lib":"libboost_program_options-<(boost_toolset)-mt-<(boost_version).lib",
+                  "boost_python_lib":"boost_python-<(boost_toolset)-mt-<(boost_version).lib",
                   "webp_lib":"libwebp_dll.lib",
                   "icuuc_lib":"icuuc.lib",
                   "icuin_lib":"icuin.lib",
@@ -70,7 +72,7 @@
           "common_defines": [
             "LIBXML_STATIC", # static libxml: libxml2_a.lib
             "BOOST_VARIANT_DO_NOT_USE_VARIADIC_TEMPLATES",
-            'BOOST_LIB_TOOLSET="vc140"',
+            'BOOST_LIB_TOOLSET="<(boost_toolset)"',
             'BOOST_COMPILER="14.0"',
             "_WINDOWS"
           ],
