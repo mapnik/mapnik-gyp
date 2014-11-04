@@ -155,11 +155,11 @@ xcopy /q /d %DEPSDIR%\icu\lib%ICU_PATH_POSTFIX%\icuuc%ICU_FILE_POSTFIX%.lib %MAP
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\icu\lib%ICU_PATH_POSTFIX%\icuin%ICU_FILE_POSTFIX%.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\icu\bin%ICU_PATH_POSTFIX%\icuuc53%ICU_FILE_POSTFIX%.dll %MAPNIK_SDK%\libs\ /Y
+xcopy /q /d %DEPSDIR%\icu\bin%ICU_PATH_POSTFIX%\icuuc54%ICU_FILE_POSTFIX%.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\icu\bin%ICU_PATH_POSTFIX%\icudt53.dll %MAPNIK_SDK%\libs\ /Y
+xcopy /q /d %DEPSDIR%\icu\bin%ICU_PATH_POSTFIX%\icudt54.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\icu\bin%ICU_PATH_POSTFIX%\icuin53%ICU_FILE_POSTFIX%.dll %MAPNIK_SDK%\libs\ /Y
+xcopy /q /d %DEPSDIR%\icu\bin%ICU_PATH_POSTFIX%\icuin54%ICU_FILE_POSTFIX%.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 
@@ -405,9 +405,9 @@ if NOT EXIST %ICU_DATA% (
   IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 )
 
-if NOT EXIST %MAPNIK_SDK%\share\icu\icudt53l.dat (
-    wget --no-check-certificate https://github.com/mapnik/mapnik-packaging/raw/master/osx/icudt53l_only_collator_and_breakiterator.dat
-    xcopy /q /d icudt53l_only_collator_and_breakiterator.dat %MAPNIK_SDK%\share\icu\icudt53l.dat* /Y
+if NOT EXIST %MAPNIK_SDK%\share\icu\icudt54l.dat (
+    wget --no-check-certificate https://github.com/mapnik/mapnik-packaging/raw/master/osx/icudt54l_only_collator_and_breakiterator.dat
+    xcopy /q /d icudt54l_only_collator_and_breakiterator.dat %MAPNIK_SDK%\share\icu\icudt54l.dat* /Y
 )
 
 SET PYTHONPATH=%CD%\..\bindings\python
