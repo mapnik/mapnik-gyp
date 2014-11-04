@@ -228,8 +228,10 @@ xcopy /i /d /s /q %DEPSDIR%\gdal\data %MAPNIK_SDK%\share\gdal
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: bin
-xcopy /q /d %DEPSDIR%\protobuf\vsprojects\%BUILD_TYPE%\protoc.exe %MAPNIK_SDK%\bin\ /Y
+xcopy /q /d %DEPSDIR%\protobuf\vsprojects\%BUILDPLATFORM%\%BUILD_TYPE%\protoc.exe %MAPNIK_SDK%\bin\ /Y
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d mapnik-config.bat %MAPNIK_SDK%\bin /Y
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: headers for plugins
 xcopy /q /d %DEPSDIR%\postgresql\src\interfaces\libpq\libpq-fe.h %MAPNIK_SDK%\includes\ /Y
