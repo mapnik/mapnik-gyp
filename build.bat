@@ -30,7 +30,6 @@ CALL gyp\gyp.bat mapnik.gyp --depth=. ^
  -Dplatform=%BUILDPLATFORM% ^
  -f msvs -G msvs_version=2013 ^
  --generator-output=build ^
- --no-duplicate-basename-check
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 if NOT EXIST %MAPNIK_SDK% (
@@ -210,7 +209,7 @@ xcopy /q /d %DEPSDIR%\cairo\src\%BUILD_TYPE%\cairo.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /i /d /s /q %DEPSDIR%\boost_1_56_0\stage\lib\* %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\protobuf\vsprojects\%BUILD_TYPE%\libprotobuf-lite.lib %MAPNIK_SDK%\libs\ /Y
+xcopy /q /d %DEPSDIR%\protobuf\vsprojects\%BUILDPLATFORM%\%BUILD_TYPE%\libprotobuf-lite.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: pdb
