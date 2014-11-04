@@ -29,7 +29,7 @@ CALL gyp\gyp.bat mapnik.gyp --depth=. ^
  -Dconfiguration=%BUILD_TYPE% ^
  -Dplatform=%BUILDPLATFORM% ^
  -f msvs -G msvs_version=2013 ^
- --generator-output=build ^
+ --generator-output=build
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 if NOT EXIST %MAPNIK_SDK% (
