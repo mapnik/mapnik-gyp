@@ -60,8 +60,7 @@ if [[ $COVERITY == true ]];then
     --generator-output=./unix-build \
     -Dincludes=${BASE_PATH}/include \
     -Dconfiguration=${CONFIGURATION} \
-    -Dlibs=${BASE_PATH}/lib \
-    --no-duplicate-basename-check
+    -Dlibs=${BASE_PATH}/lib
 
   export PATH=${HOME}/cov-analysis-macosx-7.5.0/bin/:$PATH
 
