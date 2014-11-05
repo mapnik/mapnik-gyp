@@ -492,24 +492,24 @@
         ]
       ]
     },
-    {
-      "target_name": "python",
-      "product_prefix":"",
-      "type": "loadable_module",
-      "product_dir": "lib/mapnik/input",
-      "product_extension": "input",
-      "sources": [ "<!@(find ../plugins/input/python/ -name '*.cpp')" ],
-      "dependencies": [ "mapnik" ],
-      "include_dirs": [
-        "<@(python_includes)"
-      ],
-      "msvs_settings": {
-        "VCLinkerTool": {
-          "AdditionalLibraryDirectories": [
-            "<@(python_libs)"
-          ]
-        }
-      },
+    # {
+    #   "target_name": "python",
+    #   "product_prefix":"",
+    #   "type": "loadable_module",
+    #   "product_dir": "lib/mapnik/input",
+    #   "product_extension": "input",
+    #   "sources": [ "<!@(find ../plugins/input/python/ -name '*.cpp')" ],
+    #   "dependencies": [ "mapnik" ],
+    #   "include_dirs": [
+    #     "<@(python_includes)"
+    #   ],
+    #   "msvs_settings": {
+    #     "VCLinkerTool": {
+    #       "AdditionalLibraryDirectories": [
+    #         "<@(python_libs)"
+    #       ]
+    #     }
+    #   },
       "conditions": [
         ["OS=='win'",
           {
