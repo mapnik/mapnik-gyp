@@ -137,7 +137,7 @@ xcopy /q /d %DEPSDIR%\cairo\src\cairo-ft.h %MAPNIK_SDK%\includes\cairo\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\cairo\src\cairo-ps.h %MAPNIK_SDK%\includes\cairo\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /i /d /s /q %DEPSDIR%\protobuf\vsprojects\include %MAPNIK_SDK%\includes\ /Y
+xcopy /i /d /s /q %DEPSDIR%\protobuf\src\google %MAPNIK_SDK%\includes\google /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: libs
