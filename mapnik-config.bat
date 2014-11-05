@@ -118,7 +118,7 @@ IF "%1"=="" GOTO Continue
 
     @rem TODO - figure out how to avoid hardcoding these library names
     if /i "%1"=="--dep-libs" (
-      echo libpng16.lib zlib.lib harfbuzz.lib libwebp_dll.lib libjpeg.lib icuuc.lib icuin.lib cairo.lib libboost_system-%boost_toolset%-mt-1_%boost_version%.lib libxml2_a.lib ws2_32.lib
+      echo libpng16.lib zlib.lib harfbuzz.lib libwebp_dll.lib libjpeg.lib icuuc.lib icuin.lib cairo.lib libboost_system-%boost_toolset%-mt-%boost_version%.lib libxml2_a.lib ws2_32.lib
       set hit=%1
     )
 
