@@ -510,32 +510,32 @@
     #       ]
     #     }
     #   },
-      "conditions": [
-        ["OS=='win'",
-          {
-            "libraries":[
-              "<(boost_thread_lib)",
-              "<(boost_system_lib)",
-              "<(boost_regex_lib)",
-              "<(icuuc_lib)",
-              "<(icuin_lib)",
-              "<(boost_python_lib)",
-              "python<(python_version2).lib"
-            ],
-            "defines":["HAVE_ROUND","HAVE_HYPOT"]
-          },
-          {
-            "libraries":[
-                "-lboost_python-<(python_version)",
-                "-lboost_thread",
-                "-lboost_system",
-                "-L<@(python_libs)",
-                "-lpython<(python_version)"
-            ]
-          }
-        ]
-      ]
-    },
+    #   "conditions": [
+    #     ["OS=='win'",
+    #       {
+    #         "libraries":[
+    #           "<(boost_thread_lib)",
+    #           "<(boost_system_lib)",
+    #           "<(boost_regex_lib)",
+    #           "<(icuuc_lib)",
+    #           "<(icuin_lib)",
+    #           "<(boost_python_lib)",
+    #           "python<(python_version2).lib"
+    #         ],
+    #         "defines":["HAVE_ROUND","HAVE_HYPOT"]
+    #       },
+    #       {
+    #         "libraries":[
+    #             "-lboost_python-<(python_version)",
+    #             "-lboost_thread",
+    #             "-lboost_system",
+    #             "-L<@(python_libs)",
+    #             "-lpython<(python_version)"
+    #         ]
+    #       }
+    #     ]
+    #   ]
+    # },
     {
       "target_name": "postgis",
       "product_prefix":"",
