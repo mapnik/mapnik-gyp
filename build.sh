@@ -7,9 +7,9 @@ export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BASE_PATH="$(pwd)/mapnik-sdk"
 
 if [[ $(uname -s) == 'Darwin' ]]; then
-    SLUG="mapnik-macosx-sdk-v2.2.0-2235-gb907634-lto"
+    SLUG="mapnik-macosx-sdk-v3.0.0-rc1-34-g5cd2cd6-lto"
 else
-    SLUG="mapnik-linux-sdk-v2.2.0-2235-gb907634"
+    SLUG="mapnik-linux-sdk-v3.0.0-rc1-32-ga65987a"
 fi
 
 # mapnik sdk
@@ -98,8 +98,7 @@ else
       -f ninja \
       -Dincludes=${BASE_PATH}/include \
       -Dconfiguration=${CONFIGURATION} \
-      -Dlibs=${BASE_PATH}/lib \
-      --no-duplicate-basename-check
+      -Dlibs=${BASE_PATH}/lib
    # serial build of memory intensive things first
    time ninja/ninja -C out/${CONFIGURATION}/ mapnik_wkt -j2  -l 2 -v
    time ninja/ninja -C out/${CONFIGURATION}/ mapnik_json -j2  -l 2 -v
