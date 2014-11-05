@@ -17,6 +17,9 @@ set MAPNIK_LIBS=%MAPNIK_PREFIX%\\libs
 set MAPNIK_INCLUDES=%MAPNIK_PREFIX%\\includes
 set MAPNIK_INPUT_PLUGINS_DIRECTORY=%MAPNIK_PREFIX%\\libs\\mapnik\\input
 set MAPNIK_FONTS_DIRECTORY=%MAPNIK_PREFIX%\\libs\\mapnik\\fonts
+set boost_version=1_57
+set boost_toolset=vc140
+set boost_compiler=14.0
 
 if /i "%1"=="" (
   goto help_msg_err
@@ -115,7 +118,7 @@ IF "%1"=="" GOTO Continue
 
     @rem TODO - figure out how to avoid hardcoding these library names
     if /i "%1"=="--dep-libs" (
-      echo libpng16.lib zlib.lib harfbuzz.lib libwebp_dll.lib libjpeg.lib icuuc.lib icuin.lib cairo.lib libboost_system-vc140-mt-1_56.lib libxml2_a.lib ws2_32.lib
+      echo libpng16.lib zlib.lib harfbuzz.lib libwebp_dll.lib libjpeg.lib icuuc.lib icuin.lib cairo.lib libboost_system-vc%boost_toolset%-mt-1_%boost_version%.lib libxml2_a.lib ws2_32.lib
       set hit=%1
     )
 
@@ -125,7 +128,7 @@ IF "%1"=="" GOTO Continue
     )
 
     if /i "%1"=="--defines" (
-      echo _WINDOWS BOOST_ALL_NO_LIB BOOST_LIB_TOOLSET="vc140" BOOST_COMPILER="14.0" BOOST_VARIANT_DO_NOT_USE_VARIADIC_TEMPLATES HAVE_JPEG HAVE_PNG HAVE_WEBP HAVE_TIFF MAPNIK_USE_PROJ4 BOOST_REGEX_HAS_ICU GRID_RENDERER SVG_RENDERER MAPNIK_THREADSAFE BIGINT HAVE_LIBXML2 HAVE_CAIRO LIBXML_STATIC
+      echo _WINDOWS BOOST_ALL_NO_LIB BOOST_LIB_TOOLSET="%boost_toolset%" BOOST_COMPILER="%boost_compiler%" BOOST_VARIANT_DO_NOT_USE_VARIADIC_TEMPLATES HAVE_JPEG HAVE_PNG HAVE_WEBP HAVE_TIFF MAPNIK_USE_PROJ4 BOOST_REGEX_HAS_ICU GRID_RENDERER SVG_RENDERER MAPNIK_THREADSAFE BIGINT HAVE_LIBXML2 HAVE_CAIRO LIBXML_STATIC
       set hit=%1
     )
 
