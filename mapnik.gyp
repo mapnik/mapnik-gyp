@@ -72,8 +72,7 @@
           "common_defines": [
             "LIBXML_STATIC", # static libxml: libxml2_a.lib
             "BOOST_VARIANT_DO_NOT_USE_VARIADIC_TEMPLATES",
-            'BOOST_LIB_TOOLSET="<(boost_toolset)"',
-            'BOOST_COMPILER="14.0"',
+            'BOOST_MSVC_ENABLE_2014_JUN_CTP',
             "_WINDOWS"
           ],
           "common_libraries": [],
