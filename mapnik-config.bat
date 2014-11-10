@@ -112,7 +112,7 @@ IF "%1"=="" GOTO Continue
     )
 
     if /i "%1"=="--libs" (
-      echo mapnik.lib
+      echo mapnik.lib mapnik_json.lib mapnik_wkt.lib
       set hit=%1
     )
 
@@ -165,7 +165,7 @@ IF "%1"=="" GOTO Continue
 
     if /i "%1"=="--dep-includes" (
       @rem nothing here yet
-      echo %MAPNIK_INCLUDES%\\cairo %MAPNIK_INCLUDES%\\freetype2 %MAPNIK_INCLUDES%\\google %MAPNIK_INCLUDES%\\libxml2 
+      echo %MAPNIK_INCLUDES%\\cairo %MAPNIK_INCLUDES%\\freetype2 %MAPNIK_INCLUDES%\\google %MAPNIK_INCLUDES%\\libxml2
       set hit=%1
     )
 

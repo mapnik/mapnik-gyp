@@ -342,6 +342,10 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 :: install mapnik libs
 xcopy /q /d .\build\%BUILD_TYPE%\mapnik.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+xcopy /q /d .\build\%BUILD_TYPE%\lib\mapnik_json.lib %MAPNIK_SDK%\libs\ /Y
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+xcopy /q /d .\build\%BUILD_TYPE%\lib\mapnik_wkt.lib %MAPNIK_SDK%\libs\ /Y
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d .\build\lib\mapnik.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
