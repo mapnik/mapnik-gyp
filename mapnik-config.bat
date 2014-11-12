@@ -112,7 +112,7 @@ IF "%1"=="" GOTO Continue
     )
 
     if /i "%1"=="--libs" (
-      echo mapnik.lib mapnik_json.lib mapnik_wkt.lib
+      echo mapnik.lib
       set hit=%1
     )
 
