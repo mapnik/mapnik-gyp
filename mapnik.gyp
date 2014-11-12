@@ -110,7 +110,7 @@
   },
   "targets": [
     {
-      "target_name": "mapnik_wkt",
+      "target_name": "mapnik-wkt",
       "type": "static_library",
       "sources": [
         "<!@(find ../src/wkt/ -name '*.cpp')"
@@ -123,7 +123,7 @@
       ]
     },
     {
-      "target_name": "mapnik_json",
+      "target_name": "mapnik-json",
       "type": "static_library",
       "sources": [
         "<!@(find ../src/json/ -name '*.cpp')"
@@ -250,7 +250,7 @@
       "type": "loadable_module",
       "product_extension": "<(python_module_extension)",
       "sources": [ "<!@(find ../bindings/python/ -name '*.cpp')" ],
-      "dependencies": [ "mapnik", "mapnik_wkt", "mapnik_json" ],
+      "dependencies": [ "mapnik", "mapnik-wkt", "mapnik-json" ],
       "copies": [
         {
           "files": [ "../bindings/python/mapnik/__init__.py" ],
@@ -361,7 +361,7 @@
       "product_prefix":"",
       "type": "loadable_module",
       "product_dir": "lib/mapnik/input",
-      "dependencies": [ "mapnik", "mapnik_json" ],
+      "dependencies": [ "mapnik", "mapnik-json" ],
       "product_extension": "input",
       "sources": [ "<!@(find ../plugins/input/geojson/ -name '*.cpp')" ],
       "conditions": [
@@ -379,7 +379,7 @@
       "product_prefix":"",
       "type": "loadable_module",
       "product_dir": "lib/mapnik/input",
-      "dependencies": [ "mapnik", "mapnik_json" ],
+      "dependencies": [ "mapnik", "mapnik-json" ],
       "product_extension": "input",
       "sources": [ "<!@(find ../plugins/input/topojson/ -name '*.cpp')" ],
       "conditions": [
@@ -417,7 +417,7 @@
       "product_dir": "lib/mapnik/input",
       "product_extension": "input",
       "sources": [ "<!@(find ../plugins/input/csv/ -name '*.cpp')" ],
-      "dependencies": [ "mapnik", "mapnik_wkt", "mapnik_json" ],
+      "dependencies": [ "mapnik", "mapnik-wkt", "mapnik-json" ],
       "conditions": [
         ["OS=='win'",
           {
@@ -732,7 +732,7 @@
       "type": "executable",
       "product_dir":"test",
       "sources": [ "../tests/cpp_tests/geometry_converters_test.cpp"],
-      "dependencies": [ "mapnik", "mapnik_wkt" ],
+      "dependencies": [ "mapnik", "mapnik-wkt" ],
       "conditions": [
         ["OS=='win'",
           {
@@ -752,7 +752,7 @@
       "type": "executable",
       "product_dir":"test",
       "sources": [ "../tests/cpp_tests/simplify_converters_test.cpp"],
-      "dependencies": [ "mapnik", "mapnik_wkt" ],
+      "dependencies": [ "mapnik", "mapnik-wkt" ],
       "conditions": [
         ["OS=='win'",
           {
