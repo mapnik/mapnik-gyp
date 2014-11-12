@@ -100,8 +100,8 @@ else
       -Dconfiguration=${CONFIGURATION} \
       -Dlibs=${BASE_PATH}/lib
    # serial build of memory intensive things first
-   time ninja/ninja -C out/${CONFIGURATION}/ mapnik_wkt -j2  -l 2 -v
-   time ninja/ninja -C out/${CONFIGURATION}/ mapnik_json -j2  -l 2 -v
+   time ninja/ninja -C out/${CONFIGURATION}/ mapnik_wkt -j1
+   time ninja/ninja -C out/${CONFIGURATION}/ mapnik_json -j1
    # remainder of mapnik
-   time ninja/ninja -C out/${CONFIGURATION}/ -j12 -l 2 -v
+   time ninja/ninja -C out/${CONFIGURATION}/ -j12 -l 2
 fi
