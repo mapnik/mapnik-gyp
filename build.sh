@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-#set -u
+set -eo pipefail
 
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 BASE_PATH="$(pwd)/mapnik-sdk"
 
 if [[ $(uname -s) == 'Darwin' ]]; then
-    SLUG="mapnik-macosx-sdk-v3.0.0-rc1-234-g1325075lto"
+    SLUG="mapnik-macosx-sdk-v3.0.0-rc1-234-g1325075-lto"
 else
     SLUG="mapnik-linux-sdk-v3.0.0-rc1-234-g1325075"
 fi
@@ -100,8 +100,8 @@ else
       -Dconfiguration=${CONFIGURATION} \
       -Dlibs=${BASE_PATH}/lib
    # serial build of memory intensive things first
-   time ninja/ninja -C out/${CONFIGURATION}/ mapnik_wkt -j1
-   time ninja/ninja -C out/${CONFIGURATION}/ mapnik_json -j1
+   time ninja/ninja -C out/${CONFIGURATION}/ mapnik-wkt -j1
+   time ninja/ninja -C out/${CONFIGURATION}/ mapnik-json -j1
    # remainder of mapnik
    time ninja/ninja -C out/${CONFIGURATION}/ -j12 -l 2
 fi
