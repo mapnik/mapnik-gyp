@@ -56,7 +56,6 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /Q /D /Y %PYTHON_DIR%\libs\python27.lib %MAPNIK_SDK%\libs\
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
-
 xcopy /q /d %DEPSDIR%\harfbuzz-build\harfbuzz\hb-version.h %MAPNIK_SDK%\includes\harfbuzz\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\harfbuzz\src\hb.h %MAPNIK_SDK%\includes\harfbuzz\ /Y
@@ -380,6 +379,23 @@ echo __all__ = [mapniklibpath,inputpluginspath,fontscollectionpath] >> ..\bindin
 xcopy  /q .\build\lib\mapnik\input\*.input %MAPNIK_SDK%\libs\mapnik\input\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
+::copy python bindings
+xcopy /q /d ..\bindings\python\mapnik\*.*  %MAPNIK_SDK%\python\2.7\site-packages\mapnik\
+
+::write batch file to set mapnik environment vars
+echo @ECHO OFF> %MAPNIK_SDK%\set-env-vars.bat
+echo SET SDKDIR=%%~dp0>> %MAPNIK_SDK%\set-env-vars.bat
+echo SET PYTHONPATH=%%SDKDIR%%python\2.7\site-packages;%%PYTHONPATH%%>> %MAPNIK_SDK%\set-env-vars.bat
+::echo SET MAPNIK_INPUT_PLUGINS_DIRECTORY=%%SDKDIR%%libs\mapnik\input>> %MAPNIK_SDK%\set-env-vars.bat
+echo SET ICU_DATA=%%SDKDIR%%share\icu>> %MAPNIK_SDK%\set-env-vars.bat
+echo SET PATH=%%SDKDIR%%bin;%%PATH%%>> %MAPNIK_SDK%\set-env-vars.bat
+echo SET PATH=%%SDKDIR%%libs;%%PATH%%>> %MAPNIK_SDK%\set-env-vars.bat
+
+
+::copy demo data and demo apps
+xcopy /q /d /i /s ..\demo  %MAPNIK_SDK%\demo
+
+
 :: install mapnik headers
 xcopy /i /d /s /q ..\deps\mapnik\sparsehash %MAPNIK_SDK%\includes\mapnik\sparsehash /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
@@ -424,7 +440,7 @@ if NOT EXIST %ICU_DATA% (
 
 if NOT EXIST %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat (
     wget --no-check-certificate https://github.com/mapnik/mapnik-packaging/raw/master/osx/icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat
-    xcopy /q /d icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat /Y
+    echo f | xcopy /q /d /Y icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat
 )
 
 SET PYTHONPATH=%CD%\..\bindings\python
