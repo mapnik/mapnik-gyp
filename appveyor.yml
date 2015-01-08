@@ -3,9 +3,11 @@ platform:
   - x64
   - x86
 
+fast_finish: true     # set this flag to immediately finish build once one of the jobs fails.
+
 install:
   - ps: Start-FileDownload "https://mapnik.s3.amazonaws.com/dist/dev/mapnik-win-sdk-14.0-$env:platform-v3.0.0-rc1-246-g5361d21.7z" -FileName mapnik-sdk.7z
-  - ps: Start-FileDownload "https://mapnik.s3.amazonaws.com/dist/dev/win-python-2.7.8-$env:platform.7z" -FileName python.7z
+  - ps: Start-FileDownload "https://mapnik.s3.amazonaws.com/dist/dev/win-python-2.7.8-$env:platform.Substring(1).7z" -FileName python.7z
   - 7z x mapnik-sdk.7z
   - 7z x python.7z
   - IF %PLATFORM% EQU x86 ( SET PATH=%CD%\python2-x86-32;%PATH% ) ELSE ( SET PATH=%CD%\python2;%PATH% )
