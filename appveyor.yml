@@ -27,6 +27,7 @@ install:
   - where python
   - python -V
   - python -c "import sys; print('python 64bit' if sys.maxsize > 2**32 else 'python 32bit');"
+  - python -c "import mapnik"
   - python C:\projects\mapnik-gyp\mapnik-sdk\demo\python\rundemo.py
 
 build: OFF
