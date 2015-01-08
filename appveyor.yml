@@ -1,0 +1,12 @@
+
+platform:
+  - x64
+  - x86
+
+install:
+  - ps: Start-FileDownload "https://mapnik.s3.amazonaws.com/dist/dev/mapnik-win-sdk-14.0-$env:Platform-v3.0.0-rc1-246-g5361d21.7z"
+  - 7z x mapnik-win-sdk-14.0-$env:Platform-v3.0.0-rc1-246-g5361d21.7z
+
+build: OFF
+test: OFF
+deploy: OFF
