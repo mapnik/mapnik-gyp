@@ -12,6 +12,8 @@ install:
   - IF %PLATFORM% EQU x86 ( SET PATH=%CD%\python2-x86-32;"%PATH%" ) ELSE ( SET PATH=%CD%\python2;"%PATH%" )
   - mapnik-sdk\set-env-vars.bat
   - mapnik-config --fonts
+  - ECHO %CD%
+  - SET
   - python mapnik-sdk\demo\python\rundemo.py
 
 build: OFF
