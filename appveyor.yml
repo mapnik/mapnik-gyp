@@ -11,18 +11,23 @@ install:
   - 7z x python.7z > nul
   # appending to PATH within parantheses doesn't work, workarround with %~PATH% doesn't either
   - IF %PLATFORM% EQU x86 SET PATH=%CD%\python2-x86-32;%PATH%
-  - IF %PLATFORM% EQU x86 SET PATH=%CD%\python2;%PATH%
+  - IF %PLATFORM% EQU x64 SET PATH=%CD%\python2;%PATH%
   # we have to CD into the directories to call the batch files
   # otherwise env vars have wrong paths
   # this happens only on AppVeyor - NOT necessary locally
   - cd mapnik-sdk
   - set-env-vars.bat
+  - ECHO %PYTHONPATH%
+  - ECHO %ICU_DATA%
   - cd bin
   - mapnik-config --fonts
-  - cd ..\..\
+  - cd C:\projects\mapnik-gyp\mapnik-sdk\python\2.7\site-packages
   - ECHO %CD%
   - SET
-  - python mapnik-sdk\demo\python\rundemo.py
+  - where python
+  - python -V
+  - python -c "import sys; print('python 64bit' if sys.maxsize > 2**32 else 'python 32bit');"
+  - python C:\projects\mapnik-gyp\mapnik-sdk\demo\python\rundemo.py
 
 build: OFF
 test: OFF
