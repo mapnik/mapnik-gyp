@@ -9,10 +9,15 @@ install:
   - ps: Start-FileDownload "https://mapnik.s3.amazonaws.com/deps/$env:PNAME" -FileName python.7z
   - 7z x mapnik-sdk.7z > nul
   - 7z x python.7z > nul
+  # appending to PATH within parantheses doesn't work, workarround with %~PATH% doesn't either
   - IF %PLATFORM% EQU x86 SET PATH=%CD%\python2-x86-32;%PATH%
   - IF %PLATFORM% EQU x86 SET PATH=%CD%\python2;%PATH%
-  - mapnik-sdk\set-env-vars.bat
-  - cd mapnik-sdk\bin
+  # we have to CD into the directories to call the batch files
+  # otherwise env vars have wrong paths
+  # this happens only on AppVeyor - NOT necessary locally
+  - cd mapnik-sdk
+  - set-env-vars.bat
+  - cd bin
   - mapnik-config --fonts
   - cd ..\..\
   - ECHO %CD%
