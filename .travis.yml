@@ -36,5 +36,5 @@ before_script:
  - cd mapnik-gyp
 
 script:
- - . build.sh
- #- ./test.sh
+ - COMMIT_MESSAGE=$(git show -s --format=%B $TRAVIS_COMMIT | tr -d '\n')
+ - if [[ ${COMMIT_MESSAGE} =~ "[build]" ]]; then . build.sh; fi;
