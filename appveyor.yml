@@ -7,7 +7,7 @@ platform:
 
 install:
   - IF %PLATFORM% EQU x86 (SET PNAME=win-python-2.7.8-32.7z) ELSE (SET PNAME=win-python-2.7.8-64.7z)
-  - ps: Start-FileDownload "https://mapnik.s3.amazonaws.com/dist/dev/VS-2014-runtime/vcredist_" + $env:platform + ".exe" -FileName vcredist.exe
+  - ps: Start-FileDownload "https://mapnik.s3.amazonaws.com/dist/dev/VS-2014-runtime/vcredist_$env:platform.exe" -FileName vcredist.exe
   - ps: Start-FileDownload "https://mapnik.s3.amazonaws.com/dist/dev/mapnik-win-sdk-14.0-$env:platform-v3.0.0-rc1-246-g5361d21.7z" -FileName mapnik-sdk.7z
   - ps: Start-FileDownload "https://mapnik.s3.amazonaws.com/deps/$env:PNAME" -FileName python.7z
   - vcredist /quiet
