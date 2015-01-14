@@ -782,7 +782,8 @@
           {
             "libraries":[
               "<(boost_filesystem_lib)",
-              "<(boost_system_lib)"
+              "<(boost_system_lib)",
+              "cairo.lib"
             ],
           } ,
           {
@@ -808,7 +809,8 @@
         ["OS=='win'",
           {
             "libraries":[
-              "<(boost_system_lib)"
+              "<(boost_system_lib)",
+              "cairo.lib"
             ],
           } ,
           {
