@@ -14,6 +14,8 @@ if NOT EXIST gyp (
     IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 )
 
+SET PLATFORMX=x64
+IF "%BUILDPLATFORM%"=="Win32" SET PLATFORMX=x86
 :: run find command and bail on error
 :: this ensures we have the unix find command on path
 :: before trying to run gyp
@@ -182,6 +184,8 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\libtiff\libtiff\libtiff_i.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\zlib\zlib.lib %MAPNIK_SDK%\libs\ /Y
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+xcopy /q /d %DEPSDIR%\zlib\contrib\vstudio\vc11\%PLATFORMX%\ZlibDll%BUILD_TYPE%\zlibwapi.dll %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\proj\src\proj.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
