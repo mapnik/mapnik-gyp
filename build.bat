@@ -183,9 +183,15 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ::IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\libtiff\libtiff\libtiff_i.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+::static zlib
 xcopy /q /d %DEPSDIR%\zlib\zlib.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\zlib\contrib\vstudio\vc11\%PLATFORMX%\ZlibDll%BUILD_TYPE%\zlibwapi.dll %MAPNIK_SDK%\libs\ /Y
+::shared zlib
+SET BT=Debug
+IF "%BUILD_TYPE%"=="Release" SET BT=ReleaseWithoutAsm
+xcopy /q /d %DEPSDIR%\zlib\contrib\vstudio\vc11\%PLATFORMX%\ZlibDll%BT%\zlibwapi.dll %MAPNIK_SDK%\libs\ /Y
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+xcopy /q /d %DEPSDIR%\zlib\contrib\vstudio\vc11\%PLATFORMX%\ZlibDll%BT%\zlibwapi.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\proj\src\proj.lib %MAPNIK_SDK%\libs\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
