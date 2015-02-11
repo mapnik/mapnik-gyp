@@ -24,7 +24,7 @@ ECHO packaging to %PKGNAME%
 IF EXIST %PKGNAME% DEL %PKGNAME%
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
-7z a -mx9 %PKGNAME% mapnik-sdk
+7z a -mx9 %PKGNAME% mapnik-sdk | %windir%\system32\FIND /v "Compressing"
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 ECHO packaged to %PKGNAME%
