@@ -1,10 +1,10 @@
 language: cpp
 
-os:
-  - linux
-  - osx
+#os:
+#  - linux
+#  - osx
 
-sudo:false
+sudo: false
 
 compiler:
  - clang
