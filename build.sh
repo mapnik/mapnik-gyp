@@ -4,33 +4,9 @@ set -eo pipefail
 
 export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-BASE_PATH="$(pwd)/mapnik-sdk"
+source ../bootstrap.sh
 
-if [[ $(uname -s) == 'Darwin' ]]; then
-    SLUG="mapnik-macosx-sdk-v3.0.0-rc1-234-g1325075-lto"
-else
-    SLUG="mapnik-linux-sdk-v3.0.0-rc1-234-g1325075"
-fi
-
-# mapnik sdk
-LOCAL_SDK="$HOME/projects/mapnik-package-lto/osx/out/dist/${SLUG}"
-
-echo "looking for ${LOCAL_SDK}"
-if [[ -d ${LOCAL_SDK} ]]; then
-    echo "found ${LOCAL_SDK}"
-    rm -f ./mapnik-sdk
-    ln -s ${LOCAL_SDK} ${BASE_PATH}
-elif [[ ! -d ${BASE_PATH} ]]; then
-    if [[ ! -f ${SLUG}.tar.bz2 ]]; then
-        echo "downloading https://mapnik.s3.amazonaws.com/dist/dev/${SLUG}.tar.bz2"
-        wget https://mapnik.s3.amazonaws.com/dist/dev/${SLUG}.tar.bz2
-    fi
-    if [[ ! -f ${SLUG} ]]; then
-        echo  "untarring ${SLUG}.tar.bz2"
-        tar xf ${SLUG}.tar.bz2
-    fi
-    ln -s ./${SLUG} ${BASE_PATH}
-fi
+BASE_PATH="$(cd $(pwd)/../mason_packages/.link && pwd)"
 
 # gyp
 if [[ ! -d gyp ]]; then
