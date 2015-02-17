@@ -297,7 +297,7 @@
           },
           {
             "libraries":[
-                "-lboost_python-<(python_version)",
+                "-lboost_python",
                 "-lboost_thread",
                 "-lboost_system",
             ]
@@ -542,7 +542,7 @@
     #       },
     #       {
     #         "libraries":[
-    #             "-lboost_python-<(python_version)",
+    #             "-lboost_python",
     #             "-lboost_thread",
     #             "-lboost_system",
     #             "-L<@(python_libs)",
