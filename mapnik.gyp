@@ -463,7 +463,13 @@
           } ,
           {
             "libraries": [
-              "-lgdal"
+              "-lgdal",
+              "-lproj",
+              "-liconv",
+              "-lexpat",
+              "-lz",
+              "-ljpeg",
+              "-ltiff"
             ]
           }
         ]
@@ -490,7 +496,13 @@
           } ,
           {
             "libraries": [
-              "-lgdal"
+              "-lgdal",
+              "-lproj",
+              "-liconv",
+              "-lexpat",
+              "-lz",
+              "-ljpeg",
+              "-ltiff"
             ]
           }
         ]
