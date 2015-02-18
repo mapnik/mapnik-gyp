@@ -334,40 +334,6 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\expat\win32\bin\%BUILD_TYPE%\libexpat.dll %MAPNIK_SDK%\lib\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
-
-ECHO =======================================================
-ECHO =======================================================
-ECHO =======================================================
-ECHO =======================================================
-ECHO =======================================================
-ECHO =======================================================
-ECHO =======================================================
-ECHO =======================================================
-ECHO =======================================================
-ECHO =======================================================
-ECHO =======================================================
-ECHO =======================================================
-ECHO ------------    BergWerkGIS   -------------------------
-ECHO ------------    REMOVE THIS   -------------------------
-ECHO ------------    AFTER REFACTORING ---------------------
-ECHO =======================================================
-ECHO =======================================================
-ECHO =======================================================
-ECHO =======================================================
-ECHO =======================================================
-ECHO =======================================================
-ECHO =======================================================
-ECHO =======================================================
-ECHO =======================================================
-ECHO =======================================================
-ECHO =======================================================
-ECHO SKIPPING BUILD
-REM GOTO TEMPDELME
-
-
-
-
-
 :: detect trouble with mimatched linking
 ::dumpbin /directives %MAPNIK_SDK%\lib\*lib | grep LIBCMT
 
@@ -387,18 +353,6 @@ msbuild ^
 :: /t:rebuild
 :: /v:diag > build.log
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-
-
-
-:TEMPDELME
-REM ===============================================================
-REM ===============================================================
-REM ===============================================================
-REM ===============================================================
-REM ===============================================================
-REM ===============================================================
-
-
 
 :: install command line tools
 xcopy /q /d .\build\bin\nik2img.exe %MAPNIK_SDK%\bin /Y
@@ -465,7 +419,10 @@ xcopy /i /d /s /q ..\include\mapnik %MAPNIK_SDK%\include\mapnik /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 ::copy debug symbols
-IF %PACKAGEDEBUGSYMBOLS% EQU 1 CALL %ROOTDIR%\scripts\package_mapnik_debug_symbols.bat
+powershell Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+IF %PACKAGEDEBUGSYMBOLS% EQU 1 powershell %ROOTDIR%\scripts\package_mapnik_debug_symbols.ps1
+ECHO ERRORLEVEL %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 
