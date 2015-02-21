@@ -13,8 +13,8 @@ for %%F in (%MAPNIK_PREFIX%) do set MAPNIK_PREFIX=%%~dpF
 set MAPNIK_PREFIX=%MAPNIK_PREFIX:~0,-1%
 :: now make double \\ for gyp
 set MAPNIK_PREFIX=%MAPNIK_PREFIX:\=\\%
-set MAPNIK_LIBS=%MAPNIK_PREFIX%\\libs
-set MAPNIK_INCLUDES=%MAPNIK_PREFIX%\\includes
+set MAPNIK_LIBS=%MAPNIK_PREFIX%\\lib
+set MAPNIK_INCLUDES=%MAPNIK_PREFIX%\\include
 set MAPNIK_INPUT_PLUGINS_DIRECTORY=%MAPNIK_PREFIX%\\libs\\mapnik\\input
 set MAPNIK_FONTS_DIRECTORY=%MAPNIK_PREFIX%\\libs\\mapnik\\fonts
 set boost_version=1_57
