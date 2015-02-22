@@ -23,6 +23,7 @@ find ../deps/clipper/src/ -name "*.cpp"
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 IF DEFINED PACKAGEDEBUGSYMBOLS (ECHO PACKAGEDEBUGSYMBOLS %PACKAGEDEBUGSYMBOLS%) ELSE (SET PACKAGEDEBUGSYMBOLS=0)
+IF DEFINED IGNOREFAILEDTESTS (ECHO IGNOREFAILEDTESTS %IGNOREFAILEDTESTS%) ELSE (SET IGNOREFAILEDTESTS=0)
 
 SET MAPNIK_SDK=%CD%\mapnik-sdk
 SET DEPSDIR=..\..
@@ -431,7 +432,7 @@ ECHO ============================ running TESTS ==========================
 SET PATH=%MAPNIK_SDK%\lib;%PATH%
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 for %%t in (build\test\*test.exe) do ( call %%t -d %CD%\.. )
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 if NOT EXIST get-pip.py (
     wget https://bootstrap.pypa.io/get-pip.py --no-check-certificate
@@ -466,9 +467,10 @@ if NOT EXIST %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat (
 
 SET PYTHONPATH=%CD%\..\bindings\python
 :: all visual tests should pass on windows
-python ..\tests\visual_tests\test.py -q
 :: some python tests are expected to fail
 ::python ..\tests\run_tests.py -q
+python ..\tests\visual_tests\test.py -q
+IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 GOTO DONE
 
