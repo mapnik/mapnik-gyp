@@ -420,7 +420,6 @@ xcopy /i /d /s /q ..\include\mapnik %MAPNIK_SDK%\include\mapnik /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 ::copy debug symbols
-powershell Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 IF %PACKAGEDEBUGSYMBOLS% EQU 1 powershell %ROOTDIR%\scripts\package_mapnik_debug_symbols.ps1
 ECHO ERRORLEVEL %ERRORLEVEL%
