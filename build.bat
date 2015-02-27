@@ -433,6 +433,7 @@ SET PATH=%MAPNIK_SDK%\lib;%PATH%
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 for %%t in (build\test\*test.exe) do ( call %%t -d %CD%\.. )
 IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+IF %IGNOREFAILEDTESTS% EQU 1 SET ERRORLEVEL=0
 
 if NOT EXIST get-pip.py (
     wget https://bootstrap.pypa.io/get-pip.py --no-check-certificate
@@ -470,7 +471,9 @@ SET PYTHONPATH=%CD%\..\bindings\python
 :: some python tests are expected to fail
 ::python ..\tests\run_tests.py -q
 python ..\tests\visual_tests\test.py -q
+ECHO IGNOREFAILEDTESTS %IGNOREFAILEDTESTS%
 IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+IF %IGNOREFAILEDTESTS% EQU 1 SET ERRORLEVEL=0
 
 GOTO DONE
 
