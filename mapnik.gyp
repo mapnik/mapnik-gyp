@@ -525,7 +525,10 @@
       "sources": [ 
         "<!@(find ../test/unit/ -name '*.cpp')"
       ],
-      "dependencies": [ "mapnik" ],
+      "include_dirs":[
+        "../test"
+      ],
+      "dependencies": [ "mapnik", "mapnik-json", "mapnik-wkt" ],
       "conditions": [
         ["OS=='win'",
           {
