@@ -27,9 +27,11 @@ fi
 rm -rf ./unix-build
 rm -rf ./${CONFIGURATION}
 
+COVERITY_VERSION="7.6.0"
+
 if [[ $COVERITY == true ]];then
-  #export CC=/usr/bin/clang
-  #export CXX=/usr/bin/clang++
+  export CC=/usr/bin/clang
+  export CXX=/usr/bin/clang++
   ./gyp/gyp ./mapnik.gyp \
     --depth=. \
     -f make \
@@ -38,14 +40,14 @@ if [[ $COVERITY == true ]];then
     -Dconfiguration=${CONFIGURATION} \
     -Dlibs=${BASE_PATH}/lib
 
-  export PATH=${HOME}/cov-analysis-macosx-7.5.0/bin/:$PATH
+  export PATH=${HOME}/cov-analysis-macosx-${COVERITY_VERSION}/bin/:$PATH
 
   RESULTS_DIR="$(pwd)/cov-int"
   mkdir -p $RESULTS_DIR
   rm -rf $RESULTS_DIR/*
   # https://scan.coverity.com/download
   # https://scan.coverity.com/projects/3237/builds/new
-  rm -f ${HOME}/cov-analysis-macosx-7.5.0/config/templates/.DS_Store
+  rm -f ${HOME}/cov-analysis-macosx-${COVERITY_VERSION}/config/templates/.DS_Store
   cov-configure --template --compiler clang
   # --comptype clangcxx
   cov-build -dir $RESULTS_DIR make -C ./unix-build/ mapnik -j1 V=1
@@ -53,7 +55,7 @@ if [[ $COVERITY == true ]];then
   DESCRIBE=$(git --git-dir=../.git describe)
   # NOTE: cov-int must be relative name not absolute
   tar czf mapnik-coverity.tgz cov-int
-  curl --form token=${COVERITY_TOKEN} \
+  curl --form token=${COVERITY_TOKEN_MAPNIK} \
     --form email=dane@mapbox.com \
     --form file=@mapnik-coverity.tgz \
     --form version="${DESCRIBE}" \
