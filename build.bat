@@ -52,20 +52,9 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 
 :: includes
-SET PYTHON_DIR=%ROOTDIR%\tmp-bin\python2-x86-32
-if %BOOSTADDRESSMODEL% EQU 64 (
-  SET PYTHON_DIR=%ROOTDIR%\tmp-bin\python2
-)
 SET ICU_VERSION=54
 
 IF %FASTBUILD% EQU 1 GOTO DOFASTBUILD
-
-::xcopy /Q /D /Y %PYTHON_INCLUDE_DIR%\*.* %MAPNIK_SDK%\include\python
-xcopy /Q /D /Y %PYTHON_DIR%\include\*.* %MAPNIK_SDK%\include\
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-::SET INCLUDE=%MAPNIK_SDK%\include\python;%INCLUDE%
-xcopy /Q /D /Y %PYTHON_DIR%\libs\python27.lib %MAPNIK_SDK%\lib\
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 xcopy /q /d %DEPSDIR%\harfbuzz-build\harfbuzz\hb-version.h %MAPNIK_SDK%\include\harfbuzz\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
@@ -407,29 +396,14 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 xcopy /q /d ..\fonts\dejavu-fonts-ttf-2.34\ttf\*ttf %MAPNIK_SDK%\lib\mapnik\fonts\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-:: move python binding into local testable location
-:: * hack from http://stackoverflow.com/a/14488464/2333354
-:: because otherwise xcopy can't tell if its a file or directory and will prompt
-xcopy /q /s /d .\build\lib\python2.7\mapnik\_mapnik.pyd ..\bindings\python\mapnik\_mapnik.pyd* /Y
-echo from os.path import normpath,join,dirname > ..\bindings\python\mapnik\paths.py
-echo mapniklibpath = '%MAPNIK_SDK%/lib/mapnik' >> ..\bindings\python\mapnik\paths.py
-echo mapniklibpath = normpath(join(dirname(__file__),mapniklibpath)) >> ..\bindings\python\mapnik\paths.py
-echo inputpluginspath = join(mapniklibpath,'input') >> ..\bindings\python\mapnik\paths.py
-echo fontscollectionpath = join(mapniklibpath,'fonts') >> ..\bindings\python\mapnik\paths.py
-echo __all__ = [mapniklibpath,inputpluginspath,fontscollectionpath] >> ..\bindings\python\mapnik\paths.py
 
 :: plugins
 xcopy  /q .\build\lib\mapnik\input\*.input %MAPNIK_SDK%\lib\mapnik\input\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
-::copy python bindings
-xcopy /q /d ..\bindings\python\mapnik\*.*  %MAPNIK_SDK%\python\2.7\site-packages\mapnik\
-
 ::write batch file to set mapnik environment vars
 echo @ECHO OFF> %MAPNIK_SDK%\set-env-vars.bat
 echo SET SDKDIR=%%~dp0>> %MAPNIK_SDK%\set-env-vars.bat
-echo SET PYTHONPATH=%%SDKDIR%%python\2.7\site-packages;%%PYTHONPATH%%>> %MAPNIK_SDK%\set-env-vars.bat
-::echo SET MAPNIK_INPUT_PLUGINS_DIRECTORY=%%SDKDIR%%lib\mapnik\input>> %MAPNIK_SDK%\set-env-vars.bat
 echo SET ICU_DATA=%%SDKDIR%%share\icu>> %MAPNIK_SDK%\set-env-vars.bat
 echo SET PATH=%%SDKDIR%%bin;%%PATH%%>> %MAPNIK_SDK%\set-env-vars.bat
 echo SET PATH=%%SDKDIR%%lib;%%PATH%%>> %MAPNIK_SDK%\set-env-vars.bat
@@ -464,15 +438,6 @@ for %%t in (build\test\*test.exe) do ( call %%t -d %CD%\.. )
 IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 IF %IGNOREFAILEDTESTS% EQU 1 SET ERRORLEVEL=0
 
-if NOT EXIST get-pip.py (
-    wget https://bootstrap.pypa.io/get-pip.py --no-check-certificate
-    IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-    python get-pip.py
-    IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-    pip.exe install nose
-    IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-)
-
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 SET GDAL_DATA=%MAPNIK_SDK%\share\gdal
 if NOT EXIST %GDAL_DATA% (
@@ -494,15 +459,6 @@ if NOT EXIST %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat (
     wget --no-check-certificate https://github.com/mapnik/mapnik-packaging/raw/master/osx/icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat
     echo f | xcopy /q /d /Y icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat
 )
-
-SET PYTHONPATH=%CD%\..\bindings\python
-:: all visual tests should pass on windows
-:: some python tests are expected to fail
-::python ..\tests\run_tests.py -q
-python ..\tests\visual_tests\test.py -q
-ECHO IGNOREFAILEDTESTS %IGNOREFAILEDTESTS%
-IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-IF %IGNOREFAILEDTESTS% EQU 1 SET ERRORLEVEL=0
 
 GOTO DONE
 
