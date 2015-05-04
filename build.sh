@@ -29,7 +29,7 @@ rm -rf ./${CONFIGURATION}
 
 COVERITY_VERSION="7.6.0"
 
-if [[ $COVERITY == true ]];then
+if [[ ${COVERITY} == true ]];then
   export CC=/usr/bin/clang
   export CXX=/usr/bin/clang++
   ./gyp/gyp ./mapnik.gyp \
@@ -48,9 +48,8 @@ if [[ $COVERITY == true ]];then
   # https://scan.coverity.com/download
   # https://scan.coverity.com/projects/3237/builds/new
   rm -f ${HOME}/cov-analysis-macosx-${COVERITY_VERSION}/config/templates/.DS_Store
-  cov-configure --template --compiler clang
-  # --comptype clangcxx
-  cov-build -dir $RESULTS_DIR make -C ./unix-build/ mapnik -j1 V=1
+  cov-configure --template --compiler clangcc --comptype clangcxxcc
+  cov-build -dir $RESULTS_DIR make -C ./unix-build/ mapnik -j4 V=1
   rm -f mapnik-coverity.tgz
   DESCRIBE=$(git --git-dir=../.git describe)
   # NOTE: cov-int must be relative name not absolute
