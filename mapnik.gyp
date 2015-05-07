@@ -535,7 +535,13 @@
             "libraries":[
               "<(boost_filesystem_lib)",
               "<(boost_system_lib)",
-              "cairo.lib"
+              "cairo.lib",
+              "libtiff_i.lib",
+              "<(icuuc_lib)",
+              "<(icuin_lib)",
+              "proj.lib",
+              "libxml2_a.lib",
+              "ws2_32.lib"
             ],
           } ,
           {
