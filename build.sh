@@ -29,7 +29,7 @@ rm -rf ./${CONFIGURATION}
 
 COVERITY_VERSION="7.6.0"
 
-if [[ ${COVERITY} == true ]];then
+if [[ ${COVERITY} == 1 ]];then
   export CC=/usr/bin/clang
   export CXX=/usr/bin/clang++
   ./gyp/gyp ./mapnik.gyp \
@@ -60,6 +60,21 @@ if [[ ${COVERITY} == true ]];then
     --form version="${DESCRIBE}" \
     --form description="Mapnik 3.x alpha build" \
     https://scan.coverity.com/builds?project=mapnik%2Fmapnik
+elif [[ ${SCAN} == 1 ]]; then
+    #rm -rf ./scan-static-build
+    scan-build \
+     --use-analyzer=/opt/llvm/bin/clang++ \
+     ./gyp/gyp ./mapnik.gyp \
+    --depth=. \
+    -f make \
+    --generator-output=./scan-static-build \
+    -Dincludes=${BASE_PATH}/include \
+    -Dconfiguration=Debug \
+    -Dlibs=${BASE_PATH}/lib
+
+    scan-build \
+     --use-analyzer=/opt/llvm/bin/clang++ \
+     make -C ./scan-static-build/ mapnik -j4
 else
   if [[ ! -d ninja ]]; then
       git clone --depth=1 git://github.com/martine/ninja.git
