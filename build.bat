@@ -429,16 +429,6 @@ IF %PACKAGEDEBUGSYMBOLS% EQU 1 powershell %ROOTDIR%\scripts\package_mapnik_debug
 ECHO ERRORLEVEL %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
-
-ECHO ============================ running TESTS ==========================
-:: run tests
-SET PATH=%MAPNIK_SDK%\lib;%PATH%
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-for %%t in (build\test\*test.exe) do ( call %%t -d %CD%\.. )
-IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-IF %IGNOREFAILEDTESTS% EQU 1 SET ERRORLEVEL=0
-
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 SET GDAL_DATA=%MAPNIK_SDK%\share\gdal
 if NOT EXIST %GDAL_DATA% (
   mkdir %GDAL_DATA%
@@ -454,6 +444,17 @@ if NOT EXIST %ICU_DATA% (
   mkdir %ICU_DATA%
   IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 )
+
+ECHO ============================ running TESTS ==========================
+:: run tests
+CD ..
+SET PATH=%MAPNIK_SDK%\lib;%PATH%
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+for %%t in (mapnik-gyp\build\test\*test.exe) do ( call %%t -d yes )
+IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+IF %IGNOREFAILEDTESTS% EQU 1 SET ERRORLEVEL=0
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
 
 if NOT EXIST %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat (
     wget --no-check-certificate https://github.com/mapnik/mapnik-packaging/raw/master/osx/icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat
