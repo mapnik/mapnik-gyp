@@ -445,9 +445,16 @@ if NOT EXIST %ICU_DATA% (
   IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 )
 
+:: change into mapnik directory!!! TESTS!!
+CD ..
+
+ECHO ============================ prepare TESTS ==========================
+:: copy input plugins where expected by tests
+copy /Y mapnik-gyp\build\lib\mapnik\input\*.input plugins\input\
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
 ECHO ============================ running TESTS ==========================
 :: run tests
-CD ..
 SET PATH=%MAPNIK_SDK%\lib;%PATH%
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 for %%t in (mapnik-gyp\build\test\*test.exe) do ( call %%t -d yes )
@@ -455,6 +462,9 @@ IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 IF %IGNOREFAILEDTESTS% EQU 1 SET ERRORLEVEL=0
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
+ECHO ============================ clean up after TESTS ==========================
+DEL /F plugins\input\*.input
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 if NOT EXIST %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat (
     wget --no-check-certificate https://github.com/mapnik/mapnik-packaging/raw/master/osx/icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat
