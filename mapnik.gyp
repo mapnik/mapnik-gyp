@@ -143,6 +143,7 @@
         "<!@(find ../src/renderer_common/ -name '*.cpp')",
         "<!@(find ../src/svg/ -name '*.cpp')",
         "<!@(find ../src/text/ -name '*.cpp')",
+        "<!@(find ../src/util/ -name '*.cpp')",
         "<!@(find ../src/ -name '*.cpp' -maxdepth 1)"
       ],
       "xcode_settings": {
