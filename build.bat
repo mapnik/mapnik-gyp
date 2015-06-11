@@ -19,7 +19,7 @@ IF "%BUILDPLATFORM%"=="Win32" SET PLATFORMX=x86
 :: run find command and bail on error
 :: this ensures we have the unix find command on path
 :: before trying to run gyp
-find ../deps/clipper/src/ -name "*.cpp"
+find ../deps/agg/src/ -name "*.cpp"
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 IF DEFINED PACKAGEDEBUGSYMBOLS (ECHO PACKAGEDEBUGSYMBOLS %PACKAGEDEBUGSYMBOLS%) ELSE (SET PACKAGEDEBUGSYMBOLS=0)
@@ -417,8 +417,6 @@ xcopy /q /d /i /s ..\demo  %MAPNIK_SDK%\demo
 xcopy /i /d /s /q ..\deps\mapnik\sparsehash %MAPNIK_SDK%\include\mapnik\sparsehash /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /i /d /s /q ..\deps\agg\include %MAPNIK_SDK%\include\mapnik\agg /Y
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /i /d /s /q ..\deps\clipper\include %MAPNIK_SDK%\include\mapnik\agg /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /i /d /s /q ..\include\mapnik %MAPNIK_SDK%\include\mapnik /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
