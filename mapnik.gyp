@@ -25,7 +25,6 @@
       "../include", # mapnik
       "../deps/", # mapnik/sparsehash
       "../deps/agg/include/", # agg
-      "../deps/clipper/include/", # clipper
       "../", # boost shim
       "<@(includes)/",
       "<@(includes)/gdal",
@@ -133,7 +132,6 @@
       "product_dir":"lib",
       "sources": [
         "<!@(find ../deps/agg/src/ -name '*.cpp')",
-        "<!@(find ../deps/clipper/src/ -name '*.cpp')",
         "<!@(find ../src/agg/ -name '*.cpp')",
         "<!@(find ../src/cairo/ -name '*.cpp')",
         "<!@(find ../src/grid/ -name '*.cpp')",
