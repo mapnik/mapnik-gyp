@@ -75,6 +75,13 @@ elif [[ ${SCAN} == 1 ]]; then
     scan-build \
      --use-analyzer=/opt/llvm/bin/clang++ \
      make -C ./scan-static-build/ mapnik -j4
+elif [[ ${XCODE} == 1 ]]; then
+  ./gyp/gyp ./mapnik.gyp \
+      --depth=. \
+      -f xcode \
+      -Dincludes=${BASE_PATH}/include \
+      -Dconfiguration=${CONFIGURATION} \
+      -Dlibs=${BASE_PATH}/lib
 else
   if [[ ! -d ninja ]]; then
       git clone --depth=1 git://github.com/martine/ninja.git
