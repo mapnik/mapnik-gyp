@@ -100,11 +100,13 @@ xcopy /q /d %DEPSDIR%\libpng\pnglibconf.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\libpng\pngconf.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\jpeg\jpeglib.h %MAPNIK_SDK%\include\ /Y
+xcopy /q /d %DEPSDIR%\libjpegturbo\jpeglib.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\jpeg\jconfig.h %MAPNIK_SDK%\include\ /Y
+xcopy /q /d %DEPSDIR%\libjpegturbo\jmorecfg.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\jpeg\jmorecfg.h %MAPNIK_SDK%\include\ /Y
+xcopy /q /d %DEPSDIR%\libjpegturbo\build\jconfig.h %MAPNIK_SDK%\include\ /Y
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+xcopy /q /d %DEPSDIR%\libjpegturbo\build\jconfigint.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /i /d /s /q %DEPSDIR%\webp\src\webp %MAPNIK_SDK%\include\webp /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
@@ -210,7 +212,9 @@ if "%BOOSTADDRESSMODEL%"=="64" (
   xcopy /q /d %DEPSDIR%\libpng\projects\vstudio\%BUILD_TYPE%\libpng16.dll %MAPNIK_SDK%\lib\ /Y
 )
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\jpeg\libjpeg.lib %MAPNIK_SDK%\lib\ /Y
+xcopy /q /d %DEPSDIR%\libjpegturbo\build\sharedlib\%BUILD_TYPE%\jpeg.lib %MAPNIK_SDK%\lib\ /Y
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+xcopy /q /d %DEPSDIR%\libjpegturbo\build\sharedlib\%BUILD_TYPE%\jpeg62.dll %MAPNIK_SDK%\lib\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\cairo\src\%BUILD_TYPE%\cairo-static.lib %MAPNIK_SDK%\lib\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR

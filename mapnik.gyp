@@ -180,7 +180,7 @@
               "libtiff_i.lib",
               "libxml2_a.lib",
               "ws2_32.lib",
-              "libjpeg.lib",
+              "jpeg.lib",
               "freetype.lib",
               "zlib.lib",
               "cairo.lib",
