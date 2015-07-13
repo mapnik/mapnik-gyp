@@ -267,6 +267,8 @@ xcopy /q /d %DEPSDIR%\sqlite\sqlite3.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ::xcopy /q /d %DEPSDIR%\gdal\gcore\*h %MAPNIK_SDK%\include\gdal\ /Y
 ::IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+xcopy /q /d %DEPSDIR%\gdal\ogr\ogr_api.h %MAPNIK_SDK%\include\ /Y
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\gdal\ogr\ogr_feature.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\gdal\ogr\ogr_spatialref.h %MAPNIK_SDK%\include\ /Y
@@ -298,6 +300,8 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\gdal\port\cpl_conv.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\gdal\port\cpl_vsi.h %MAPNIK_SDK%\include\ /Y
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+xcopy /q /d %DEPSDIR%\gdal\port\cpl_multiproc.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\gdal\port\cpl_virtualmem.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
