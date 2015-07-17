@@ -531,15 +531,20 @@
           {
             "libraries":[
               "<(boost_filesystem_lib)",
+              "<(boost_regex_lib)",
               "<(boost_system_lib)",
-              "cairo.lib",
-              "libtiff_i.lib",
+              "<(webp_lib)",
               "<(icuuc_lib)",
               "<(icuin_lib)",
+              "libpng16.lib",
               "proj.lib",
+              "libtiff_i.lib",
               "libxml2_a.lib",
-              "<(webp_lib)",
               "ws2_32.lib",
+              "jpeg.lib",
+              "freetype.lib",
+              "zlib.lib",
+              "cairo.lib",
               "harfbuzz.lib"
             ],
           } ,
