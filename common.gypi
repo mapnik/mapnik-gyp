@@ -3,7 +3,14 @@
     "default_configuration": "<(configuration)",
     "msvs_configuration_platform": "<(platform)",
     "msbuild_toolset":"v140",
-    "msvs_disabled_warnings": [ 4068,4244,4005,4506,4345,4804,4805,4661 ],
+    "msvs_disabled_warnings": [
+      4910, # we should fix this, but do not know how yet:  (__declspec(dllexport)' and 'extern' are incompatible on an explicit instantiation)
+      4068, # (unknown pragma)
+      4244, # should consider re-enabling now after https://github.com/mapnik/mapnik/issues/2907 (conversion from 'type1' to 'type2', possible loss of data)
+      4005, # 'identifier' : macro redefinition
+      4506, # no definition for inline function 'function'
+      4661  # no suitable definition provided for explicit template instantiation request
+    ],
     "msvs_settings": {
       "VCCLCompilerTool": {
         "ObjectFile": "$(IntDir)/%(RelativeDir)/",
