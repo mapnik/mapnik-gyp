@@ -539,7 +539,8 @@
               "proj.lib",
               "libxml2_a.lib",
               "<(webp_lib)",
-              "ws2_32.lib"
+              "ws2_32.lib",
+              "harfbuzz.lib"
             ],
           } ,
           {
