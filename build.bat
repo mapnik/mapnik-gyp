@@ -9,16 +9,15 @@
 ::ddt build\Release
 ::IF ERRORLEVEL NEQ 0 GOTO ERROR
 
-if NOT EXIST gyp (
-    CALL git clone https://chromium.googlesource.com/external/gyp.git gyp
-    IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-)
+if NOT EXIST gyp CALL git clone https://chromium.googlesource.com/external/gyp.git gyp
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 SET PLATFORMX=x64
 IF "%BUILDPLATFORM%"=="Win32" SET PLATFORMX=x86
 :: run find command and bail on error
 :: this ensures we have the unix find command on path
 :: before trying to run gyp
+ECHO testing unix find command
 find ../deps/agg/src/ -name "*.cpp"
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
@@ -30,6 +29,7 @@ IF DEFINED PACKAGEDEPS (ECHO PACKAGEDEPS %PACKAGEDEPS%) ELSE (SET PACKAGEDEPS=0)
 SET MAPNIK_SDK=%CD%\mapnik-sdk
 SET DEPSDIR=..\..
 
+ECHO generating solution file, calling gyp...
 CALL gyp\gyp.bat mapnik.gyp --depth=. ^
  -Dincludes=%MAPNIK_SDK%/include ^
  -Dlibs=%MAPNIK_SDK%/lib ^
@@ -54,7 +54,9 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 :: includes
 SET ICU_VERSION=54
 
-IF %FASTBUILD% EQU 1 GOTO DOFASTBUILD
+IF %FASTBUILD% EQU 1 (ECHO doing a FASTBUILD && GOTO DOFASTBUILD) ELSE (ECHO doing a FULLBUILD)
+
+ECHO copying deps header files...
 
 xcopy /q /d %DEPSDIR%\harfbuzz-build\harfbuzz\hb-version.h %MAPNIK_SDK%\include\harfbuzz\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
@@ -142,6 +144,7 @@ xcopy /i /d /s /q %DEPSDIR%\protobuf\src\google %MAPNIK_SDK%\include\google /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: libs
+ECHO copying deps lib files...
 xcopy /q /d %DEPSDIR%\harfbuzz-build\harfbuzz.lib %MAPNIK_SDK%\lib\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\freetype\freetype.lib %MAPNIK_SDK%\lib\ /Y
@@ -241,12 +244,14 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 
 :: data
+ECHO copying deps additional data files...
 xcopy /i /d /s /q %DEPSDIR%\proj\nad %MAPNIK_SDK%\share\proj /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /i /d /s /q %DEPSDIR%\gdal\data %MAPNIK_SDK%\share\gdal
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: bin
+ECHO copying deps bin files...
 IF %TARGET_ARCH% EQU 32 (
   xcopy /q /d %DEPSDIR%\protobuf\vsprojects\%BUILD_TYPE%\protoc.exe %MAPNIK_SDK%\bin\ /Y
 ) ELSE (
@@ -257,6 +262,7 @@ xcopy /q /d mapnik-config.bat %MAPNIK_SDK%\bin /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: headers for plugins
+ECHO copying headers for plugins...
 xcopy /q /d %DEPSDIR%\postgresql\src\interfaces\libpq\libpq-fe.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\postgresql\src\include\postgres_ext.h %MAPNIK_SDK%\include\ /Y
@@ -315,6 +321,7 @@ xcopy /q /d %DEPSDIR%\gdal\port\cpl_config.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: libs for plugins
+ECHO copying libs for plugins...
 SET LIBPQ_FILE_SUFFIX=
 IF %BUILD_TYPE% EQU Debug (SET LIBPQ_FILE_SUFFIX=d)
 xcopy /q /d %DEPSDIR%\postgresql\src\interfaces\libpq\%BUILD_TYPE%\libpq%LIBPQ_FILE_SUFFIX%.lib %MAPNIK_SDK%\lib\ /Y
@@ -338,8 +345,9 @@ xcopy /q /d %DEPSDIR%\expat\win32\bin\%BUILD_TYPE%\libexpat.dll %MAPNIK_SDK%\lib
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: jump to build when not packaging deps
-IF %PACKAGEDEPS% EQU 0 GOTO RUNMAPNIKBUILD
+IF %PACKAGEDEPS% EQU 0 ECHO NOT packaging deps && GOTO RUNMAPNIKBUILD
 
+ECHO packaging deps...
 SET CURRENTBUILDDIR=%CD%
 CD %MAPNIK_SDK%
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
@@ -355,7 +363,7 @@ IF EXIST %ROOTDIR%\bin\%DEP_PKG_FILENAME% DEL /Q %ROOTDIR%\bin\%DEP_PKG_FILENAME
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 COPY %DEP_PKG_FILENAME% %ROOTDIR%\bin\
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-ECHO dependencies pacakge copied to %ROOTDIR%\bin\%DEP_PKG_FILENAME%
+ECHO dependencies package copied to %ROOTDIR%\bin\%DEP_PKG_FILENAME%
 CD %CURRENTBUILDDIR%
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
@@ -369,6 +377,7 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 ECHO INCLUDE %INCLUDE%
 
+ECHO calling msbuild...
 msbuild ^
 .\build\mapnik.sln ^
 /nologo ^
