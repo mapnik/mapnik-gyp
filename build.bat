@@ -383,11 +383,12 @@ ECHO INCLUDE %INCLUDE%
 
 ECHO generating solution file, calling gyp...
 CALL gyp\gyp.bat mapnik.gyp --depth=. ^
+ --debug=all ^
  -Dincludes=%MAPNIK_SDK%/include ^
  -Dlibs=%MAPNIK_SDK%/lib ^
  -Dconfiguration=%BUILD_TYPE% ^
  -Dplatform=%BUILDPLATFORM% ^
- -f msvs -G msvs_version=2013 ^
+ -f msvs -G msvs_version=2015 ^
  --generator-output=build
 IF %ERRORLEVEL% NEQ 0 (ECHO error during solution file generation && GOTO ERROR) ELSE (ECHO solution file generated)
 
