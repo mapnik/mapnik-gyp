@@ -29,27 +29,29 @@ IF DEFINED PACKAGEDEPS (ECHO PACKAGEDEPS %PACKAGEDEPS%) ELSE (SET PACKAGEDEPS=0)
 SET MAPNIK_SDK=%CD%\mapnik-sdk
 SET DEPSDIR=..\..
 
-ECHO generating solution file, calling gyp...
-CALL gyp\gyp.bat mapnik.gyp --depth=. ^
- -Dincludes=%MAPNIK_SDK%/include ^
- -Dlibs=%MAPNIK_SDK%/lib ^
- -Dconfiguration=%BUILD_TYPE% ^
- -Dplatform=%BUILDPLATFORM% ^
- -f msvs -G msvs_version=2013 ^
- --generator-output=build
+ECHO mapnik SDK directory^: %MAPNIK_SDK%
+ECHO DEPSDIR^: %DEPSDIR%
+
+IF EXIST %MAPNIK_SDK% (ECHO SDK directory found && GOTO MAPNIK_SDK_DIR_CREATED)
+
+ECHO creating mapnik SDK directory
+mkdir %MAPNIK_SDK%
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+mkdir %MAPNIK_SDK%\bin
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+mkdir %MAPNIK_SDK%\include
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+mkdir %MAPNIK_SDK%\share
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+mkdir %MAPNIK_SDK%\lib
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+mkdir %MAPNIK_SDK%\lib\mapnik\input
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+mkdir %MAPNIK_SDK%\lib\mapnik\fonts
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
-if NOT EXIST %MAPNIK_SDK% (
-  mkdir %MAPNIK_SDK%
-  mkdir %MAPNIK_SDK%\bin
-  mkdir %MAPNIK_SDK%\include
-  mkdir %MAPNIK_SDK%\share
-  mkdir %MAPNIK_SDK%\lib
-  mkdir %MAPNIK_SDK%\lib\mapnik\input
-  mkdir %MAPNIK_SDK%\lib\mapnik\fonts
-)
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-
+:MAPNIK_SDK_DIR_CREATED
+ECHO label MAPNIK_SDK_DIR_CREATED
 
 :: includes
 SET ICU_VERSION=54
@@ -368,14 +370,27 @@ CD %CURRENTBUILDDIR%
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :RUNMAPNIKBUILD
+ECHO label RUNMAPNIKBUILD
 :: detect trouble with mimatched linking
 ::dumpbin /directives %MAPNIK_SDK%\lib\*lib | grep LIBCMT
 
 ::msbuild /m:2 /t:mapnik /p:BuildInParellel=true .\build\mapnik.sln /p:Configuration=Release
 
 :DOFASTBUILD
+ECHO label DOFASTBUILD
 
 ECHO INCLUDE %INCLUDE%
+
+ECHO generating solution file, calling gyp...
+CALL gyp\gyp.bat mapnik.gyp --depth=. ^
+ -Dincludes=%MAPNIK_SDK%/include ^
+ -Dlibs=%MAPNIK_SDK%/lib ^
+ -Dconfiguration=%BUILD_TYPE% ^
+ -Dplatform=%BUILDPLATFORM% ^
+ -f msvs -G msvs_version=2013 ^
+ --generator-output=build
+IF %ERRORLEVEL% NEQ 0 (ECHO error during solution file generation && GOTO ERROR) ELSE (ECHO solution file generated)
+
 
 ECHO calling msbuild...
 msbuild ^
@@ -389,7 +404,8 @@ msbuild ^
 
 :: /t:rebuild
 :: /v:diag > build.log
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
+
 
 :: install command line tools
 xcopy /q /d .\build\bin\nik2img.exe %MAPNIK_SDK%\bin /Y
