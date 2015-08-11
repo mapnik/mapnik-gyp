@@ -1,5 +1,5 @@
 .DS_Store
-mapnik-win-sdk-x*
+mapnik-win-sdk-*
 build
 gyp
 mapnik-sdk

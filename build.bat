@@ -9,8 +9,20 @@
 ::ddt build\Release
 ::IF ERRORLEVEL NEQ 0 GOTO ERROR
 
-if NOT EXIST gyp CALL git clone https://chromium.googlesource.com/external/gyp.git gyp
+if EXIST gyp ECHO gyp already cloned && GOTO GYP_ALREADY_HERE
+
+CALL git clone https://chromium.googlesource.com/external/gyp.git gyp
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+::modify gyp to see where it hangs during autmated builds
+CD gyp
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+patch -N -p1 < %PATCHES%/__DELME-GYP-HANG-TEST.diff || %SKIP_FAILED_PATCH%
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+CD ..
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+:GYP_ALREADY_HERE
 
 SET PLATFORMX=x64
 IF "%BUILDPLATFORM%"=="Win32" SET PLATFORMX=x86
