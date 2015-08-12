@@ -12,6 +12,7 @@
       "BOOST_REGEX_HAS_ICU",
       "HAVE_JPEG",
       "MAPNIK_USE_PROJ4",
+      "MAPNIK_NO_ATEXIT",
       "HAVE_PNG",
       "HAVE_TIFF",
       "HAVE_WEBP",
@@ -519,7 +520,7 @@
       "target_name": "test",
       "type": "executable",
       "product_dir":"test",
-      "sources": [ 
+      "sources": [
         "<!@(find ../test/unit/ -name '*.cpp')"
       ],
       "include_dirs":[

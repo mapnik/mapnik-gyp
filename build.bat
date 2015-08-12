@@ -440,7 +440,7 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d .\build\bin\shapeindex.exe %MAPNIK_SDK%\bin\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
-xcopy /q /d ..\fonts\dejavu-fonts-ttf-2.34\ttf\*ttf %MAPNIK_SDK%\lib\mapnik\fonts\ /Y
+xcopy /q /d ..\fonts\dejavu-fonts-ttf-2.35\ttf\*ttf %MAPNIK_SDK%\lib\mapnik\fonts\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: plugins
