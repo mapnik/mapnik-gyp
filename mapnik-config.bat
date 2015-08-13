@@ -17,7 +17,7 @@ set MAPNIK_LIBS=%MAPNIK_PREFIX%\\lib
 set MAPNIK_INCLUDES=%MAPNIK_PREFIX%\\include
 set MAPNIK_INPUT_PLUGINS_DIRECTORY=%MAPNIK_PREFIX%\\lib\\mapnik\\input
 set MAPNIK_FONTS_DIRECTORY=%MAPNIK_PREFIX%\\lib\\mapnik\\fonts
-set boost_version=1_57
+set boost_version=1_58
 set boost_toolset=vc140
 set boost_compiler=14.0
 

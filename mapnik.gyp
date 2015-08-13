@@ -33,7 +33,7 @@
       "<@(includes)/libxml2",
       "<@(includes)/cairo"
     ],
-    "boost_version":"1_57",
+    "boost_version":"1_58",
     "boost_toolset":"vc140",
     "conditions": [
       ["OS=='win'",
