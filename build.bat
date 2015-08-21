@@ -66,7 +66,7 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ECHO label MAPNIK_SDK_DIR_CREATED
 
 :: includes
-SET ICU_VERSION=55
+IF DEFINED ICU_VERSION (FOR /f "delims=." %%G IN ("%ICU_VERSION%") DO SET ICU_VERSION=%%G) ELSE (SET ICU_VERSION=55)
 
 IF %FASTBUILD% EQU 1 (ECHO doing a FASTBUILD && GOTO DOFASTBUILD) ELSE (ECHO doing a FULLBUILD)
 
@@ -400,6 +400,7 @@ CALL gyp\gyp.bat mapnik.gyp --depth=. ^
  -Dlibs=%MAPNIK_SDK%/lib ^
  -Dconfiguration=%BUILD_TYPE% ^
  -Dplatform=%BUILDPLATFORM% ^
+ -Dboost_version=1_%BOOST_VERSION% ^
  -f msvs -G msvs_version=2015 ^
  --generator-output=build
 IF %ERRORLEVEL% NEQ 0 (ECHO error during solution file generation && GOTO ERROR) ELSE (ECHO solution file generated)
