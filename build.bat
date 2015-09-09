@@ -405,6 +405,9 @@ CALL gyp\gyp.bat mapnik.gyp --depth=. ^
  --generator-output=build
 IF %ERRORLEVEL% NEQ 0 (ECHO error during solution file generation && GOTO ERROR) ELSE (ECHO solution file generated)
 
+SET MSBUILD_VERBOSITY=
+IF NOT DEFINED VERBOSE SET VERBOSE=0
+IF %VERBOSE% EQU 1 ECHO !!!!!! using msbuild verbosity diagnostic !!!!! && SET MSBUILD_VERBOSITY=/verbosity:diagnostic
 
 ECHO calling msbuild...
 msbuild ^
@@ -414,7 +417,8 @@ msbuild ^
 /toolsversion:%TOOLS_VERSION% ^
 /p:BuildInParellel=true ^
 /p:Configuration=%BUILD_TYPE% ^
-/p:Platform=%BUILDPLATFORM%
+/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY%
+
 
 :: /t:rebuild
 :: /v:diag > build.log
