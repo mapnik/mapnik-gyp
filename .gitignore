@@ -1,5 +1,6 @@
 .DS_Store
 mapnik-win-sdk-*
+mapnik-config.bat
 build
 gyp
 mapnik-sdk

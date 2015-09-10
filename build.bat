@@ -265,14 +265,14 @@ xcopy /i /d /s /q %DEPSDIR%\gdal\data %MAPNIK_SDK%\share\gdal
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: bin
+::copy mapnik-config.bat after all necessary files have been copied, to
+::allow for autocreation of "dep libs"
 ECHO copying deps bin files...
 IF %TARGET_ARCH% EQU 32 (
   xcopy /q /d %DEPSDIR%\protobuf\vsprojects\%BUILD_TYPE%\protoc.exe %MAPNIK_SDK%\bin\ /Y
 ) ELSE (
   xcopy /q /d %DEPSDIR%\protobuf\vsprojects\%BUILDPLATFORM%\%BUILD_TYPE%\protoc.exe %MAPNIK_SDK%\bin\ /Y
 )
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d mapnik-config.bat %MAPNIK_SDK%\bin /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: headers for plugins
@@ -471,6 +471,22 @@ xcopy /i /d /s /q ..\deps\agg\include %MAPNIK_SDK%\include\mapnik\agg /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /i /d /s /q ..\include\mapnik %MAPNIK_SDK%\include\mapnik /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+
+::create and copy mapnik-config.bat
+::do this after copying the headers, to allow parsing of version.hpp for mapnik version
+SET MAPNIK_GIT_DESCRIBE=
+ECHO stepping down into mapnik && CD ..
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+ECHO doing git describe... && FOR /F "tokens=*" %%i in ('git describe') do SET MAPNIK_GIT_DESCRIBE=%%i
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+ECHO stepping up into mapnik-gyp && CD mapnik-gyp
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+powershell .\mapnik-config-create.ps1
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+xcopy /q /d mapnik-config.bat %MAPNIK_SDK%\bin /Y
+IF %ERRORLEVEL% NEQ 0 ECHO could not copy mapnik-config.bat && GOTO ERROR
+
 
 ::copy debug symbols
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
