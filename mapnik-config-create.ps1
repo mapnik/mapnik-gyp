@@ -43,7 +43,8 @@ Replace('{{BOOST_VERSION}}', $env:BOOST_VERSION).
 Replace('{{BOOST_TOOLSET}}', $env:TOOLS_VERSION.Replace('.','')).
 Replace('{{BOOST_COMPILER}}', $env:TOOLS_VERSION). 
 Replace('{{DEP_LIBS}}', ($dep_libs -Join ' ')). 
-Replace('{{GIT_DESCRIBE}}', $env:MAPNIK_GIT_DESCRIBE) | 
+Replace('{{GIT_DESCRIBE}}', $env:MAPNIK_GIT_DESCRIBE). 
+Replace('{{GIT_REVISION}}', $env:MAPNIK_GIT_REVISION) | 
 Set-Content .\mapnik-config.bat
 
 Write-Host done creating mapnik-config.bat

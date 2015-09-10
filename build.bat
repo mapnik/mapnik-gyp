@@ -422,6 +422,7 @@ msbuild ^
 
 :: /t:rebuild
 :: /v:diag > build.log
+ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
 
@@ -476,9 +477,12 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ::create and copy mapnik-config.bat
 ::do this after copying the headers, to allow parsing of version.hpp for mapnik version
 SET MAPNIK_GIT_DESCRIBE=
+SET MAPNIK_GIT_REVISION=
 ECHO stepping down into mapnik && CD ..
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ECHO doing git describe... && FOR /F "tokens=*" %%i in ('git describe') do SET MAPNIK_GIT_DESCRIBE=%%i
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+ECHO doing git rev-list... && FOR /F "tokens=*" %%i in ('git rev-list --max-count=1 HEAD') do SET MAPNIK_GIT_REVISION=%%i
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ECHO stepping up into mapnik-gyp && CD mapnik-gyp
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
