@@ -30,7 +30,6 @@
       "<@(includes)/",
       "<@(includes)/gdal",
       "<@(includes)/freetype2",
-      "<@(includes)/libxml2",
       "<@(includes)/cairo"
     ],
     "boost_toolset":"vc140",
@@ -62,7 +61,6 @@
             ]
           ],
           "common_defines": [
-            "LIBXML_STATIC", # static libxml: libxml2_a.lib
             "BOOST_VARIANT_DO_NOT_USE_VARIADIC_TEMPLATES",
             'BOOST_MSVC_ENABLE_2014_JUN_CTP',
             "_WINDOWS"
@@ -178,7 +176,6 @@
               "libpng16.lib",
               "proj.lib",
               "libtiff_i.lib",
-              "libxml2_a.lib",
               "ws2_32.lib",
               "jpeg.lib",
               "freetype.lib",
@@ -539,7 +536,6 @@
               "libpng16.lib",
               "proj.lib",
               "libtiff_i.lib",
-              "libxml2_a.lib",
               "ws2_32.lib",
               "jpeg.lib",
               "freetype.lib",

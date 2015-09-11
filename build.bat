@@ -193,9 +193,9 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ::IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ::xcopy /q /d %DEPSDIR%\libxml2\win32\bin.msvc\libxml2.lib %MAPNIK_SDK%\lib\ /Y
 ::IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-::xcopy /q /d %DEPSDIR%\libtiff\libtiff\libtiff.dll %MAPNIK_SDK%\lib\ /Y
-::IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
+xcopy /q /d %DEPSDIR%\libtiff\libtiff\libtiff.dll %MAPNIK_SDK%\lib\ /Y
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ::xcopy /i /d /s /q %DEPSDIR%\libtiff\libtiff\libtiff.lib %MAPNIK_SDK%\lib\ /Y
 ::IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\libtiff\libtiff\libtiff_i.lib %MAPNIK_SDK%\lib\ /Y
