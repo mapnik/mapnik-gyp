@@ -104,8 +104,8 @@ xcopy /i /d /s /q %DEPSDIR%\icu\include\unicode %MAPNIK_SDK%\include\unicode /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /i /d /s /q %DEPSDIR%\freetype\include %MAPNIK_SDK%\include\freetype2 /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /i /d /s /q %DEPSDIR%\libxml2\include %MAPNIK_SDK%\include\libxml2 /Y
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+::xcopy /i /d /s /q %DEPSDIR%\libxml2\include %MAPNIK_SDK%\include\libxml2 /Y
+::IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\zlib\zlib.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\zlib\zconf.h %MAPNIK_SDK%\include\ /Y
@@ -185,16 +185,17 @@ xcopy /q /d %DEPSDIR%\icu\bin%ICU_PATH_POSTFIX%\icudt%ICU_VERSION%.dll %MAPNIK_S
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 
-xcopy /q /d %DEPSDIR%\libxml2\win32\bin.msvc\libxml2_a.lib %MAPNIK_SDK%\lib\ /Y
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\libxml2\win32\bin.msvc\libxml2_a_dll.lib %MAPNIK_SDK%\lib\ /Y
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\libxml2\win32\bin.msvc\libxml2.dll %MAPNIK_SDK%\lib\ /Y
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\libxml2\win32\bin.msvc\libxml2.lib %MAPNIK_SDK%\lib\ /Y
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-xcopy /q /d %DEPSDIR%\libtiff\libtiff\libtiff.dll %MAPNIK_SDK%\lib\ /Y
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+::xcopy /q /d %DEPSDIR%\libxml2\win32\bin.msvc\libxml2_a.lib %MAPNIK_SDK%\lib\ /Y
+::IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+::xcopy /q /d %DEPSDIR%\libxml2\win32\bin.msvc\libxml2_a_dll.lib %MAPNIK_SDK%\lib\ /Y
+::IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+::xcopy /q /d %DEPSDIR%\libxml2\win32\bin.msvc\libxml2.dll %MAPNIK_SDK%\lib\ /Y
+::IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+::xcopy /q /d %DEPSDIR%\libxml2\win32\bin.msvc\libxml2.lib %MAPNIK_SDK%\lib\ /Y
+::IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+::xcopy /q /d %DEPSDIR%\libtiff\libtiff\libtiff.dll %MAPNIK_SDK%\lib\ /Y
+::IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
 ::xcopy /i /d /s /q %DEPSDIR%\libtiff\libtiff\libtiff.lib %MAPNIK_SDK%\lib\ /Y
 ::IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\libtiff\libtiff\libtiff_i.lib %MAPNIK_SDK%\lib\ /Y
