@@ -532,8 +532,13 @@ IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 IF %IGNOREFAILEDTESTS% EQU 1 SET ERRORLEVEL=0
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
+ECHO about to benchmark && CALL mapnik-gyp\benchmark.bat
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
 ECHO ============================ clean up after TESTS ==========================
-DEL /F plugins\input\*.input
+ECHO !!!!!!! !!!!! !!!!!! NOT REMOVING PLUGINS COPY DURING benchmark testing
+ECHO !!!!!!! !!!!! !!!!!! TODO: enable again! ! ! ! ! !
+::DEL /F plugins\input\*.input
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 if NOT EXIST %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat (

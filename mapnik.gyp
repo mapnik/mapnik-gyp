@@ -564,6 +564,39 @@
           }
         ]
       ]
+    },
+    {
+      "target_name": "test_proj_transform1",
+      "type": "executable",
+      "sources": [ "../benchmark/test_proj_transform1.cpp" ],
+      "dependencies": [ "mapnik" ],
+      "conditions": [
+        ["OS=='win'",
+          {
+            "libraries":[
+              "<(boost_system_lib)"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "target_name": "test_quad_tree",
+      "type": "executable",
+      "sources": [ "../benchmark/test_quad_tree.cpp" ],
+      "dependencies": [ "mapnik" ],
+      "conditions": [
+        ["OS=='win'",
+          {
+            "libraries":[
+              "<(boost_system_lib)",
+              "<(icuuc_lib)",
+              "cairo.lib",
+              "proj.lib",
+            ]
+          }
+        ]
+      ]
     }
   ]
 }
