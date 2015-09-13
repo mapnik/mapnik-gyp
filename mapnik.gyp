@@ -597,6 +597,54 @@
           }
         ]
       ]
+    },
+    {
+      "target_name": "test_expression_parse",
+      "type": "executable",
+      "sources": [ "../benchmark/test_expression_parse.cpp" ],
+      "dependencies": [ "mapnik" ],
+      "conditions": [
+        ["OS=='win'",
+          {
+            "libraries":[
+              "<(boost_system_lib)",
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "target_name": "test_face_ptr_creation",
+      "type": "executable",
+      "sources": [ "../benchmark/test_face_ptr_creation.cpp" ],
+      "dependencies": [ "mapnik" ],
+      "conditions": [
+        ["OS=='win'",
+          {
+            "libraries":[
+              "<(boost_system_lib)",
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "target_name": "test_font_registration",
+      "type": "executable",
+      "sources": [ "../benchmark/test_font_registration.cpp" ],
+      "dependencies": [ "mapnik" ],
+      "conditions": [
+        ["OS=='win'",
+          {
+            "libraries":[
+              "<(boost_system_lib)",
+              "<(icuuc_lib)",
+              "cairo.lib",
+              "proj.lib",
+            ]
+          }
+        ]
+      ]
     }
   ]
 }

@@ -5,8 +5,25 @@ SET EL=0
 ECHO ~~~~~~~~~~~~~~~~~~~ %~f0 ~~~~~~~~~~~~~~~~~~~
 
 SET PATH_TO_BIN=mapnik-gyp\build\Release
+
+GOTO CURRENT_TEST
+
 CALL mapnik-gyp\benchmark-2.bat %PATH_TO_BIN%\test_proj_transform1.exe 10 100
 IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+CALL mapnik-gyp\benchmark-2.bat %PATH_TO_BIN%\test_expression_parse.exe 10 100
+IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+CALL mapnik-gyp\benchmark-2.bat %PATH_TO_BIN%\test_face_ptr_creation.exe 10 100
+IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+:CURRENT_TEST
+CALL mapnik-gyp\benchmark-2.bat %PATH_TO_BIN%\test_font_registration.exe 10 100
+IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+
+GOTO DONE
+
 
 ECHO text rendering...
 %PATH_TO_BIN%\test_rendering.exe ^
