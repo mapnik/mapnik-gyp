@@ -645,6 +645,21 @@
           }
         ]
       ]
+    },
+    {
+      "target_name": "test_offset_converter",
+      "type": "executable",
+      "sources": [ "../benchmark/test_offset_converter.cpp" ],
+      "dependencies": [ "mapnik" ],
+      "conditions": [
+        ["OS=='win'",
+          {
+            "libraries":[
+              "<(boost_system_lib)",
+            ]
+          }
+        ]
+      ]
     }
   ]
 }
