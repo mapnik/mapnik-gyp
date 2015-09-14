@@ -454,10 +454,13 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy  /q .\build\lib\mapnik\input\*.input %MAPNIK_SDK%\lib\mapnik\input\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
+
 ::write batch file to set mapnik environment vars
 echo @ECHO OFF> %MAPNIK_SDK%\set-env-vars.bat
 echo SET SDKDIR=%%~dp0>> %MAPNIK_SDK%\set-env-vars.bat
 echo SET ICU_DATA=%%SDKDIR%%share\icu>> %MAPNIK_SDK%\set-env-vars.bat
+echo SET GDAL_DATA=%%SDKDIR%%\share\gdal>> %MAPNIK_SDK%\set-env-vars.bat
+echo SET PROJ_LIB=%%SDKDIR%%\share\proj>> %MAPNIK_SDK%\set-env-vars.bat
 echo SET PATH=%%SDKDIR%%bin;%%PATH%%>> %MAPNIK_SDK%\set-env-vars.bat
 echo SET PATH=%%SDKDIR%%lib;%%PATH%%>> %MAPNIK_SDK%\set-env-vars.bat
 
