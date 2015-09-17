@@ -414,20 +414,29 @@ IF %VERBOSE% EQU 1 ECHO !!!!!! using msbuild verbosity diagnostic !!!!! && SET M
 ::build heavy files single threaded
 
 ::MAYBE TRY SINGLE FILES MULTITHREADED????
+::http://www.hanselman.com/blog/FasterBuildsWithMSBuildUsingParallelBuildsAndMulticoreCPUs.aspx
+::In conclusion, BuildInParallel allows the MSBuild task to process the list of projects
+::which were passed to it in a parallel fashion,
+::while /m tells MSBuild how many processes it is allowed to start.
+
+
+
 
 msbuild ^
 .\build\mapnik.vcxproj ^
 /t:ClCompile ^
 /p:SelectedFiles="..\..\src\renderer_common\process_group_symbolizer.cpp;..\..\src\css_color_grammar.cpp;..\..\src\expression_grammar.cpp;..\..\src\transform_expression_grammar.cpp;..\..\src\image_filter_types.cpp;..\..\src\agg\process_markers_symbolizer.cpp;..\..\src\agg\process_group_symbolizer.cpp;..\..\src\grid\process_markers_symbolizer.cpp;..\..\src\grid\process_group_symbolizer.cpp;..\..\src\cairo\process_markers_symbolizer.cpp;..\..\src\cairo\process_group_symbolizer.cpp" ^
 /nologo ^
-/m:1 ^
+/m:%NUMBER_OF_PROCESSORS% ^
 /toolsversion:%TOOLS_VERSION% ^
-/p:BuildInParellel=false ^
+/p:BuildInParellel=true ^
+/p:cgthreads=8 ^
 /p:Configuration=%BUILD_TYPE% ^
 /p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY%
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
+GOTO DONE
 
 ::build heavy projects single threaded
 ECHO calling msbuild on mapnik-json and mapnik-wkt...
