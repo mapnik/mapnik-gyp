@@ -87,7 +87,7 @@
               "/MP", # compile across multiple CPUs
               "/bigobj", #compiling: x86 fatal error C1128: number of sections exceeded object file format limit: compile with /bigobj
             ],
-            "DebugInformationFormat": "3"
+            "DebugInformationFormat": "0" #0:disable 1:/Z7 3:/Zi 4:/ZI , see GenerateDebugInformation below, https://msdn.microsoft.com/en-us/library/958x11bc.aspx
           },
           "VCLibrarianTool": {
             "AdditionalOptions": [
@@ -99,7 +99,7 @@
             #"OptimizeReferences": 2, # /OPT:REF
             #"EnableCOMDATFolding": 2, # /OPT:ICF
             "LinkIncremental": 2, # force incremental linking
-            "GenerateDebugInformation": "true",
+            "GenerateDebugInformation": "false",
             "AdditionalOptions": [
                 #"/NODEFAULTLIB:libcmt.lib"
             ],

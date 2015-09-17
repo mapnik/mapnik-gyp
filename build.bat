@@ -420,11 +420,42 @@ IF %VERBOSE% EQU 1 ECHO !!!!!! using msbuild verbosity diagnostic !!!!! && SET M
 ::while /m tells MSBuild how many processes it is allowed to start.
 
 
+::https://randomascii.wordpress.com/2014/03/22/make-vc-compiles-fast-through-parallel-compilation/
+::http://blogs.msdn.com/b/vcblog/archive/2010/04/01/vc-tip-get-detailed-build-throughput-diagnostics-using-msbuild-compiler-and-linker.aspx
+::http://fastbuild.org/docs/home.html
+::https://channel9.msdn.com/Shows/C9-GoingNative/GoingNative-35-Fast-Tips-for-Faster-Builds
+::compile only one file in VS http://stackoverflow.com/a/2332199
+
 ::MSBuild: /m[axcpucount]:%NUMBER_OF_PROCESSORS% => number of MSBuild.exe processes that may be run in parallel
 ::MSBuild: /p:BuildInParellel=true => multiple worker processes are generated to build as many projects at the same time as possible
 
 ::LINK: /MP:%NUMBER_OF_PROCESSORS% => (Build with Multiple Processes) specifies the number of cl.exe processes that simultaneously compile the source files
-::LINK: /cgthreads:8 => specifies the number of threads used by each cl.exe process
+::LINK: /cgthreads[n] => default 4, max 8: specifies the number of threads used by each cl.exe process
+
+
+::LINKER OPTIONS: https://msdn.microsoft.com/en-us/library/y0zzbyt4.aspx
+::                https://msdn.microsoft.com/en-us/library/kezkeayy.aspx
+SET CL=/CGTHREADS8
+
+::https://github.com/mapnik/mapnik/blob/master/Makefile
+
+GOTO CURRENT
+
+
+msbuild ^
+.\build\mapnik.vcxproj ^
+/t:ClCompile ^
+/p:SelectedFiles="..\..\src\renderer_common\process_group_symbolizer.cpp;..\..\src\css_color_grammar.cpp" ^
+/nologo ^
+/m:%NUMBER_OF_PROCESSORS% ^
+/toolsversion:%TOOLS_VERSION% ^
+/p:BuildInParellel=true ^
+/p:Configuration=%BUILD_TYPE% ^
+/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY%
+ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
+IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
+
+GOTO DONE
 
 
 msbuild ^
@@ -465,14 +496,17 @@ msbuild ^
 .\build\mapnik.sln ^
 /t:mapnik-json;mapnik-wkt ^
 /nologo ^
-/m:1 ^
+/m:%NUMBER_OF_PROCESSORS% ^
 /toolsversion:%TOOLS_VERSION% ^
-/p:BuildInParellel=false ^
+/p:BuildInParellel=true ^
 /p:Configuration=%BUILD_TYPE% ^
 /p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY%
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
+GOTO DONE
+
+:CURRENT
 
 ::build everything multithreaded
 ECHO calling msbuild on mapnik...
@@ -484,12 +518,12 @@ msbuild ^
 /p:BuildInParellel=true ^
 /p:Configuration=%BUILD_TYPE% ^
 /p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY%
-
-
 :: /t:rebuild
 :: /v:diag > build.log
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
+
+GOTO DONE
 
 
 :: install command line tools
