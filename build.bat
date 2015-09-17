@@ -415,33 +415,33 @@ IF %VERBOSE% EQU 1 ECHO !!!!!! using msbuild verbosity diagnostic !!!!! && SET M
 
 ::MAYBE TRY SINGLE FILES MULTITHREADED????
 
-msbuild ^
-.\build\mapnik.vcxproj ^
-/t:ClCompile ^
-/p:SelectedFiles="..\..\src\renderer_common\process_group_symbolizer.cpp;..\..\src\css_color_grammar.cpp;..\..\src\expression_grammar.cpp;..\..\src\transform_expression_grammar.cpp;..\..\src\image_filter_types.cpp;..\..\src\agg\process_markers_symbolizer.cpp;..\..\src\agg\process_group_symbolizer.cpp;..\..\src\grid\process_markers_symbolizer.cpp;..\..\src\grid\process_group_symbolizer.cpp;..\..\src\cairo\process_markers_symbolizer.cpp;..\..\src\cairo\process_group_symbolizer.cpp" ^
-/nologo ^
-/m:1 ^
-/toolsversion:%TOOLS_VERSION% ^
-/p:BuildInParellel=false ^
-/p:Configuration=%BUILD_TYPE% ^
-/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY%
-ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
-IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
+::msbuild ^
+::.\build\mapnik.vcxproj ^
+::/t:ClCompile ^
+::/p:SelectedFiles="..\..\src\renderer_common\process_group_symbolizer.cpp;..\..\src\css_color_grammar.cpp;..\..\src\expression_grammar.cpp;..\..\src\transform_expression_grammar.cpp;..\..\src\image_filter_types.cpp;..\..\src\agg\process_markers_symbolizer.cpp;..\..\src\agg\process_group_symbolizer.cpp;..\..\src\grid\process_markers_symbolizer.cpp;..\..\src\grid\process_group_symbolizer.cpp;..\..\src\cairo\process_markers_symbolizer.cpp;..\..\src\cairo\process_group_symbolizer.cpp" ^
+::/nologo ^
+::/m:1 ^
+::/toolsversion:%TOOLS_VERSION% ^
+::/p:BuildInParellel=false ^
+::/p:Configuration=%BUILD_TYPE% ^
+::/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY%
+::ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
+::IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
 
 ::build heavy projects single threaded
-ECHO calling msbuild on mapnik-json and mapnik-wkt...
-msbuild ^
-.\build\mapnik.sln ^
-/t:mapnik-json;mapnik-wkt ^
-/nologo ^
-/m:1 ^
-/toolsversion:%TOOLS_VERSION% ^
-/p:BuildInParellel=false ^
-/p:Configuration=%BUILD_TYPE% ^
-/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY%
-ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
-IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
+::ECHO calling msbuild on mapnik-json and mapnik-wkt...
+::msbuild ^
+::.\build\mapnik.sln ^
+::/t:mapnik-json;mapnik-wkt ^
+::/nologo ^
+::/m:1 ^
+::/toolsversion:%TOOLS_VERSION% ^
+::/p:BuildInParellel=false ^
+::/p:Configuration=%BUILD_TYPE% ^
+::/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY%
+::ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
+::IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
 
 ::build everything multithreaded
