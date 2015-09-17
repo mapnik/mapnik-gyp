@@ -420,6 +420,11 @@ IF %VERBOSE% EQU 1 ECHO !!!!!! using msbuild verbosity diagnostic !!!!! && SET M
 ::while /m tells MSBuild how many processes it is allowed to start.
 
 
+::MSBuild: /m[axcpucount]:%NUMBER_OF_PROCESSORS% => number of MSBuild.exe processes that may be run in parallel
+::MSBuild: /p:BuildInParellel=true => multiple worker processes are generated to build as many projects at the same time as possible
+
+::LINK: /MP:%NUMBER_OF_PROCESSORS% => (Build with Multiple Processes) specifies the number of cl.exe processes that simultaneously compile the source files
+::LINK: /cgthreads:8 => specifies the number of threads used by each cl.exe process
 
 
 msbuild ^
@@ -427,16 +432,32 @@ msbuild ^
 /t:ClCompile ^
 /p:SelectedFiles="..\..\src\renderer_common\process_group_symbolizer.cpp;..\..\src\css_color_grammar.cpp;..\..\src\expression_grammar.cpp;..\..\src\transform_expression_grammar.cpp;..\..\src\image_filter_types.cpp;..\..\src\agg\process_markers_symbolizer.cpp;..\..\src\agg\process_group_symbolizer.cpp;..\..\src\grid\process_markers_symbolizer.cpp;..\..\src\grid\process_group_symbolizer.cpp;..\..\src\cairo\process_markers_symbolizer.cpp;..\..\src\cairo\process_group_symbolizer.cpp" ^
 /nologo ^
-/m:%NUMBER_OF_PROCESSORS% ^
+/m:1 ^
 /toolsversion:%TOOLS_VERSION% ^
-/p:BuildInParellel=true ^
-/p:cgthreads=8 ^
+/p:BuildInParellel=false ^
 /p:Configuration=%BUILD_TYPE% ^
 /p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY%
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
 GOTO DONE
+
+
+msbuild ^
+.\build\mapnik.vcxproj ^
+/t:ClCompile ^
+/p:SelectedFiles="..\..\src\css_color_grammar.cpp" ^
+/nologo ^
+/m:1 ^
+/toolsversion:%TOOLS_VERSION% ^
+/p:BuildInParellel=false ^
+/p:Configuration=%BUILD_TYPE% ^
+/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY%
+ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
+IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
+
+GOTO DONE
+
 
 ::build heavy projects single threaded
 ECHO calling msbuild on mapnik-json and mapnik-wkt...
@@ -588,7 +609,7 @@ ECHO !!!!!!! !!!!! !!!!!! TODO: enable again! ! ! ! ! !
 ::DEL /F plugins\input\*.input
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
-if NOT EXIST %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat (
+if NOT EXIST %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat (
     wget --no-check-certificate https://github.com/mapnik/mapnik-packaging/raw/master/osx/icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat
     echo f | xcopy /q /d /Y icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat
 )
