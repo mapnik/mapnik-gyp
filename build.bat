@@ -434,34 +434,27 @@ IF %VERBOSE% EQU 1 ECHO !!!!!! using msbuild verbosity diagnostic !!!!! && SET M
 
 
 ::LINKER OPTIONS: https://msdn.microsoft.com/en-us/library/y0zzbyt4.aspx
-::                https://msdn.microsoft.com/en-us/library/kezkeayy.aspx
-SET CL=/CGTHREADS8
+::COMPILER OPTIONS: https://msdn.microsoft.com/en-us/library/kezkeayy.aspx
+::LINKER: /CGTHREADS:8
+::COMPILER: /cgthreads8
+SET CL=/cgthreads8 /Bt+
+SET LINK=/CGTHREADS:8 /time+
 
 ::https://github.com/mapnik/mapnik/blob/master/Makefile
+
+::create empty directory structure, otherwise compilation of single files will fail
+::seems, that directories don't get created for single file compile
+XCOPY /T /E ..\src build\Release\src\
+IF %ERRORLEVEL% NEQ 0 (ECHO error during creating empty directory structure && GOTO ERROR) ELSE (ECHO empty directory structure created)
 
 GOTO CURRENT
 
 
-msbuild ^
-.\build\mapnik.vcxproj ^
-/t:ClCompile ^
-/p:SelectedFiles="..\..\src\renderer_common\process_group_symbolizer.cpp;..\..\src\css_color_grammar.cpp" ^
-/nologo ^
-/m:%NUMBER_OF_PROCESSORS% ^
-/toolsversion:%TOOLS_VERSION% ^
-/p:BuildInParellel=true ^
-/p:Configuration=%BUILD_TYPE% ^
-/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY%
-ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
-IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
-
-GOTO DONE
-
 
 msbuild ^
 .\build\mapnik.vcxproj ^
 /t:ClCompile ^
-/p:SelectedFiles="..\..\src\renderer_common\process_group_symbolizer.cpp;..\..\src\css_color_grammar.cpp;..\..\src\expression_grammar.cpp;..\..\src\transform_expression_grammar.cpp;..\..\src\image_filter_types.cpp;..\..\src\agg\process_markers_symbolizer.cpp;..\..\src\agg\process_group_symbolizer.cpp;..\..\src\grid\process_markers_symbolizer.cpp;..\..\src\grid\process_group_symbolizer.cpp;..\..\src\cairo\process_markers_symbolizer.cpp;..\..\src\cairo\process_group_symbolizer.cpp" ^
+/p:SelectedFiles="..\..\src\css_color_grammar.cpp;..\..\src\expression_grammar.cpp;..\..\src\transform_expression_grammar.cpp;..\..\src\image_filter_types.cpp;..\..\src\agg\process_markers_symbolizer.cpp;..\..\src\agg\process_group_symbolizer.cpp;..\..\src\grid\process_markers_symbolizer.cpp;..\..\src\grid\process_group_symbolizer.cpp;..\..\src\cairo\process_markers_symbolizer.cpp;..\..\src\cairo\process_group_symbolizer.cpp;..\src\renderer_common\process_group_symbolizer.cpp" ^
 /nologo ^
 /m:1 ^
 /toolsversion:%TOOLS_VERSION% ^
@@ -471,23 +464,8 @@ msbuild ^
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
-GOTO DONE
 
-
-msbuild ^
-.\build\mapnik.vcxproj ^
-/t:ClCompile ^
-/p:SelectedFiles="..\..\src\css_color_grammar.cpp" ^
-/nologo ^
-/m:1 ^
-/toolsversion:%TOOLS_VERSION% ^
-/p:BuildInParellel=false ^
-/p:Configuration=%BUILD_TYPE% ^
-/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY%
-ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
-IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
-
-GOTO DONE
+::GOTO DONE
 
 
 ::build heavy projects single threaded
@@ -504,9 +482,10 @@ msbuild ^
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
-GOTO DONE
+::GOTO DONE
 
 :CURRENT
+
 
 ::build everything multithreaded
 ECHO calling msbuild on mapnik...
@@ -524,6 +503,69 @@ ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
 GOTO DONE
+
+
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\CL.exe
+/c
+/I..\..\include
+/I..\..\deps
+/I..\..\deps\agg\include
+/I..\..
+/I"c:\mb\windows-builds-64\packages\mapnik-master\mapnik-gyp\mapnik-sdk\include"
+/I"c:\mb\windows-builds-64\packages\mapnik-master\mapnik-gyp\mapnik-sdk\include\gdal"
+/I"c:\mb\windows-builds-64\packages\mapnik-master\mapnik-gyp\mapnik-sdk\include\freetype2"
+/I"c:\mb\windows-builds-64\packages\mapnik-master\mapnik-gyp\mapnik-sdk\include\cairo"
+/Zi
+/nologo
+/W1
+/WX-
+/Ox
+/Ob2
+/Oi
+/Ot
+/Oy
+/D BIGINT
+/D BOOST_REGEX_HAS_ICU
+/D HAVE_JPEG
+/D MAPNIK_USE_PROJ4
+/D MAPNIK_NO_ATEXIT
+/D HAVE_PNG
+/D HAVE_TIFF
+/D HAVE_WEBP
+/D MAPNIK_THREADSAFE
+/D HAVE_CAIRO
+/D GRID_RENDERER
+/D SVG_RENDERER
+/D BOOST_SPIRIT_USE_PHOENIX_V3=1
+/D BOOST_VARIANT_DO_NOT_USE_VARIADIC_TEMPLATES
+/D BOOST_MSVC_ENABLE_2014_JUN_CTP
+/D _WINDOWS
+/D MAPNIK_EXPORTS
+/D NDEBUG
+/D _WINDLL
+/Gm-
+/EHsc
+/MD
+/GS
+/fp:precise
+/Zc:wchar_t
+/Zc:forScope
+/Zc:inline
+/GR
+/Fo"Release\obj\mapnik\..\..\src\cairo\/"
+/Fd"Release\obj\mapnik\vc140.pdb"
+/Gd
+/TP
+/wd4910
+/wd4068
+/wd4244
+/wd4005
+/wd4506
+/wd4661
+/errorReport:queue
+/MP
+/bigobj
+
 
 
 :: install command line tools

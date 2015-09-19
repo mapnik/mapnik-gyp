@@ -78,6 +78,7 @@
             "RuntimeLibrary": "2", #0:/MT, 2:/MD,
             "Optimization": 3, # /Ox, full optimization
             "FavorSizeOrSpeed": 1, # /Ot, favour speed over size
+            #"MinimalRebuild": "false",
             "InlineFunctionExpansion": 2, # /Ob2, inline anything eligible
             #"WholeProgramOptimization": "true", # /GL, whole program optimization, needed for LTCG
             "OmitFramePointers": "true",
@@ -87,7 +88,7 @@
               "/MP", # compile across multiple CPUs
               "/bigobj", #compiling: x86 fatal error C1128: number of sections exceeded object file format limit: compile with /bigobj
             ],
-            "DebugInformationFormat": "0" #0:disable 1:/Z7 3:/Zi 4:/ZI , see GenerateDebugInformation below, https://msdn.microsoft.com/en-us/library/958x11bc.aspx
+            #"DebugInformationFormat": "0" #0:disable 1:/Z7 3:/Zi 4:/ZI , see GenerateDebugInformation below, https://msdn.microsoft.com/en-us/library/958x11bc.aspx
           },
           "VCLibrarianTool": {
             "AdditionalOptions": [
@@ -99,7 +100,7 @@
             #"OptimizeReferences": 2, # /OPT:REF
             #"EnableCOMDATFolding": 2, # /OPT:ICF
             "LinkIncremental": 2, # force incremental linking
-            "GenerateDebugInformation": "false",
+            #"GenerateDebugInformation": "false",
             "AdditionalOptions": [
                 #"/NODEFAULTLIB:libcmt.lib"
             ],
