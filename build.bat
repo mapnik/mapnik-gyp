@@ -437,8 +437,8 @@ IF %VERBOSE% EQU 1 ECHO !!!!!! using msbuild verbosity diagnostic !!!!! && SET M
 ::COMPILER OPTIONS: https://msdn.microsoft.com/en-us/library/kezkeayy.aspx
 ::LINKER: /CGTHREADS:8
 ::COMPILER: /cgthreads8
-SET CL=/cgthreads8 /Bt+
-SET LINK=/CGTHREADS:8 /time+
+IF NOT DEFINED APPVEYOR SET CL=/cgthreads8 /Bt+
+IF NOT DEFINED APPVEYOR SET LINK=/CGTHREADS:8 /time+
 
 ::https://github.com/mapnik/mapnik/blob/master/Makefile
 
@@ -451,7 +451,7 @@ GOTO CURRENT
 
 :CURRENT
 
-
+ECHO building heavy files first...
 msbuild ^
 .\build\mapnik.vcxproj ^
 /t:ClCompile ^
@@ -465,6 +465,7 @@ msbuild ^
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
+IF DEFINED APPVEYOR ECHO building on AppVeyor^: exiting... && GOTO DONE
 
 ::GOTO DONE
 
@@ -488,7 +489,7 @@ IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build f
 
 
 ::build everything multithreaded
-ECHO calling msbuild on mapnik...
+ECHO calling msbuild on whole mapnik solution...
 msbuild ^
 .\build\mapnik.sln ^
 /nologo ^
