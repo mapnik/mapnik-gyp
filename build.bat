@@ -450,6 +450,8 @@ IF %ERRORLEVEL% NEQ 0 (ECHO error during creating empty directory structure && G
 
 GOTO CURRENT
 
+:CURRENT
+
 
 ECHO building heavy files first...
 msbuild ^
@@ -465,7 +467,7 @@ msbuild ^
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
-IF DEFINED APPVEYOR ECHO building on AppVeyor^: exiting... && GOTO DONE
+::IF DEFINED APPVEYOR ECHO building on AppVeyor^: exiting... && GOTO DONE
 
 ::GOTO DONE
 
@@ -487,7 +489,6 @@ IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build f
 ::GOTO DONE
 
 
-:CURRENT
 
 ::build everything multithreaded
 ECHO calling msbuild on whole mapnik solution...
