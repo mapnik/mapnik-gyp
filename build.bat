@@ -483,6 +483,7 @@ IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build f
 ::GOTO DONE
 
 
+
 ::build heavy projects single threaded
 ECHO calling msbuild on mapnik-json and mapnik-wkt...
 msbuild ^
@@ -501,10 +502,15 @@ IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build f
 
 
 
-::build everything multithreaded
+::build everything else
+::on AppVeyor just the mapnik project
+
+SET MAPNIK_PROJECT=
+IF DEFINED APPVEYOR SET MAPNIK_PROJECT=/t:mapnik
+
 ECHO calling msbuild on whole mapnik solution...
 msbuild ^
-.\build\mapnik.sln ^
+.\build\mapnik.sln %MAPNIK_PROJECT% ^
 /nologo ^
 /m:%NUMBER_OF_PROCESSORS% ^
 /toolsversion:%TOOLS_VERSION% ^
