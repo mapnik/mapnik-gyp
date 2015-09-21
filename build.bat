@@ -406,6 +406,7 @@ CALL gyp\gyp.bat mapnik.gyp --depth=. ^
  --generator-output=build
 IF %ERRORLEVEL% NEQ 0 (ECHO error during solution file generation && GOTO ERROR) ELSE (ECHO solution file generated)
 
+::verbosity: q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]
 SET MSBUILD_VERBOSITY=
 IF NOT DEFINED VERBOSE SET VERBOSE=0
 IF %VERBOSE% EQU 1 ECHO !!!!!! using msbuild verbosity diagnostic !!!!! && SET MSBUILD_VERBOSITY=/verbosity:diagnostic
@@ -449,7 +450,6 @@ IF %ERRORLEVEL% NEQ 0 (ECHO error during creating empty directory structure && G
 
 GOTO CURRENT
 
-:CURRENT
 
 ECHO building heavy files first...
 msbuild ^
@@ -487,6 +487,7 @@ IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build f
 ::GOTO DONE
 
 
+:CURRENT
 
 ::build everything multithreaded
 ECHO calling msbuild on whole mapnik solution...
@@ -685,6 +686,8 @@ ECHO !!!!!!! !!!!! !!!!!! NOT REMOVING PLUGINS COPY DURING benchmark testing
 ECHO !!!!!!! !!!!! !!!!!! TODO: enable again! ! ! ! ! !
 ::DEL /F plugins\input\*.input
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+IF DEFINED APPVEYOR ECHO on AppVeyor, skipping icudt collator download && GOTO DONE
 
 if NOT EXIST %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat (
     wget --no-check-certificate https://github.com/mapnik/mapnik-packaging/raw/master/osx/icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat
