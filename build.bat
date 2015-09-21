@@ -449,6 +449,7 @@ IF %ERRORLEVEL% NEQ 0 (ECHO error during creating empty directory structure && G
 
 GOTO CURRENT
 
+:CURRENT
 
 
 msbuild ^
@@ -484,7 +485,6 @@ IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build f
 
 ::GOTO DONE
 
-:CURRENT
 
 
 ::build everything multithreaded
@@ -502,7 +502,7 @@ msbuild ^
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
-GOTO DONE
+GOTO TEMPJUMP
 
 
 C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\CL.exe
@@ -566,7 +566,7 @@ C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\CL.exe
 /MP
 /bigobj
 
-
+:TEMPJUMP
 
 :: install command line tools
 xcopy /q /d .\build\bin\nik2img.exe %MAPNIK_SDK%\bin /Y
