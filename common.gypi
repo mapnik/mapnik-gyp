@@ -56,7 +56,7 @@
           "VCCLCompilerTool": {
             "RuntimeLibrary": "3",
             "Optimization": 0,
-            "FavorSizeOrSpeed": 1, # /Ot, favour speed over size
+            "FavorSizeOrSpeed": 1, #1:/Ot, favour speed, 2:/Os favour size
             "MinimalRebuild": "false",
             "OmitFramePointers": "true",
             "BasicRuntimeChecks": 3,
@@ -76,10 +76,10 @@
         "msvs_settings": {
           "VCCLCompilerTool": {
             "RuntimeLibrary": "2", #0:/MT, 2:/MD,
-            "Optimization": 3, # /Ox, full optimization
-            "FavorSizeOrSpeed": 1, # /Ot, favour speed over size
+            "Optimization": 0, # 0:/Od disable, 1:/O1 min size, 2:/O2 max speed, 3:/Ox full optimization
+            #"FavorSizeOrSpeed": 1, #1:/Ot favour speed, 2:/Os favour size
             #"MinimalRebuild": "false",
-            "InlineFunctionExpansion": 2, # /Ob2, inline anything eligible
+            "InlineFunctionExpansion": 0, #0:/Ob0: disable, 1:/Ob1 inline only marked funtions, 2:/Ob2 inline anything eligible
             #"WholeProgramOptimization": "true", # /GL, whole program optimization, needed for LTCG
             "OmitFramePointers": "true",
             #"EnableFunctionLevelLinking": "true",
@@ -88,7 +88,7 @@
               "/MP", # compile across multiple CPUs
               "/bigobj", #compiling: x86 fatal error C1128: number of sections exceeded object file format limit: compile with /bigobj
             ],
-            #"DebugInformationFormat": "0" #0:disable 1:/Z7 3:/Zi 4:/ZI , see GenerateDebugInformation below, https://msdn.microsoft.com/en-us/library/958x11bc.aspx
+            "DebugInformationFormat": "0" #0:disable 1:/Z7 3:/Zi 4:/ZI , see GenerateDebugInformation below, https://msdn.microsoft.com/en-us/library/958x11bc.aspx
           },
           "VCLibrarianTool": {
             "AdditionalOptions": [
@@ -99,8 +99,8 @@
             #"LinkTimeCodeGeneration": 1, # link-time code generation
             #"OptimizeReferences": 2, # /OPT:REF
             #"EnableCOMDATFolding": 2, # /OPT:ICF
-            "LinkIncremental": 2, # force incremental linking
-            #"GenerateDebugInformation": "false",
+            "LinkIncremental": 1, #1:/INCREMENTAL:NO, 2:/INCREMENTAL force incremental linking
+            "GenerateDebugInformation": "false",
             "AdditionalOptions": [
                 #"/NODEFAULTLIB:libcmt.lib"
             ],
