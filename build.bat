@@ -410,7 +410,18 @@ IF %ERRORLEVEL% NEQ 0 (ECHO error during solution file generation && GOTO ERROR)
 SET MSBUILD_VERBOSITY=
 IF NOT DEFINED VERBOSE SET VERBOSE=0
 IF %VERBOSE% EQU 1 ECHO !!!!!! using msbuild verbosity diagnostic !!!!! && SET MSBUILD_VERBOSITY=/verbosity:diagnostic
+#::build log files
+IF EXIST msbuild-summary.txt ECHO delete msbuild-summary.txt && DEL msbuild-summary.txt
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+IF EXIST msbuild-warnings.txt ECHO delete msbuild-warnings.txt && DEL msbuild-warnings.txt
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+IF EXIST msbuild-errors.txt ECHO delete msbuild-errors.txt && DEL msbuild-errors.txt
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
+SET MSBUILD_LOGS=/fl1 /fl2 /fl3 ^
+/flp1:Summary;Verbosity=minimal;LogFile=msbuild-summary.txt;Append;Encoding=UTF-8 ^
+/flp2:warningsonly;Verbosity=Diagnostic;logfile=msbuild-warnings.txt;Append;Encoding=UTF-8 ^
+/flp3:errorsonly;Verbosity=Diagnostic;logfile=msbuild-errors.txt;Append;Encoding=UTF-8
 
 ::build heavy files single threaded
 
@@ -463,7 +474,7 @@ msbuild ^
 /toolsversion:%TOOLS_VERSION% ^
 /p:BuildInParellel=false ^
 /p:Configuration=%BUILD_TYPE% ^
-/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY%
+/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY% %MSBUILD_LOGS%
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
@@ -482,7 +493,7 @@ msbuild ^
 /toolsversion:%TOOLS_VERSION% ^
 /p:BuildInParellel=true ^
 /p:Configuration=%BUILD_TYPE% ^
-/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY%
+/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY% %MSBUILD_LOGS%
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
@@ -499,7 +510,7 @@ msbuild ^
 /toolsversion:%TOOLS_VERSION% ^
 /p:BuildInParellel=true ^
 /p:Configuration=%BUILD_TYPE% ^
-/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY%
+/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY% %MSBUILD_LOGS%
 :: /t:rebuild
 :: /v:diag > build.log
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
@@ -570,6 +581,8 @@ C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\CL.exe
 /bigobj
 
 :TEMPJUMP
+
+IF DEFINED APPVEYOR ECHO on AppVeyor, skipping tests && GOTO DONE
 
 :: install command line tools
 xcopy /q /d .\build\bin\nik2img.exe %MAPNIK_SDK%\bin /Y
