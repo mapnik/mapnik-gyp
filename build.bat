@@ -522,7 +522,7 @@ IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build f
 ::on AppVeyor just the mapnik project
 
 SET MAPNIK_PROJECT=
-IF DEFINED APPVEYOR SET MAPNIK_PROJECT=/t:mapnik;csv;gdal;geojson;ogr;raster;shape;sqlite
+IF DEFINED APPVEYOR SET MAPNIK_PROJECT=/t:mapnik;csv;gdal;geojson;ogr;pgraster;postgis;raster;shape;sqlite;topojson
 
 IF DEFINED APPVEYOR (ECHO calling msbuild on %MAPNIK_PROJECT%) ELSE (ECHO calling msbuild on whole mapnik solution...)
 msbuild ^
