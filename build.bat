@@ -394,6 +394,16 @@ ECHO label DOFASTBUILD
 
 ECHO INCLUDE %INCLUDE%
 
+IF NOT DEFINED APPVEYOR GOTO GENERATE_SOLUTION
+ECHO on AppVeyor && ECHO using common.gypi without optimizations
+ECHO renaming existing common.gypi && IF EXIST common.gypi REN common.gypi common.gypi-optimized
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+ECHO copying common.gypi-appveyor to common.gypi
+COPY common.gypi-appveyor common.gypi
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+:GENERATE_SOLUTION
+
 ECHO generating solution file, calling gyp...
 CALL gyp\gyp.bat mapnik.gyp --depth=. ^
  --debug=all ^
@@ -406,11 +416,17 @@ CALL gyp\gyp.bat mapnik.gyp --depth=. ^
  --generator-output=build
 IF %ERRORLEVEL% NEQ 0 (ECHO error during solution file generation && GOTO ERROR) ELSE (ECHO solution file generated)
 
+::for local development simulating AppVeyor, copy back common.gypi
+IF EXIST common.gypi-optimized ECHO deleting common.gypi && DEL common.gypi
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+IF EXIST common.gypi-optimized ECHO renaming common.gypi-optimized to common.gypi && REN common.gypi-optimized common.gypi
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
 ::verbosity: q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]
 SET MSBUILD_VERBOSITY=
 IF NOT DEFINED VERBOSE SET VERBOSE=0
 IF %VERBOSE% EQU 1 ECHO !!!!!! using msbuild verbosity diagnostic !!!!! && SET MSBUILD_VERBOSITY=/verbosity:diagnostic
-#::build log files
+::build log files
 IF EXIST msbuild-summary.txt ECHO delete msbuild-summary.txt && DEL msbuild-summary.txt
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 IF EXIST msbuild-warnings.txt ECHO delete msbuild-warnings.txt && DEL msbuild-warnings.txt
@@ -506,9 +522,9 @@ IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build f
 ::on AppVeyor just the mapnik project
 
 SET MAPNIK_PROJECT=
-IF DEFINED APPVEYOR SET MAPNIK_PROJECT=/t:mapnik
+IF DEFINED APPVEYOR SET MAPNIK_PROJECT=/t:mapnik;shape;sqlite;csv
 
-ECHO calling msbuild on whole mapnik solution...
+IF DEFINED APPVEYOR (ECHO calling msbuild on %MAPNIK_PROJECT%) ELSE (ECHO calling msbuild on whole mapnik solution...)
 msbuild ^
 .\build\mapnik.sln %MAPNIK_PROJECT% ^
 /nologo ^
@@ -522,71 +538,6 @@ msbuild ^
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
-GOTO TEMPJUMP
-
-
-C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\CL.exe
-/c
-/I..\..\include
-/I..\..\deps
-/I..\..\deps\agg\include
-/I..\..
-/I"c:\mb\windows-builds-64\packages\mapnik-master\mapnik-gyp\mapnik-sdk\include"
-/I"c:\mb\windows-builds-64\packages\mapnik-master\mapnik-gyp\mapnik-sdk\include\gdal"
-/I"c:\mb\windows-builds-64\packages\mapnik-master\mapnik-gyp\mapnik-sdk\include\freetype2"
-/I"c:\mb\windows-builds-64\packages\mapnik-master\mapnik-gyp\mapnik-sdk\include\cairo"
-/Zi
-/nologo
-/W1
-/WX-
-/Ox
-/Ob2
-/Oi
-/Ot
-/Oy
-/D BIGINT
-/D BOOST_REGEX_HAS_ICU
-/D HAVE_JPEG
-/D MAPNIK_USE_PROJ4
-/D MAPNIK_NO_ATEXIT
-/D HAVE_PNG
-/D HAVE_TIFF
-/D HAVE_WEBP
-/D MAPNIK_THREADSAFE
-/D HAVE_CAIRO
-/D GRID_RENDERER
-/D SVG_RENDERER
-/D BOOST_SPIRIT_USE_PHOENIX_V3=1
-/D BOOST_VARIANT_DO_NOT_USE_VARIADIC_TEMPLATES
-/D BOOST_MSVC_ENABLE_2014_JUN_CTP
-/D _WINDOWS
-/D MAPNIK_EXPORTS
-/D NDEBUG
-/D _WINDLL
-/Gm-
-/EHsc
-/MD
-/GS
-/fp:precise
-/Zc:wchar_t
-/Zc:forScope
-/Zc:inline
-/GR
-/Fo"Release\obj\mapnik\..\..\src\cairo\/"
-/Fd"Release\obj\mapnik\vc140.pdb"
-/Gd
-/TP
-/wd4910
-/wd4068
-/wd4244
-/wd4005
-/wd4506
-/wd4661
-/errorReport:queue
-/MP
-/bigobj
-
-:TEMPJUMP
 
 IF DEFINED APPVEYOR ECHO on AppVeyor, skipping tests && GOTO DONE
 
