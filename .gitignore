@@ -1,6 +1,10 @@
 .DS_Store
 mapnik-win-sdk-*
+deps.7z
 mapnik-config.bat
 build
 gyp
 mapnik-sdk
+msbuild-summary.txt
+msbuild-errors.txt
+msbuild-warnings.txt

@@ -394,6 +394,16 @@ ECHO label DOFASTBUILD
 
 ECHO INCLUDE %INCLUDE%
 
+IF NOT DEFINED APPVEYOR GOTO GENERATE_SOLUTION
+ECHO on AppVeyor && ECHO using common.gypi without optimizations
+ECHO renaming existing common.gypi && IF EXIST common.gypi REN common.gypi common.gypi-optimized
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+ECHO copying common.gypi-appveyor to common.gypi
+COPY common.gypi-appveyor common.gypi
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+:GENERATE_SOLUTION
+
 ECHO generating solution file, calling gyp...
 CALL gyp\gyp.bat mapnik.gyp --depth=. ^
  --debug=all ^
@@ -406,61 +416,130 @@ CALL gyp\gyp.bat mapnik.gyp --depth=. ^
  --generator-output=build
 IF %ERRORLEVEL% NEQ 0 (ECHO error during solution file generation && GOTO ERROR) ELSE (ECHO solution file generated)
 
+::for local development simulating AppVeyor, copy back common.gypi
+IF EXIST common.gypi-optimized ECHO deleting common.gypi && DEL common.gypi
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+IF EXIST common.gypi-optimized ECHO renaming common.gypi-optimized to common.gypi && REN common.gypi-optimized common.gypi
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+::verbosity: q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]
 SET MSBUILD_VERBOSITY=
 IF NOT DEFINED VERBOSE SET VERBOSE=0
 IF %VERBOSE% EQU 1 ECHO !!!!!! using msbuild verbosity diagnostic !!!!! && SET MSBUILD_VERBOSITY=/verbosity:diagnostic
+::build log files
+IF EXIST msbuild-summary.txt ECHO delete msbuild-summary.txt && DEL msbuild-summary.txt
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+IF EXIST msbuild-warnings.txt ECHO delete msbuild-warnings.txt && DEL msbuild-warnings.txt
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+IF EXIST msbuild-errors.txt ECHO delete msbuild-errors.txt && DEL msbuild-errors.txt
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
+SET MSBUILD_LOGS=/fl1 /fl2 /fl3 ^
+/flp1:Summary;Verbosity=minimal;LogFile=msbuild-summary.txt;Append;Encoding=UTF-8 ^
+/flp2:warningsonly;Verbosity=Diagnostic;logfile=msbuild-warnings.txt;Append;Encoding=UTF-8 ^
+/flp3:errorsonly;Verbosity=Diagnostic;logfile=msbuild-errors.txt;Append;Encoding=UTF-8
 
 ::build heavy files single threaded
 
 ::MAYBE TRY SINGLE FILES MULTITHREADED????
+::http://www.hanselman.com/blog/FasterBuildsWithMSBuildUsingParallelBuildsAndMulticoreCPUs.aspx
+::In conclusion, BuildInParallel allows the MSBuild task to process the list of projects
+::which were passed to it in a parallel fashion,
+::while /m tells MSBuild how many processes it is allowed to start.
 
-::msbuild ^
-::.\build\mapnik.vcxproj ^
-::/t:ClCompile ^
-::/p:SelectedFiles="..\..\src\renderer_common\process_group_symbolizer.cpp;..\..\src\css_color_grammar.cpp;..\..\src\expression_grammar.cpp;..\..\src\transform_expression_grammar.cpp;..\..\src\image_filter_types.cpp;..\..\src\agg\process_markers_symbolizer.cpp;..\..\src\agg\process_group_symbolizer.cpp;..\..\src\grid\process_markers_symbolizer.cpp;..\..\src\grid\process_group_symbolizer.cpp;..\..\src\cairo\process_markers_symbolizer.cpp;..\..\src\cairo\process_group_symbolizer.cpp" ^
-::/nologo ^
-::/m:1 ^
-::/toolsversion:%TOOLS_VERSION% ^
-::/p:BuildInParellel=false ^
-::/p:Configuration=%BUILD_TYPE% ^
-::/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY%
-::ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
-::IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
+
+::https://randomascii.wordpress.com/2014/03/22/make-vc-compiles-fast-through-parallel-compilation/
+::http://blogs.msdn.com/b/vcblog/archive/2010/04/01/vc-tip-get-detailed-build-throughput-diagnostics-using-msbuild-compiler-and-linker.aspx
+::http://fastbuild.org/docs/home.html
+::https://channel9.msdn.com/Shows/C9-GoingNative/GoingNative-35-Fast-Tips-for-Faster-Builds
+::compile only one file in VS http://stackoverflow.com/a/2332199
+
+::MSBuild: /m[axcpucount]:%NUMBER_OF_PROCESSORS% => number of MSBuild.exe processes that may be run in parallel
+::MSBuild: /p:BuildInParellel=true => multiple worker processes are generated to build as many projects at the same time as possible
+
+::LINK: /MP:%NUMBER_OF_PROCESSORS% => (Build with Multiple Processes) specifies the number of cl.exe processes that simultaneously compile the source files
+::LINK: /cgthreads[n] => default 4, max 8: specifies the number of threads used by each cl.exe process
+
+
+::LINKER OPTIONS: https://msdn.microsoft.com/en-us/library/y0zzbyt4.aspx
+::COMPILER OPTIONS: https://msdn.microsoft.com/en-us/library/kezkeayy.aspx
+::LINKER: /CGTHREADS:8
+::COMPILER: /cgthreads8
+IF NOT DEFINED APPVEYOR SET CL=/cgthreads8 /Bt+
+IF NOT DEFINED APPVEYOR SET LINK=/CGTHREADS:8 /time+
+
+::https://github.com/mapnik/mapnik/blob/master/Makefile
+
+::create empty directory structure, otherwise compilation of single files will fail
+::seems, that directories don't get created for single file compile
+XCOPY /T /E ..\src build\Release\src\
+IF %ERRORLEVEL% NEQ 0 (ECHO error during creating empty directory structure && GOTO ERROR) ELSE (ECHO empty directory structure created)
+
+GOTO CURRENT
+
+:CURRENT
+
+
+ECHO building heavy files first...
+msbuild ^
+.\build\mapnik.vcxproj ^
+/t:ClCompile ^
+/p:SelectedFiles="..\..\src\css_color_grammar.cpp;..\..\src\expression_grammar.cpp;..\..\src\transform_expression_grammar.cpp;..\..\src\image_filter_types.cpp;..\..\src\agg\process_markers_symbolizer.cpp;..\..\src\agg\process_group_symbolizer.cpp;..\..\src\grid\process_markers_symbolizer.cpp;..\..\src\grid\process_group_symbolizer.cpp;..\..\src\cairo\process_markers_symbolizer.cpp;..\..\src\cairo\process_group_symbolizer.cpp;..\src\renderer_common\process_group_symbolizer.cpp" ^
+/nologo ^
+/m:1 ^
+/toolsversion:%TOOLS_VERSION% ^
+/p:BuildInParellel=false ^
+/p:Configuration=%BUILD_TYPE% ^
+/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY% %MSBUILD_LOGS%
+ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
+IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
+
+::IF DEFINED APPVEYOR ECHO building on AppVeyor^: exiting... && GOTO DONE
+
+::GOTO DONE
+
 
 
 ::build heavy projects single threaded
-::ECHO calling msbuild on mapnik-json and mapnik-wkt...
-::msbuild ^
-::.\build\mapnik.sln ^
-::/t:mapnik-json;mapnik-wkt ^
-::/nologo ^
-::/m:1 ^
-::/toolsversion:%TOOLS_VERSION% ^
-::/p:BuildInParellel=false ^
-::/p:Configuration=%BUILD_TYPE% ^
-::/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY%
-::ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
-::IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
-
-
-::build everything multithreaded
-ECHO calling msbuild on mapnik...
+ECHO calling msbuild on mapnik-json and mapnik-wkt...
 msbuild ^
 .\build\mapnik.sln ^
+/t:mapnik-json;mapnik-wkt ^
 /nologo ^
 /m:%NUMBER_OF_PROCESSORS% ^
 /toolsversion:%TOOLS_VERSION% ^
 /p:BuildInParellel=true ^
 /p:Configuration=%BUILD_TYPE% ^
-/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY%
+/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY% %MSBUILD_LOGS%
+ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
+IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
+
+::GOTO DONE
 
 
+
+::build everything else
+::on AppVeyor just the mapnik project
+
+SET MAPNIK_PROJECT=
+IF DEFINED APPVEYOR SET MAPNIK_PROJECT=/t:mapnik;csv;gdal;geojson;ogr;pgraster;postgis;raster;shape;sqlite;topojson
+
+IF DEFINED APPVEYOR (ECHO calling msbuild on %MAPNIK_PROJECT%) ELSE (ECHO calling msbuild on whole mapnik solution...)
+msbuild ^
+.\build\mapnik.sln %MAPNIK_PROJECT% ^
+/nologo ^
+/m:%NUMBER_OF_PROCESSORS% ^
+/toolsversion:%TOOLS_VERSION% ^
+/p:BuildInParellel=true ^
+/p:Configuration=%BUILD_TYPE% ^
+/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY% %MSBUILD_LOGS%
 :: /t:rebuild
 :: /v:diag > build.log
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
+
+IF DEFINED APPVEYOR ECHO on AppVeyor, skipping tests && GOTO DONE
 
 :: install command line tools
 xcopy /q /d .\build\bin\nik2img.exe %MAPNIK_SDK%\bin /Y
@@ -579,7 +658,9 @@ ECHO !!!!!!! !!!!! !!!!!! TODO: enable again! ! ! ! ! !
 ::DEL /F plugins\input\*.input
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
-if NOT EXIST %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat (
+IF DEFINED APPVEYOR ECHO on AppVeyor, skipping icudt collator download && GOTO DONE
+
+if NOT EXIST %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat (
     wget --no-check-certificate https://github.com/mapnik/mapnik-packaging/raw/master/osx/icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat
     echo f | xcopy /q /d /Y icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat
 )

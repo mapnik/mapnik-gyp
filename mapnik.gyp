@@ -226,7 +226,7 @@
             "AdditionalLibraryDirectories": [
               "<@(libs)/"
             ]
-          }
+          },
         }
       }
     },
