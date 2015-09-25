@@ -660,6 +660,25 @@
           }
         ]
       ]
+    },
+    {
+      "target_name": "test_visual_run",
+      "type": "executable",
+      "sources": [
+        "../test/visual/report.cpp",
+        "../test/visual/runner.cpp",
+        "../test/visual/run.cpp"
+      ],
+      "dependencies": [ "mapnik" ],
+      "conditions": [
+        ["OS=='win'",
+          {
+            "libraries":[
+              "<(boost_system_lib)",
+            ]
+          }
+        ]
+      ]
     }
   ]
 }
