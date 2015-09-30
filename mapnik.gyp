@@ -660,6 +660,31 @@
           }
         ]
       ]
+    },
+    {
+      "target_name": "test_visual_run",
+      "dependencies": [ "mapnik" ],
+      "type": "executable",
+      "sources": [
+        "../test/visual/report.cpp",
+        "../test/visual/runner.cpp",
+        "../test/visual/run.cpp"
+      ],
+      "include_dirs":[
+        "../test"
+      ],
+      "conditions": [
+        ["OS=='win'",
+          {
+            "libraries":[
+              "<(boost_system_lib)",
+              "<(icuuc_lib)",
+              "cairo.lib",
+              "proj.lib",
+            ]
+          }
+        ]
+      ]
     }
   ]
 }

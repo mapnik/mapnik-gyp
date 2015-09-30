@@ -490,6 +490,7 @@ msbuild ^
 /toolsversion:%TOOLS_VERSION% ^
 /p:BuildInParellel=false ^
 /p:Configuration=%BUILD_TYPE% ^
+/p:StopOnFirstFailure=true ^
 /p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY% %MSBUILD_LOGS%
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
@@ -510,6 +511,7 @@ msbuild ^
 /toolsversion:%TOOLS_VERSION% ^
 /p:BuildInParellel=true ^
 /p:Configuration=%BUILD_TYPE% ^
+/p:StopOnFirstFailure=true ^
 /p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY% %MSBUILD_LOGS%
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
@@ -522,7 +524,7 @@ IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build f
 ::on AppVeyor just the mapnik project
 
 SET MAPNIK_PROJECT=
-IF DEFINED APPVEYOR SET MAPNIK_PROJECT=/t:mapnik;csv;gdal;geojson;ogr;pgraster;postgis;raster;shape;sqlite;topojson
+::IF DEFINED APPVEYOR SET MAPNIK_PROJECT=/t:mapnik;csv;gdal;geojson;ogr;pgraster;postgis;raster;shape;sqlite;topojson
 
 IF DEFINED APPVEYOR (ECHO calling msbuild on %MAPNIK_PROJECT%) ELSE (ECHO calling msbuild on whole mapnik solution...)
 msbuild ^
@@ -532,6 +534,7 @@ msbuild ^
 /toolsversion:%TOOLS_VERSION% ^
 /p:BuildInParellel=true ^
 /p:Configuration=%BUILD_TYPE% ^
+/p:StopOnFirstFailure=true ^
 /p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY% %MSBUILD_LOGS%
 :: /t:rebuild
 :: /v:diag > build.log
@@ -539,7 +542,7 @@ ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
 
-IF DEFINED APPVEYOR ECHO on AppVeyor, skipping tests && GOTO DONE
+IF NOT DEFINED LOCAL_BUILD_DONT_SKIP_TESTS IF DEFINED APPVEYOR ECHO on AppVeyor, skipping tests && GOTO DONE
 
 :: install command line tools
 xcopy /q /d .\build\bin\nik2img.exe %MAPNIK_SDK%\bin /Y
@@ -644,12 +647,23 @@ ECHO ============================ running TESTS ==========================
 :: run tests
 SET PATH=%MAPNIK_SDK%\lib;%PATH%
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+ECHO ==== unit tests ===
 for %%t in (mapnik-gyp\build\test\*test.exe) do ( call %%t -d yes )
 IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 IF %IGNOREFAILEDTESTS% EQU 1 SET ERRORLEVEL=0
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
-ECHO about to benchmark && CALL mapnik-gyp\benchmark.bat
+ECHO ==== visual tests ===
+ECHO visual tests agg && mapnik-gyp\build\Release\test_visual_run.exe --agg
+IF %IGNOREFAILEDTESTS% EQU 0 (IF %ERRORLEVEL% NEQ 0 GOTO ERROR) ELSE (SET ERRORLEVEL=0)
+ECHO visual tests cairo && mapnik-gyp\build\Release\test_visual_run.exe --cairo
+IF %IGNOREFAILEDTESTS% EQU 0 (IF %ERRORLEVEL% NEQ 0 GOTO ERROR) ELSE (SET ERRORLEVEL=0)
+ECHO visual tests grid && mapnik-gyp\build\Release\test_visual_run.exe --grid
+IF %IGNOREFAILEDTESTS% EQU 0 (IF %ERRORLEVEL% NEQ 0 GOTO ERROR) ELSE (SET ERRORLEVEL=0)
+ECHO visual tests svg && mapnik-gyp\build\Release\test_visual_run.exe --svg
+IF %IGNOREFAILEDTESTS% EQU 0 (IF %ERRORLEVEL% NEQ 0 GOTO ERROR) ELSE (SET ERRORLEVEL=0)
+
+ECHO ===== about to benchmark === && CALL mapnik-gyp\benchmark.bat
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 ECHO ============================ clean up after TESTS ==========================
