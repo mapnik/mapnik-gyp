@@ -647,12 +647,23 @@ ECHO ============================ running TESTS ==========================
 :: run tests
 SET PATH=%MAPNIK_SDK%\lib;%PATH%
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+ECHO ==== unit tests ===
 for %%t in (mapnik-gyp\build\test\*test.exe) do ( call %%t -d yes )
 IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 IF %IGNOREFAILEDTESTS% EQU 1 SET ERRORLEVEL=0
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
-ECHO about to benchmark && CALL mapnik-gyp\benchmark.bat
+ECHO ==== visual tests ===
+ECHO visual tests agg && mapnik-gyp\build\Release\test_visual_run.exe --agg
+IF %IGNOREFAILEDTESTS% EQU 0 (IF %ERRORLEVEL% NEQ 0 GOTO ERROR) ELSE (SET ERRORLEVEL=0)
+ECHO visual tests cairo && mapnik-gyp\build\Release\test_visual_run.exe --cairo
+IF %IGNOREFAILEDTESTS% EQU 0 (IF %ERRORLEVEL% NEQ 0 GOTO ERROR) ELSE (SET ERRORLEVEL=0)
+ECHO visual tests grid && mapnik-gyp\build\Release\test_visual_run.exe --grid
+IF %IGNOREFAILEDTESTS% EQU 0 (IF %ERRORLEVEL% NEQ 0 GOTO ERROR) ELSE (SET ERRORLEVEL=0)
+ECHO visual tests svg && mapnik-gyp\build\Release\test_visual_run.exe --svg
+IF %IGNOREFAILEDTESTS% EQU 0 (IF %ERRORLEVEL% NEQ 0 GOTO ERROR) ELSE (SET ERRORLEVEL=0)
+
+ECHO ===== about to benchmark === && CALL mapnik-gyp\benchmark.bat
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 ECHO ============================ clean up after TESTS ==========================
