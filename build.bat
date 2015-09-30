@@ -490,6 +490,7 @@ msbuild ^
 /toolsversion:%TOOLS_VERSION% ^
 /p:BuildInParellel=false ^
 /p:Configuration=%BUILD_TYPE% ^
+/p:StopOnFirstFailure=true ^
 /p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY% %MSBUILD_LOGS%
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
@@ -510,6 +511,7 @@ msbuild ^
 /toolsversion:%TOOLS_VERSION% ^
 /p:BuildInParellel=true ^
 /p:Configuration=%BUILD_TYPE% ^
+/p:StopOnFirstFailure=true ^
 /p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY% %MSBUILD_LOGS%
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
@@ -522,7 +524,7 @@ IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build f
 ::on AppVeyor just the mapnik project
 
 SET MAPNIK_PROJECT=
-IF DEFINED APPVEYOR SET MAPNIK_PROJECT=/t:mapnik;csv;gdal;geojson;ogr;pgraster;postgis;raster;shape;sqlite;topojson
+::IF DEFINED APPVEYOR SET MAPNIK_PROJECT=/t:mapnik;csv;gdal;geojson;ogr;pgraster;postgis;raster;shape;sqlite;topojson
 
 IF DEFINED APPVEYOR (ECHO calling msbuild on %MAPNIK_PROJECT%) ELSE (ECHO calling msbuild on whole mapnik solution...)
 msbuild ^
@@ -532,6 +534,7 @@ msbuild ^
 /toolsversion:%TOOLS_VERSION% ^
 /p:BuildInParellel=true ^
 /p:Configuration=%BUILD_TYPE% ^
+/p:StopOnFirstFailure=true ^
 /p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY% %MSBUILD_LOGS%
 :: /t:rebuild
 :: /v:diag > build.log
@@ -539,7 +542,7 @@ ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
 
-IF DEFINED APPVEYOR ECHO on AppVeyor, skipping tests && GOTO DONE
+IF NOT DEFINED LOCAL_BUILD_DONT_SKIP_TESTS IF DEFINED APPVEYOR ECHO on AppVeyor, skipping tests && GOTO DONE
 
 :: install command line tools
 xcopy /q /d .\build\bin\nik2img.exe %MAPNIK_SDK%\bin /Y
