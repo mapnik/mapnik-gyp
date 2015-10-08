@@ -524,7 +524,10 @@ IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build f
 ::on AppVeyor just the mapnik project
 
 SET MAPNIK_PROJECT=
-::IF DEFINED APPVEYOR SET MAPNIK_PROJECT=/t:mapnik;csv;gdal;geojson;ogr;pgraster;postgis;raster;shape;sqlite;topojson
+IF DEFINED LOCAL_BUILD_DONT_SKIP_TESTS GOTO DO_MAPNIK_BUILD
+IF DEFINED APPVEYOR SET MAPNIK_PROJECT=/t:mapnik;csv;gdal;geojson;ogr;pgraster;postgis;raster;shape;sqlite;topojson
+
+:DO_MAPNIK_BUILD
 
 IF DEFINED APPVEYOR (ECHO calling msbuild on %MAPNIK_PROJECT%) ELSE (ECHO calling msbuild on whole mapnik solution...)
 msbuild ^
@@ -632,11 +635,21 @@ if NOT EXIST %PROJ_LIB% (
 SET ICU_DATA=%MAPNIK_SDK%\share\icu
 if NOT EXIST %ICU_DATA% (
   mkdir %ICU_DATA%
-  IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 )
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+::download ICU collator
+IF EXIST %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat GOTO COLLATOR_ALREAY_DOWNLOADED
+
+wget --no-check-certificate -O %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat https://github.com/mapnik/mapnik-packaging/raw/master/osx/icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+:COLLATOR_ALREAY_DOWNLOADED
 
 :: change into mapnik directory!!! TESTS!!
 CD ..
+
+
 
 ECHO ============================ prepare TESTS ==========================
 :: copy input plugins where expected by tests
@@ -672,12 +685,6 @@ ECHO !!!!!!! !!!!! !!!!!! TODO: enable again! ! ! ! ! !
 ::DEL /F plugins\input\*.input
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
-IF DEFINED APPVEYOR ECHO on AppVeyor, skipping icudt collator download && GOTO DONE
-
-if NOT EXIST %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat (
-    wget --no-check-certificate https://github.com/mapnik/mapnik-packaging/raw/master/osx/icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat
-    echo f | xcopy /q /d /Y icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat
-)
 
 GOTO DONE
 
