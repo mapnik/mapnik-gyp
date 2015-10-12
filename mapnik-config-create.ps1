@@ -10,7 +10,7 @@ $version_number='A'
 Write-Host reading mapnik version
 Get-Content .\mapnik-sdk\include\mapnik\version.hpp |
     foreach { 
-        elseif ($_ -match "#define MAPNIK_MAJOR_VERSION"){ $major = $_.split()[-1] }
+        if ($_ -match "#define MAPNIK_MAJOR_VERSION"){ $major = $_.split()[-1] }
         elseif ($_ -match "#define MAPNIK_MINOR_VERSION"){ $minor = $_.split()[-1] }
         elseif ($_ -match "#define MAPNIK_PATCH_VERSION"){ $patch = $_.split()[-1] }
     }
