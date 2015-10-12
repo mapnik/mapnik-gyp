@@ -1,7 +1,6 @@
 ﻿$ErrorActionPreference = 'Stop'
 $nl = [System.Environment]::NewLine
 
-$is_release='A'
 $major='A'
 $minor='A'
 $patch='A'
@@ -11,7 +10,6 @@ $version_number='A'
 Write-Host reading mapnik version
 Get-Content .\mapnik-sdk\include\mapnik\version.hpp |
     foreach { 
-        if ($_ -match "#define MAPNIK_VERSION_IS_RELEASE"){ $is_release = (1*$_.Split()[-1]) }
         elseif ($_ -match "#define MAPNIK_MAJOR_VERSION"){ $major = $_.split()[-1] }
         elseif ($_ -match "#define MAPNIK_MINOR_VERSION"){ $minor = $_.split()[-1] }
         elseif ($_ -match "#define MAPNIK_PATCH_VERSION"){ $patch = $_.split()[-1] }
@@ -20,12 +18,7 @@ Get-Content .\mapnik-sdk\include\mapnik\version.hpp |
 $version = "$major.$minor.$patch"
 #multiplication: number first! -> PS converts string/number automatically
 $version_number = "{0}" -f ((100000*$major) + (100*$minor) + (1*$patch))
-if ($is_release -eq 0) { 
-    $version = "$version-pre" 
-    $version_number = "$version_number-pre" 
-}
 
-Write-Host is release: $is_release
 Write-Host version: $version
 Write-Host version_number: $version_number
 
