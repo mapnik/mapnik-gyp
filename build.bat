@@ -548,7 +548,7 @@ IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build f
 IF NOT DEFINED LOCAL_BUILD_DONT_SKIP_TESTS IF DEFINED APPVEYOR ECHO on AppVeyor, skipping tests && GOTO DONE
 
 :: install command line tools
-xcopy /q /d .\build\bin\nik2img.exe %MAPNIK_SDK%\bin /Y
+xcopy /q /d .\build\bin\mapnik-render.exe %MAPNIK_SDK%\bin /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d .\build\bin\shapeindex.exe %MAPNIK_SDK%\bin /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR

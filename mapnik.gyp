@@ -231,10 +231,10 @@
       }
     },
     {
-      "target_name": "nik2img",
+      "target_name": "mapnik-render",
       "type": "executable",
       "product_dir":"bin",
-      "sources": [ "<!@(find ../utils/nik2img/ -name '*.cpp')" ],
+      "sources": [ "<!@(find ../utils/mapnik-render/ -name '*.cpp')" ],
       "dependencies": [ "mapnik" ],
       "conditions": [
         ["OS=='win'",
