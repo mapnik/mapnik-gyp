@@ -543,9 +543,9 @@
               "cairo.lib",
               "harfbuzz.lib"
             ],
-          } ,
+          },
           {
-            "libraries": [ "-lboost_system","-lboost_filesystem"]
+            "libraries": [ "-lboost_system", "-lboost_filesystem", "-licuuc"]
           }
         ]
       ]
@@ -682,6 +682,9 @@
               "cairo.lib",
               "proj.lib",
             ]
+          },
+          {
+            "libraries": [ "-lboost_system","-lboost_filesystem","-lboost_program_options"]
           }
         ]
       ]
