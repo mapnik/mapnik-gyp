@@ -70,7 +70,7 @@
         {
           "common_defines": [
             "MAPNIK_HAS_DLCFN",
-            "SHAPE_MEMORY_MAPPED_FILE",
+            "MAPNIK_MEMORY_MAPPED_FILE",
             "U_CHARSET_IS_UTF8=1"
           ],
           "common_libraries": [
