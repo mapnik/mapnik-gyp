@@ -284,7 +284,7 @@
       "target_name": "mapnik-index",
       "type": "executable",
       "product_dir":"bin",
-      "dependencies": [ "mapnik-json", "csv" ],
+      "dependencies": [ "mapnik", "mapnik-wkt", "mapnik-json" ],
       "sources": [ "<!@(find ../utils/mapnik-index/ -name '*.cpp')" ],
       "include_dirs":[
         "<@(common_includes)"
