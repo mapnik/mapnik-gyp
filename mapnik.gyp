@@ -281,6 +281,32 @@
       ]
     },
     {
+      "target_name": "mapnik-index",
+      "type": "executable",
+      "product_dir":"bin",
+      "dependencies": [ "mapnik-json", "csv" ],
+      "sources": [ "<!@(find ../utils/mapnik-index/ -name '*.cpp')" ],
+      "include_dirs":[
+        "<@(common_includes)"
+      ],
+      "conditions": [
+        ["OS=='win'",
+          {
+            "libraries":[
+              "<(boost_program_options_lib)",
+              "<(boost_system_lib)",
+            ],
+          },
+          {
+            "libraries":[
+              "-lboost_system",
+              "-lboost_program_options"
+             ]
+          }
+        ]
+      ]
+    },
+    {
       "target_name": "geojson",
       "product_prefix":"",
       "type": "loadable_module",
