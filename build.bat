@@ -552,6 +552,8 @@ xcopy /q /d .\build\bin\mapnik-render.exe %MAPNIK_SDK%\bin /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d .\build\bin\shapeindex.exe %MAPNIK_SDK%\bin /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+xcopy /q /d .\build\bin\mapnik-index.exe %MAPNIK_SDK%\bin /Y
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :: install mapnik libs
 xcopy /q /d .\build\%BUILD_TYPE%\mapnik.lib %MAPNIK_SDK%\lib\ /Y
@@ -561,10 +563,6 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d .\build\%BUILD_TYPE%\lib\mapnik-wkt.lib %MAPNIK_SDK%\lib\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d .\build\lib\mapnik.dll %MAPNIK_SDK%\lib\ /Y
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-
-:: install additional bins
-xcopy /q /d .\build\bin\shapeindex.exe %MAPNIK_SDK%\bin\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 xcopy /q /d ..\fonts\dejavu-fonts-ttf-2.35\ttf\*ttf %MAPNIK_SDK%\lib\mapnik\fonts\ /Y
