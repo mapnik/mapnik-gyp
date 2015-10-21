@@ -373,7 +373,8 @@
           {
             "libraries":[
               "<(boost_system_lib)",
-              "<(icuuc_lib)"
+              "<(icuuc_lib)",
+              "harfbuzz.lib"
             ],
           }
         ]

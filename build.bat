@@ -657,6 +657,7 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ECHO ============================ running TESTS ==========================
 :: run tests
 SET PATH=%MAPNIK_SDK%\lib;%PATH%
+SET PATH=%MAPNIK_SDK%\bin;%PATH%
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ECHO ==== unit tests ===
 for %%t in (mapnik-gyp\build\test\*test.exe) do ( call %%t -d yes )
