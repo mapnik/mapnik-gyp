@@ -666,13 +666,16 @@ IF %IGNOREFAILEDTESTS% EQU 1 SET ERRORLEVEL=0
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 ECHO ==== visual tests ===
-ECHO visual tests agg && mapnik-gyp\build\Release\test_visual_run.exe --agg
+
+SET /A V_TEST_JOBS=%NUMBER_OF_PROCESSORS%-1
+IF %V_TEST_JOBS% LSS 1 SET V_TEST_JOBS=1
+ECHO visual tests agg && mapnik-gyp\build\Release\test_visual_run.exe --agg --jobs=%V_TEST_JOBS%
 IF %IGNOREFAILEDTESTS% EQU 0 (IF %ERRORLEVEL% NEQ 0 GOTO ERROR) ELSE (SET ERRORLEVEL=0)
-ECHO visual tests cairo && mapnik-gyp\build\Release\test_visual_run.exe --cairo
+ECHO visual tests cairo && mapnik-gyp\build\Release\test_visual_run.exe --cairo --jobs=%V_TEST_JOBS%
 IF %IGNOREFAILEDTESTS% EQU 0 (IF %ERRORLEVEL% NEQ 0 GOTO ERROR) ELSE (SET ERRORLEVEL=0)
-ECHO visual tests grid && mapnik-gyp\build\Release\test_visual_run.exe --grid
+ECHO visual tests grid && mapnik-gyp\build\Release\test_visual_run.exe --grid --jobs=%V_TEST_JOBS%
 IF %IGNOREFAILEDTESTS% EQU 0 (IF %ERRORLEVEL% NEQ 0 GOTO ERROR) ELSE (SET ERRORLEVEL=0)
-ECHO visual tests svg && mapnik-gyp\build\Release\test_visual_run.exe --svg
+ECHO visual tests svg && mapnik-gyp\build\Release\test_visual_run.exe --svg --jobs=%V_TEST_JOBS%
 IF %IGNOREFAILEDTESTS% EQU 0 (IF %ERRORLEVEL% NEQ 0 GOTO ERROR) ELSE (SET ERRORLEVEL=0)
 
 ECHO ===== about to benchmark === && CALL mapnik-gyp\benchmark.bat
