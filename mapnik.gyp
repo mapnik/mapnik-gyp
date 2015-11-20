@@ -295,12 +295,14 @@
             "libraries":[
               "<(boost_program_options_lib)",
               "<(boost_system_lib)",
+              "<(icuuc_lib)"
             ],
           },
           {
             "libraries":[
               "-lboost_system",
-              "-lboost_program_options"
+              "-lboost_program_options",
+              "-licuuc"
              ]
           }
         ]
