@@ -641,7 +641,7 @@ IF EXIST %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat GOTO COLLATOR_ALREAY_DOW
 
 ::wget --no-check-certificate -O %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat https://github.com/mapnik/mapnik-packaging/raw/master/osx/icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat
 ::use curl as it comes with git
-curl -o %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat https://github.com/mapnik/mapnik-packaging/raw/master/osx/icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat
+curl -o %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat https://raw.githubusercontent.com/mapnik/mapnik-packaging/master/osx/icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :COLLATOR_ALREAY_DOWNLOADED
