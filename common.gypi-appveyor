@@ -88,7 +88,7 @@
             "AdditionalOptions": [
               "/MP", # compile across multiple CPUs
               "/bigobj", #compiling: x86 fatal error C1128: number of sections exceeded object file format limit: compile with /bigobj
-              "/Zm200", #prevent: Fatal Error C1060 compiler is out of heap space
+              #"/Zm200", #prevent: Fatal Error C1060 compiler is out of heap space
             ],
           },
           "VCLibrarianTool": {
