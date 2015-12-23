@@ -33,6 +33,9 @@
       "<@(includes)/cairo"
     ],
     "boost_toolset":"vc140",
+    "python_version": '<!(python -c "import sys;print(\'%s.%s\' % (sys.version_info.major,sys.version_info.minor))")',
+    "python_version2": '<!(python -c "import sys;print(\'%s%s\' % (sys.version_info.major,sys.version_info.minor))")',
+    "python_root": '<!(python -c "import sys,ntpath,posixpath;print(sys.prefix).replace(ntpath.sep,posixpath.sep)")', # note: single quotes needed for windows
     "conditions": [
       ["OS=='win'",
         {
@@ -42,7 +45,9 @@
                   "boost_filesystem_lib":"libboost_filesystem-<(boost_toolset)-mt-gd-<(boost_version).lib",
                   "boost_regex_lib":"libboost_regex-<(boost_toolset)-mt-gd-<(boost_version).lib",
                   "boost_system_lib":"libboost_system-<(boost_toolset)-mt-gd-<(boost_version).lib",
+                  "boost_thread_lib":"libboost_thread-<(boost_toolset)-mt-gd-<(boost_version).lib",
                   "boost_program_options_lib":"libboost_program_options-<(boost_toolset)-mt-gd-<(boost_version).lib",
+                  "boost_python_lib":"boost_python-<(boost_toolset)-mt-gd-<(boost_version).lib",
                   "webp_lib":"libwebp_debug_dll.lib",
                   "icuuc_lib":"icuucd.lib",
                   "icuin_lib":"icuind.lib",
@@ -52,7 +57,9 @@
                   "boost_filesystem_lib":"libboost_filesystem-<(boost_toolset)-mt-<(boost_version).lib",
                   "boost_regex_lib":"libboost_regex-<(boost_toolset)-mt-<(boost_version).lib",
                   "boost_system_lib":"libboost_system-<(boost_toolset)-mt-<(boost_version).lib",
+                  "boost_thread_lib":"libboost_thread-<(boost_toolset)-mt-<(boost_version).lib",
                   "boost_program_options_lib":"libboost_program_options-<(boost_toolset)-mt-<(boost_version).lib",
+                  "boost_python_lib":"boost_python-<(boost_toolset)-mt-<(boost_version).lib",
                   "webp_lib":"libwebp_dll.lib",
                   "icuuc_lib":"icuuc.lib",
                   "icuin_lib":"icuin.lib",
@@ -65,7 +72,10 @@
             'BOOST_MSVC_ENABLE_2014_JUN_CTP',
             "_WINDOWS"
           ],
-          "common_libraries": []
+          "common_libraries": [],
+          "python_includes":"<(python_root)/include",
+          "python_libs":"<(python_root)/libs",
+          "python_module_extension": "pyd"
         },
         {
           "common_defines": [
@@ -718,5 +728,53 @@
         ]
       ]
     }
+  ],
+  "conditions": [
+    ["OS=='win'", {
+      "targets": [
+        {
+          "target_name": "_mapnik",
+          "product_prefix":"",
+          "product_dir":"lib/python<(python_version)/mapnik/",
+          "type": "loadable_module",
+          "product_extension": "<(python_module_extension)",
+          "sources": [ "<!@(find ../bindings/python/ -name '*.cpp')" ],
+          "dependencies": [ "mapnik", "mapnik-wkt", "mapnik-json" ],
+          "copies": [
+            {
+              "files": [ "../bindings/python/mapnik/__init__.py" ],
+              "destination": "<(PRODUCT_DIR)/lib/python<(python_version)/mapnik/"
+            },
+            {
+              "files": [ "../bindings/python/mapnik/printing.py" ],
+              "destination": "<(PRODUCT_DIR)/lib/python<(python_version)/mapnik/"
+            }
+          ],
+
+          "include_dirs": [
+            "<@(python_includes)"
+          ],
+          "msvs_settings": {
+            "VCLinkerTool": {
+              "AdditionalLibraryDirectories": [
+                "<@(python_libs)"
+              ]
+            }
+          },
+          "libraries":[
+            "<(boost_thread_lib)",
+            "<(boost_system_lib)",
+            "<(boost_regex_lib)",
+            "<(icuuc_lib)",
+            "<(icuin_lib)",
+            "<(boost_python_lib)",
+            "python<(python_version2).lib"
+          ],
+          "defines":["HAVE_ROUND","HAVE_HYPOT"]
+
+
+        }
+      ]}
+    ]
   ]
 }

@@ -65,13 +65,26 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 :MAPNIK_SDK_DIR_CREATED
 ECHO label MAPNIK_SDK_DIR_CREATED
 
-:: includes
 IF DEFINED ICU_VERSION (FOR /f "delims=." %%G IN ("%ICU_VERSION%") DO SET ICU_VERSION=%%G) ELSE (SET ICU_VERSION=55)
+
+SET PYTHON_DIR=%ROOTDIR%\tmp-bin\python2-x86-32
+IF /I "%PLATFORMX%"=="x64" SET PYTHON_DIR=%ROOTDIR%\tmp-bin\python2
+ECHO PYTHON_DIR^: %PYTHON_DIR%
 
 IF %FASTBUILD% EQU 1 (ECHO doing a FASTBUILD && GOTO DOFASTBUILD) ELSE (ECHO doing a FULLBUILD)
 
+
+:: includes
 ECHO copying deps header files...
 
+ECHO Python
+xcopy /Q /D /Y %PYTHON_DIR%\include\*.* %MAPNIK_SDK%\include\
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+xcopy /Q /D /Y %PYTHON_DIR%\libs\python27.lib %MAPNIK_SDK%\lib\
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+
+ECHO harfbuzz
 xcopy /q /d %DEPSDIR%\harfbuzz-build\harfbuzz\hb-version.h %MAPNIK_SDK%\include\harfbuzz\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\harfbuzz\src\hb.h %MAPNIK_SDK%\include\harfbuzz\ /Y
@@ -98,24 +111,30 @@ xcopy /q /d %DEPSDIR%\harfbuzz\src\hb-face.h %MAPNIK_SDK%\include\harfbuzz\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\harfbuzz\src\hb-deprecated.h %MAPNIK_SDK%\include\harfbuzz\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+ECHO boost
 xcopy /i /d /s /q %DEPSDIR%\boost\boost %MAPNIK_SDK%\include\boost /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+ECHO icu
 xcopy /i /d /s /q %DEPSDIR%\icu\include\unicode %MAPNIK_SDK%\include\unicode /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+ECHO freetype
 xcopy /i /d /s /q %DEPSDIR%\freetype\include %MAPNIK_SDK%\include\freetype2 /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ::xcopy /i /d /s /q %DEPSDIR%\libxml2\include %MAPNIK_SDK%\include\libxml2 /Y
 ::IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+ECHO zlib
 xcopy /q /d %DEPSDIR%\zlib\zlib.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\zlib\zconf.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+ECHO png
 xcopy /q /d %DEPSDIR%\libpng\png.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\libpng\pnglibconf.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\libpng\pngconf.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+ECHO jpg
 xcopy /q /d %DEPSDIR%\libjpegturbo\jpeglib.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\libjpegturbo\jmorecfg.h %MAPNIK_SDK%\include\ /Y
@@ -124,10 +143,13 @@ xcopy /q /d %DEPSDIR%\libjpegturbo\build\jconfig.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\libjpegturbo\build\jconfigint.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+ECHO webp
 xcopy /i /d /s /q %DEPSDIR%\webp\src\webp %MAPNIK_SDK%\include\webp /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+ECHO proj4
 xcopy /q /d %DEPSDIR%\proj\src\proj_api.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+ECHO tiff
 xcopy /q /d %DEPSDIR%\libtiff\libtiff\tiff.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\libtiff\libtiff\tiffvers.h %MAPNIK_SDK%\include\ /Y
@@ -136,6 +158,7 @@ xcopy /q /d %DEPSDIR%\libtiff\libtiff\tiffconf.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\libtiff\libtiff\tiffio.h %MAPNIK_SDK%\include\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+ECHO cairo
 xcopy /q /d %DEPSDIR%\cairo\cairo-version.h %MAPNIK_SDK%\include\cairo\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\cairo\src\cairo-features.h %MAPNIK_SDK%\include\cairo\ /Y
@@ -154,6 +177,7 @@ xcopy /q /d %DEPSDIR%\cairo\src\cairo-ft.h %MAPNIK_SDK%\include\cairo\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d %DEPSDIR%\cairo\src\cairo-ps.h %MAPNIK_SDK%\include\cairo\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+ECHO protobuf
 xcopy /i /d /s /q %DEPSDIR%\protobuf\src\google %MAPNIK_SDK%\include\google /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
@@ -404,6 +428,10 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :GENERATE_SOLUTION
 
+::generate a debug version of the gyp file: -f gypd -DOS=win
+::  -f msvs -G msvs_version=2015 ^
+
+SET PATH=%PYTHONPATH%;%PATH%
 ECHO generating solution file, calling gyp...
 CALL gyp\gyp.bat mapnik.gyp --depth=. ^
  --debug=all ^
@@ -413,6 +441,7 @@ CALL gyp\gyp.bat mapnik.gyp --depth=. ^
  -Dplatform=%BUILDPLATFORM% ^
  -Dboost_version=1_%BOOST_VERSION% ^
  -f msvs -G msvs_version=2015 ^
+ -f gypd -DOS=win ^
  --generator-output=build
 IF %ERRORLEVEL% NEQ 0 (ECHO error during solution file generation && GOTO ERROR) ELSE (ECHO solution file generated)
 
@@ -568,6 +597,22 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d ..\fonts\dejavu-fonts-ttf-2.35\ttf\*ttf %MAPNIK_SDK%\lib\mapnik\fonts\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
+::Python
+:: move python binding into local testable location
+:: use of "*": hack from http://stackoverflow.com/a/14488464/2333354
+:: because otherwise xcopy can't tell if its a file or directory and will prompt
+xcopy /q /s /d .\build\lib\python2.7\mapnik\_mapnik.pyd ..\bindings\python\mapnik\_mapnik.pyd* /Y
+echo from os.path import normpath,join,dirname > ..\bindings\python\mapnik\paths.py
+echo mapniklibpath = '%MAPNIK_SDK%/lib/mapnik' >> ..\bindings\python\mapnik\paths.py
+echo mapniklibpath = normpath(join(dirname(__file__),mapniklibpath)) >> ..\bindings\python\mapnik\paths.py
+echo inputpluginspath = join(mapniklibpath,'input') >> ..\bindings\python\mapnik\paths.py
+echo fontscollectionpath = join(mapniklibpath,'fonts') >> ..\bindings\python\mapnik\paths.py
+echo __all__ = [mapniklibpath,inputpluginspath,fontscollectionpath] >> ..\bindings\python\mapnik\paths.py
+
+::copy python bindings
+xcopy /q /d ..\bindings\python\mapnik\*.*  %MAPNIK_SDK%\python\2.7\site-packages\mapnik\
+
+
 :: plugins
 xcopy  /q .\build\lib\mapnik\input\*.input %MAPNIK_SDK%\lib\mapnik\input\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
@@ -576,6 +621,7 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ::write batch file to set mapnik environment vars
 echo @ECHO OFF> %MAPNIK_SDK%\set-env-vars.bat
 echo SET SDKDIR=%%~dp0>> %MAPNIK_SDK%\set-env-vars.bat
+echo SET PYTHONPATH=%%SDKDIR%%python\2.7\site-packages;%%PYTHONPATH%%>> %MAPNIK_SDK%\set-env-vars.bat
 echo SET ICU_DATA=%%SDKDIR%%share\icu>> %MAPNIK_SDK%\set-env-vars.bat
 echo SET GDAL_DATA=%%SDKDIR%%\share\gdal>> %MAPNIK_SDK%\set-env-vars.bat
 echo SET PROJ_LIB=%%SDKDIR%%\share\proj>> %MAPNIK_SDK%\set-env-vars.bat
@@ -620,6 +666,16 @@ IF %PACKAGEDEBUGSYMBOLS% EQU 1 powershell %ROOTDIR%\scripts\package_mapnik_debug
 ECHO ERRORLEVEL %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
+
+curl -o get-pip.py https://bootstrap.pypa.io/get-pip.py
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+python get-pip.py
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+pip.exe install nose
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+
+
 SET GDAL_DATA=%MAPNIK_SDK%\share\gdal
 if NOT EXIST %GDAL_DATA% (
   mkdir %GDAL_DATA%
@@ -646,6 +702,18 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :COLLATOR_ALREAY_DOWNLOADED
 
+
+::Python tests
+SET PYTHONPATH=%CD%\..\bindings\python
+:: all visual tests should pass on windows
+python ..\tests\visual_tests\test.py -q
+:: some python tests are expected to fail
+::python ..\tests\run_tests.py -q
+ECHO IGNOREFAILEDTESTS %IGNOREFAILEDTESTS%
+IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+IF %IGNOREFAILEDTESTS% EQU 1 SET ERRORLEVEL=0
+
+
 :: change into mapnik directory!!! TESTS!!
 CD ..
 
@@ -671,6 +739,8 @@ ECHO ==== visual tests ===
 
 SET /A V_TEST_JOBS=%NUMBER_OF_PROCESSORS%-2
 IF %V_TEST_JOBS% LSS 1 SET V_TEST_JOBS=1
+::fix to one for now
+SET V_TEST_JOBS=1
 ECHO visual tests agg && mapnik-gyp\build\Release\test_visual_run.exe --agg --jobs=%V_TEST_JOBS%
 IF %IGNOREFAILEDTESTS% EQU 0 (IF %ERRORLEVEL% NEQ 0 GOTO ERROR) ELSE (SET ERRORLEVEL=0)
 ECHO visual tests cairo && mapnik-gyp\build\Release\test_visual_run.exe --cairo --jobs=%V_TEST_JOBS%
