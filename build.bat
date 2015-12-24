@@ -30,7 +30,7 @@ IF "%BUILDPLATFORM%"=="Win32" SET PLATFORMX=x86
 :: this ensures we have the unix find command on path
 :: before trying to run gyp
 ECHO testing unix find command
-find ../deps/agg/src/ -name "*.cpp"
+find ../deps/agg/src/ -name "*.cpp" -maxdepth 1
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 IF DEFINED PACKAGEDEBUGSYMBOLS (ECHO PACKAGEDEBUGSYMBOLS %PACKAGEDEBUGSYMBOLS%) ELSE (SET PACKAGEDEBUGSYMBOLS=0)
