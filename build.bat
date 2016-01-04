@@ -420,7 +420,8 @@ ECHO INCLUDE %INCLUDE%
 
 IF NOT DEFINED APPVEYOR GOTO GENERATE_SOLUTION
 ECHO on AppVeyor && ECHO using common.gypi without optimizations
-ECHO renaming existing common.gypi && IF EXIST common.gypi REN common.gypi common.gypi-optimized
+IF EXIST common.gypi-optimized ECHO deleting existing common.gypi-optimized && DEL common.gypi-optimized
+ECHO renaming existing common.gypi to common.gypi-optimized && IF EXIST common.gypi REN common.gypi common.gypi-optimized
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ECHO copying common.gypi-appveyor to common.gypi
 COPY common.gypi-appveyor common.gypi
@@ -443,6 +444,7 @@ CALL gyp\gyp.bat mapnik.gyp --depth=. ^
  -f msvs -G msvs_version=2015 ^
  -f gypd -DOS=win ^
  --generator-output=build
+ECHO ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during solution file generation && GOTO ERROR) ELSE (ECHO solution file generated)
 
 ::for local development simulating AppVeyor, copy back common.gypi

@@ -111,7 +111,11 @@
       "target_name": "mapnik-wkt",
       "type": "static_library",
       "sources": [
-        "<!@(find ../src/wkt/ -name '*.cpp')"
+        #'<!(python -c "import os;import glob;print(unicode(os.linesep).join(glob.glob(\'../src/wkt/*.cpp\')));")'
+        #'<!(python -c "import glob;print(\'\\n\'.join(glob.glob(\'../src/wkt/*.cpp\')));")'
+        #'<!(python -c "import sys;import os;import glob;sys.stdout.write(os.linesep.join(glob.glob(\'../src/wkt/*.cpp\')));")'
+        #'<!(python -c "import sys;import glob;sys.stdout.write(\'\\n\'.join(glob.glob(\'../src/wkt/*.cpp\')));")'
+        '<!(python -c "import sys;import glob;sys.stdout.write(unicode(\'\\n\'.join(glob.glob(\'../src/wkt/*.cpp\'))).encode(\'utf8\'));")'
       ],
       "defines": [
         "<@(common_defines)"
