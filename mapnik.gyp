@@ -111,11 +111,7 @@
       "target_name": "mapnik-wkt",
       "type": "static_library",
       "sources": [
-        #'<!(python -c "import os;import glob;print(unicode(os.linesep).join(glob.glob(\'../src/wkt/*.cpp\')));")'
-        #'<!(python -c "import glob;print(\'\\n\'.join(glob.glob(\'../src/wkt/*.cpp\')));")'
-        #'<!(python -c "import sys;import os;import glob;sys.stdout.write(os.linesep.join(glob.glob(\'../src/wkt/*.cpp\')));")'
-        #'<!(python -c "import sys;import glob;sys.stdout.write(\'\\n\'.join(glob.glob(\'../src/wkt/*.cpp\')));")'
-        '<!(python -c "import sys;import glob;sys.stdout.write(unicode(\'\\n\'.join(glob.glob(\'../src/wkt/*.cpp\'))).encode(\'utf8\'));")'
+        '<!@(python glob-files.py "../src/wkt/*.cpp")' #search pattern must be within double quotes ("")
       ],
       "defines": [
         "<@(common_defines)"
@@ -128,7 +124,7 @@
       "target_name": "mapnik-json",
       "type": "static_library",
       "sources": [
-        "<!@(find ../src/json/ -name '*.cpp')"
+        '<!@(python glob-files.py "../src/json/*.cpp")' #search pattern must be within double quotes ("")
       ],
       "defines": [
         "<@(common_defines)"
@@ -143,16 +139,16 @@
       "type": "shared_library",
       "product_dir":"lib",
       "sources": [
-        "<!@(find ../deps/agg/src/ -name '*.cpp')",
-        "<!@(find ../src/agg/ -name '*.cpp')",
-        "<!@(find ../src/cairo/ -name '*.cpp')",
-        "<!@(find ../src/grid/ -name '*.cpp')",
-        "<!@(find ../src/group/ -name '*.cpp')",
-        "<!@(find ../src/renderer_common/ -name '*.cpp')",
-        "<!@(find ../src/svg/ -name '*.cpp')",
-        "<!@(find ../src/text/ -name '*.cpp')",
-        "<!@(find ../src/util/ -name '*.cpp')",
-        "<!@(find ../src/ -name '*.cpp' -maxdepth 1)"
+        '<!@(python glob-files.py "../deps/agg/src/*.cpp")', #search pattern must be within double quotes ("")
+        '<!@(python glob-files.py "../src/agg/*.cpp")',
+        '<!@(python glob-files.py "../src/cairo/*.cpp")',
+        '<!@(python glob-files.py "../src/grid/*.cpp")',
+        '<!@(python glob-files.py "../src/group/*.cpp")',
+        '<!@(python glob-files.py "../src/renderer_common/*.cpp")',
+        '<!@(python glob-files.py "../src/svg/*.cpp")',
+        '<!@(python glob-files.py "../src/text/*.cpp")',
+        '<!@(python glob-files.py "../src/util/*.cpp")',
+        '<!@(python glob-files.py "../src/*.cpp")'
       ],
       "xcode_settings": {
         "SDKROOT": "macosx",
@@ -248,7 +244,9 @@
       "target_name": "mapnik-render",
       "type": "executable",
       "product_dir":"bin",
-      "sources": [ "<!@(find ../utils/mapnik-render/ -name '*.cpp')" ],
+      "sources": [
+        '<!@(python glob-files.py "../utils/mapnik-render/*.cpp")' #search pattern must be within double quotes ("")
+      ],
       "dependencies": [ "mapnik" ],
       "conditions": [
         ["OS=='win'",
@@ -274,7 +272,7 @@
       "target_name": "shapeindex",
       "type": "executable",
       "product_dir":"bin",
-      "sources": [ "<!@(find ../utils/shapeindex/ -name '*.cpp')" ],
+      "sources": [ '<!@(python glob-files.py "../utils/shapeindex/*.cpp")' ],
       "include_dirs":["../plugins/input/shape/"],
       "dependencies": [ "mapnik" ],
       "conditions": [
@@ -299,7 +297,7 @@
       "type": "executable",
       "product_dir":"bin",
       "dependencies": [ "mapnik", "mapnik-wkt", "mapnik-json" ],
-      "sources": [ "<!@(find ../utils/mapnik-index/ -name '*.cpp')" ],
+      "sources": [ '<!@(python glob-files.py "../utils/mapnik-index/*.cpp")' ],
       "include_dirs":[
         "<@(common_includes)"
       ],
@@ -329,7 +327,7 @@
       "product_dir": "lib/mapnik/input",
       "dependencies": [ "mapnik", "mapnik-json" ],
       "product_extension": "input",
-      "sources": [ "<!@(find ../plugins/input/geojson/ -name '*.cpp')" ],
+      "sources": [ '<!@(python glob-files.py "../plugins/input/geojson/*.cpp")' ],
       "conditions": [
         ["OS=='win'",
           {
@@ -347,7 +345,7 @@
       "product_dir": "lib/mapnik/input",
       "dependencies": [ "mapnik", "mapnik-json" ],
       "product_extension": "input",
-      "sources": [ "<!@(find ../plugins/input/topojson/ -name '*.cpp')" ],
+      "sources": [ '<!@(python glob-files.py "./plugins/input/topojson/*.cpp")' ],
       "conditions": [
         ["OS=='win'",
           {
@@ -364,7 +362,7 @@
       "type": "loadable_module",
       "product_dir": "lib/mapnik/input",
       "product_extension": "input",
-      "sources": [ "<!@(find ../plugins/input/shape/ -name '*.cpp')" ],
+      "sources": [ '<!@(python glob-files.py "../plugins/input/shape/*.cpp")' ],
       "dependencies": [ "mapnik" ],
       "conditions": [
         ["OS=='win'",
@@ -382,7 +380,7 @@
       "type": "loadable_module",
       "product_dir": "lib/mapnik/input",
       "product_extension": "input",
-      "sources": [ "<!@(find ../plugins/input/csv/ -name '*.cpp')" ],
+      "sources": [ '<!@(python glob-files.py "../plugins/input/csv/*.cpp")' ],
       "dependencies": [ "mapnik", "mapnik-wkt", "mapnik-json" ],
       "conditions": [
         ["OS=='win'",
@@ -402,7 +400,7 @@
       "type": "loadable_module",
       "product_dir": "lib/mapnik/input",
       "product_extension": "input",
-      "sources": [ "<!@(find ../plugins/input/raster/ -name '*.cpp')" ],
+      "sources": [ '<!@(python glob-files.py "../plugins/input/raster/*.cpp")' ],
       "dependencies": [ "mapnik" ]
     },
     {
@@ -411,7 +409,7 @@
       "type": "loadable_module",
       "product_dir": "lib/mapnik/input",
       "product_extension": "input",
-      "sources": [ "<!@(find ../plugins/input/gdal/ -name '*.cpp')" ],
+      "sources": [ '<!@(python glob-files.py "../plugins/input/gdal/*.cpp")' ],
       "dependencies": [ "mapnik" ],
       "conditions": [
         ["OS=='win'",
@@ -444,7 +442,7 @@
       "type": "loadable_module",
       "product_dir": "lib/mapnik/input",
       "product_extension": "input",
-      "sources": [ "<!@(find ../plugins/input/ogr/ -name '*.cpp')" ],
+      "sources": [ '<!@(python glob-files.py "../plugins/input/ogr/*.cpp")' ],
       "dependencies": [ "mapnik" ],
       "conditions": [
         ["OS=='win'",
@@ -477,7 +475,7 @@
       "type": "loadable_module",
       "product_dir": "lib/mapnik/input",
       "product_extension": "input",
-      "sources": [ "<!@(find ../plugins/input/postgis/ -name '*.cpp')" ],
+      "sources": [ '<!@(python glob-files.py "../plugins/input/postgis/*.cpp")' ],
       "dependencies": [ "mapnik" ],
       "conditions": [
         ["OS=='win'",
@@ -509,7 +507,7 @@
       "type": "loadable_module",
       "product_dir": "lib/mapnik/input",
       "product_extension": "input",
-      "sources": [ "<!@(find ../plugins/input/pgraster/ -name '*.cpp')" ],
+      "sources": [ '<!@(python glob-files.py "../plugins/input/pgraster/*.cpp")' ],
       "dependencies": [ "mapnik" ],
       "conditions": [
         ["OS=='win'",
@@ -539,7 +537,7 @@
       "type": "loadable_module",
       "product_dir": "lib/mapnik/input",
       "product_extension": "input",
-      "sources": [ "<!@(find ../plugins/input/sqlite/ -name '*.cpp')" ],
+      "sources": [ '<!@(python glob-files.py "../plugins/input/sqlite/*.cpp")' ],
       "dependencies": [ "mapnik" ],
       "conditions": [
         ["OS=='win'",
@@ -560,7 +558,7 @@
       "type": "executable",
       "product_dir":"test",
       "sources": [
-        "<!@(find ../test/unit/ -name '*.cpp')"
+        '<!@(python glob-files.py "../test/unit/*.cpp")'
       ],
       "include_dirs":[
         "../test"
@@ -742,7 +740,7 @@
           "product_dir":"lib/python<(python_version)/mapnik/",
           "type": "loadable_module",
           "product_extension": "<(python_module_extension)",
-          "sources": [ "<!@(find ../bindings/python/ -name '*.cpp')" ],
+          "sources": [ '<!@(python glob-files.py "../bindings/python/*.cpp")' ],
           "dependencies": [ "mapnik", "mapnik-wkt", "mapnik-json" ],
           "copies": [
             {
