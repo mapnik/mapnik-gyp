@@ -145,8 +145,8 @@
         '<!@(python glob-files.py "../src/grid/*.cpp")',
         '<!@(python glob-files.py "../src/group/*.cpp")',
         '<!@(python glob-files.py "../src/renderer_common/*.cpp")',
-        '<!@(python glob-files.py "../src/svg/*.cpp")',
-        '<!@(python glob-files.py "../src/text/*.cpp")',
+        '<!@(python glob-files.py "../src/svg/*/*.cpp")', #"src/svg/*/*.cpp" => search in "src/svg" and subdirectories
+        '<!@(python glob-files.py "../src/text/*/*.cpp")', #"src/text/*/*.cpp" => search in "src/text" and subdirectories
         '<!@(python glob-files.py "../src/util/*.cpp")',
         '<!@(python glob-files.py "../src/*.cpp")'
       ],
@@ -558,7 +558,7 @@
       "type": "executable",
       "product_dir":"test",
       "sources": [
-        '<!@(python glob-files.py "../test/unit/*.cpp")'
+        '<!@(python glob-files.py "../test/unit/*/*.cpp")'
       ],
       "include_dirs":[
         "../test"
@@ -740,7 +740,7 @@
           "product_dir":"lib/python<(python_version)/mapnik/",
           "type": "loadable_module",
           "product_extension": "<(python_module_extension)",
-          "sources": [ '<!@(python glob-files.py "../bindings/python/*.cpp")' ],
+          "sources": [ '<!@(python glob-files.py "../bindings/python/*/*.cpp")' ],
           "dependencies": [ "mapnik", "mapnik-wkt", "mapnik-json" ],
           "copies": [
             {
