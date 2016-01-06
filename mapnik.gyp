@@ -347,7 +347,7 @@
       "product_dir": "lib/mapnik/input",
       "dependencies": [ "mapnik", "mapnik-json" ],
       "product_extension": "input",
-      "sources": [ '<!@(python glob-files.py "./plugins/input/topojson/*.cpp")' ],
+      "sources": [ '<!@(python glob-files.py "../plugins/input/topojson/*.cpp")' ],
       "conditions": [
         ["OS=='win'",
           {
