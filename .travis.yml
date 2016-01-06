@@ -15,10 +15,23 @@ env:
    - CONFIGURATION=Debug
 
 addons:
-  postgresql: "9.3"
+  postgresql: "9.4"
+  apt:
+    sources:
+     - ubuntu-toolchain-r-test
+     - llvm-toolchain-precise-3.5
+    packages:
+     - clang-3.5
+
+cache:
+  directories:
+  - $HOME/.ccache
 
 before_install:
- - true
+ - if [[ $(uname -s) == 'Linux' ]]; then
+     export CXX="ccache clang++-3.5 -Qunused-arguments";
+     export CC="ccache clang-3.5 -Qunused-arguments";
+   fi
 
 install:
  # TODO - get postgis working
