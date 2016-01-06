@@ -88,7 +88,7 @@ else
   fi
   if [[ ! -f ninja/ninja ]]; then
       cd ninja
-      ./bootstrap.py
+      ./configure.py --bootstrap
       cd ../
   fi
 
