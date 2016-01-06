@@ -34,4 +34,5 @@ before_script:
 
 script:
  - COMMIT_MESSAGE=$(git show -s --format=%B $TRAVIS_COMMIT | tr -d '\n')
- - if [[ ${COMMIT_MESSAGE} =~ "[build]" ]]; then . build.sh; fi;
+ - if [[ ${COMMIT_MESSAGE} =~ "[build]" ]]; then ./build.sh; fi;
+ - if [[ ${COMMIT_MESSAGE} =~ "[build]" ]]; then ./test.sh; fi;
