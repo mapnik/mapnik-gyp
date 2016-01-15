@@ -427,7 +427,6 @@
             "libraries": [
               "-lgdal",
               "-lproj",
-              "-liconv",
               "-lexpat",
               "-lz",
               "-ljpeg",
@@ -460,7 +459,6 @@
             "libraries": [
               "-lgdal",
               "-lproj",
-              "-liconv",
               "-lexpat",
               "-lz",
               "-ljpeg",
