@@ -45,8 +45,8 @@ install:
  - git init .
  - git remote add origin http://github.com/mapnik/mapnik
  - git fetch
- - git submodule update --init
  - git checkout master
+ - git submodule update --init
  - cd mapnik-gyp
 
 script:
