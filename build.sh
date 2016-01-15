@@ -6,7 +6,7 @@ export ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 source ../bootstrap.sh
 
-BASE_PATH="$(cd $(pwd)/../mason_packages/.link && pwd)"
+BASE_PATH="$(cd $(pwd)/mason_packages/.link && pwd)"
 
 # gyp
 if [[ ! -d gyp ]]; then
@@ -88,7 +88,7 @@ else
   fi
   if [[ ! -f ninja/ninja ]]; then
       cd ninja
-      ./bootstrap.py
+      ./configure.py --bootstrap
       cd ../
   fi
 

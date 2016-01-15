@@ -35,7 +35,6 @@ matrix:
       compiler: clang
       env: CONFIGURATION=Debug
 
-
 install:
  # TODO - get postgis working
  - if [[ $(uname -s) == 'Linux' ]]; then
@@ -52,4 +51,5 @@ install:
 
 script:
  - COMMIT_MESSAGE=$(git show -s --format=%B $TRAVIS_COMMIT | tr -d '\n')
- - if [[ ${COMMIT_MESSAGE} =~ "[build]" ]]; then . build.sh; fi;
+ - if [[ ${COMMIT_MESSAGE} =~ "[build]" ]]; then ./build.sh; fi;
+ - if [[ ${COMMIT_MESSAGE} =~ "[build]" ]]; then ./test.sh; fi;
