@@ -208,7 +208,6 @@
               "-lproj",
               "-ltiff",
               "-lwebp",
-              "-lxml2",
               "-licui18n",
               "-ljpeg",
               "-licuuc",
