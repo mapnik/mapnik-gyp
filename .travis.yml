@@ -1,13 +1,6 @@
 language: cpp
 
-os:
-  - linux
-  - osx
-
 sudo: false
-
-compiler:
- - clang
 
 env:
   matrix:
@@ -27,21 +20,32 @@ cache:
   directories:
   - $HOME/.ccache
 
-before_install:
+matrix:
+  include:
+    - os: linux
+      compiler: clang35
+      env: CONFIGURATION=Release
+    - os: linux
+      compiler: clang35
+      env: CONFIGURATION=Debug
+    - os: osx
+      compiler: clang
+      env: CONFIGURATION=Release
+    - os: osx
+      compiler: clang
+      env: CONFIGURATION=Debug
+
+install:
+ # TODO - get postgis working
  - if [[ $(uname -s) == 'Linux' ]]; then
      export CXX="ccache clang++-3.5 -Qunused-arguments";
      export CC="ccache clang-3.5 -Qunused-arguments";
    fi
-
-install:
- # TODO - get postgis working
- - true
-
-before_script:
  - cd ..
  - git init .
  - git remote add origin http://github.com/mapnik/mapnik
  - git fetch
+ - git submodule update --init
  - git checkout master
  - cd mapnik-gyp
 
