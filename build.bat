@@ -174,6 +174,10 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ECHO protobuf
 xcopy /i /d /s /q %DEPSDIR%\protobuf\src\google %MAPNIK_SDK%\include\google /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+ECHO mapbox variant
+XCOPY /i /d /q ..\deps\mapbox\variant\*.hpp %MAPNIK_SDK%\include\mapbox\variant\ /Y
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
 
 :: libs
 ECHO copying deps lib files...
