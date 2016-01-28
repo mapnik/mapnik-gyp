@@ -8,6 +8,7 @@
     "configuration%":"",
     "platform%":"",
     "common_defines": [
+      "WIN32_LEAN_AND_MEAN",
       "BIGINT",
       "BOOST_REGEX_HAS_ICU",
       "HAVE_JPEG",
