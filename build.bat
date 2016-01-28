@@ -409,7 +409,7 @@ ECHO label RUNMAPNIKBUILD
 :: detect trouble with mimatched linking
 ::dumpbin /directives %MAPNIK_SDK%\lib\*lib | grep LIBCMT
 
-::msbuild /m:2 /t:mapnik /p:BuildInParellel=true .\build\mapnik.sln /p:Configuration=Release
+::msbuild /m:2 /t:mapnik /p:BuildInParallel=true .\build\mapnik.sln /p:Configuration=Release
 
 :DOFASTBUILD
 ECHO label DOFASTBUILD
@@ -484,7 +484,7 @@ SET MSBUILD_LOGS=/fl1 /fl2 /fl3 ^
 ::compile only one file in VS http://stackoverflow.com/a/2332199
 
 ::MSBuild: /m[axcpucount]:%NUMBER_OF_PROCESSORS% => number of MSBuild.exe processes that may be run in parallel
-::MSBuild: /p:BuildInParellel=true => multiple worker processes are generated to build as many projects at the same time as possible
+::MSBuild: /p:BuildInParallel=true => multiple worker processes are generated to build as many projects at the same time as possible
 
 ::LINK: /MP:%NUMBER_OF_PROCESSORS% => (Build with Multiple Processes) specifies the number of cl.exe processes that simultaneously compile the source files
 ::LINK: /cgthreads[n] => default 4, max 8: specifies the number of threads used by each cl.exe process
@@ -513,11 +513,11 @@ ECHO building heavy files first...
 msbuild ^
 .\build\mapnik.vcxproj ^
 /t:ClCompile ^
-/p:SelectedFiles="..\..\src\css_color_grammar.cpp;..\..\src\expression_grammar.cpp;..\..\src\transform_expression_grammar.cpp;..\..\src\image_filter_types.cpp;..\..\src\agg\process_markers_symbolizer.cpp;..\..\src\agg\process_group_symbolizer.cpp;..\..\src\grid\process_markers_symbolizer.cpp;..\..\src\grid\process_group_symbolizer.cpp;..\..\src\cairo\process_markers_symbolizer.cpp;..\..\src\cairo\process_group_symbolizer.cpp;..\src\renderer_common\process_group_symbolizer.cpp" ^
+/p:SelectedFiles="..\..\src\css_color_grammar.cpp;..\..\src\expression_grammar.cpp;..\..\src\transform_expression_grammar.cpp;..\..\src\image_filter_grammar.cpp;..\..\src\agg\process_markers_symbolizer.cpp;..\..\src\agg\process_group_symbolizer.cpp;..\..\src\grid\process_markers_symbolizer.cpp;..\..\src\grid\process_group_symbolizer.cpp;..\..\src\cairo\process_markers_symbolizer.cpp;..\..\src\cairo\process_group_symbolizer.cpp;..\src\renderer_common\process_group_symbolizer.cpp" ^
 /nologo ^
 /m:1 ^
 /toolsversion:%TOOLS_VERSION% ^
-/p:BuildInParellel=false ^
+/p:BuildInParallel=false ^
 /p:Configuration=%BUILD_TYPE% ^
 /p:StopOnFirstFailure=true ^
 /p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY% %MSBUILD_LOGS%
@@ -538,7 +538,7 @@ msbuild ^
 /nologo ^
 /m:%NUMBER_OF_PROCESSORS% ^
 /toolsversion:%TOOLS_VERSION% ^
-/p:BuildInParellel=true ^
+/p:BuildInParallel=true ^
 /p:Configuration=%BUILD_TYPE% ^
 /p:StopOnFirstFailure=true ^
 /p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY% %MSBUILD_LOGS%
@@ -564,7 +564,7 @@ msbuild ^
 /nologo ^
 /m:%NUMBER_OF_PROCESSORS% ^
 /toolsversion:%TOOLS_VERSION% ^
-/p:BuildInParellel=true ^
+/p:BuildInParallel=true ^
 /p:Configuration=%BUILD_TYPE% ^
 /p:StopOnFirstFailure=true ^
 /p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY% %MSBUILD_LOGS%
