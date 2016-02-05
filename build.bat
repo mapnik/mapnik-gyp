@@ -564,7 +564,7 @@ IF %RUNCODEANALYSIS% EQU 1 SET ANALYZE_MAPNIK=/p:RunCodeAnalysis=true
 IF %RUNCODEANALYSIS% EQU 1 DEL /S *.lastcodeanalysissucceeded && ECHO deleting previous analysis results
 IF %ERRORLEVEL% NEQ 0 (ECHO could not delete previous analysis results && GOTO ERROR) ELSE (ECHO previous analysis results deleted)
 
-
+ECHO "setting CL=/MP" && SET CL=/MP
 IF DEFINED APPVEYOR (ECHO calling msbuild on %MAPNIK_PROJECT%) ELSE (ECHO calling msbuild on whole mapnik solution...)
 msbuild ^
 .\build\mapnik.sln %MAPNIK_PROJECT% ^
