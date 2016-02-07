@@ -798,6 +798,11 @@
     }
   ],
   "conditions": [
+    ["buildbot == 'appveyor'",
+      {
+        "includes": [ "./common.gypi-appveyor" ]
+      }
+    ],
     ["OS=='win'", {
       "targets": [
         {
