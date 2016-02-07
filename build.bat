@@ -454,6 +454,24 @@ SET MSBUILD_LOGS=/fl1 /fl2 /fl3 ^
 /flp2:warningsonly;Verbosity=Diagnostic;logfile=msbuild-warnings.txt;Append;Encoding=UTF-8 ^
 /flp3:errorsonly;Verbosity=Diagnostic;logfile=msbuild-errors.txt;Append;Encoding=UTF-8
 
+SET MSBUILD_COMMON=^
+/nologo ^
+/toolsversion:%TOOLS_VERSION% ^
+/p:Configuration=%BUILD_TYPE% ^
+/p:Platform=%BUILDPLATFORM% ^
+/p:StopOnFirstFailure=true ^
+%MSBUILD_VERBOSITY% %MSBUILD_LOGS%
+
+SET MSBUILD_PARALLEL=/maxcpucount:1
+IF %NUMBER_OF_PROCESSORS% GEQ 4 SET MSBUILD_PARALLEL=/p:BuildInParallel=true /maxcpucount:2
+IF %NUMBER_OF_PROCESSORS% GEQ 8 SET MSBUILD_PARALLEL=/p:BuildInParallel=true /maxcpucount:3
+:: since any CL.EXE /MP is able to use all available processors (provided it is given enough
+:: sources to compile), using multiple MSBUILD workers only makes sense when you have more
+:: processors than sources per directory (because sources from different directories yield
+:: different /Fo paths, a separate CL.EXE /MP master process must be run for each directory)
+
+IF DEFINED APPVEYOR SET MSBUILD_PARALLEL=/maxcpucount:1
+
 ::build heavy files single threaded
 
 ::MAYBE TRY SINGLE FILES MULTITHREADED????
@@ -494,19 +512,23 @@ GOTO CURRENT
 
 :CURRENT
 
+SET HEAVY_SOURCES=^
+..\..\src\renderer_common\render_group_symbolizer.cpp;^
+..\..\src\renderer_common\render_markers_symbolizer.cpp;^
+..\..\src\renderer_common\render_thunk_extractor.cpp;^
+..\..\src\css_color_grammar.cpp;^
+..\..\src\expression_grammar.cpp;^
+..\..\src\image_filter_grammar.cpp;^
+..\..\src\transform_expression_grammar.cpp
 
 ECHO building heavy files first...
+IF DEFINED APPVEYOR (ECHO disabling parallel compilation && SET _CL_=/MP1)
 msbuild ^
 .\build\mapnik.vcxproj ^
 /t:ClCompile ^
-/p:SelectedFiles="..\..\src\css_color_grammar.cpp;..\..\src\expression_grammar.cpp;..\..\src\transform_expression_grammar.cpp;..\..\src\image_filter_grammar.cpp;..\..\src\agg\process_markers_symbolizer.cpp;..\..\src\agg\process_group_symbolizer.cpp;..\..\src\grid\process_markers_symbolizer.cpp;..\..\src\grid\process_group_symbolizer.cpp;..\..\src\cairo\process_markers_symbolizer.cpp;..\..\src\cairo\process_group_symbolizer.cpp;..\src\renderer_common\process_group_symbolizer.cpp" ^
-/nologo ^
-/m:1 ^
-/toolsversion:%TOOLS_VERSION% ^
-/p:BuildInParallel=false ^
-/p:Configuration=%BUILD_TYPE% ^
-/p:StopOnFirstFailure=true ^
-/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY% %MSBUILD_LOGS%
+/p:SelectedFiles="%HEAVY_SOURCES%" ^
+%MSBUILD_COMMON%
+
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
@@ -516,31 +538,14 @@ IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build f
 
 
 
-::build heavy projects single threaded
-ECHO calling msbuild on mapnik-json and mapnik-wkt...
-msbuild ^
-.\build\mapnik.sln ^
-/t:mapnik-json;mapnik-wkt ^
-/nologo ^
-/m:%NUMBER_OF_PROCESSORS% ^
-/toolsversion:%TOOLS_VERSION% ^
-/p:BuildInParallel=true ^
-/p:Configuration=%BUILD_TYPE% ^
-/p:StopOnFirstFailure=true ^
-/p:Platform=%BUILDPLATFORM% %MSBUILD_VERBOSITY% %MSBUILD_LOGS%
-ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
-IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
-
-::GOTO DONE
-
-
-
 ::build everything else
 ::on AppVeyor just the mapnik project
 
+SET MAPNIK_LIBS=mapnik;mapnik-json;mapnik-wkt
+SET MAPNIK_PLUGINS=csv;gdal;geojson;ogr;pgraster;postgis;raster;shape;sqlite;topojson
 SET MAPNIK_PROJECT=
 IF DEFINED LOCAL_BUILD_DONT_SKIP_TESTS GOTO DO_MAPNIK_BUILD
-IF DEFINED APPVEYOR SET MAPNIK_PROJECT=/t:mapnik;csv;gdal;geojson;ogr;pgraster;postgis;raster;shape;sqlite;topojson
+IF DEFINED APPVEYOR SET MAPNIK_PROJECT=/t:%MAPNIK_LIBS%;%MAPNIK_PLUGINS%
 
 :DO_MAPNIK_BUILD
 
@@ -550,17 +555,13 @@ IF %RUNCODEANALYSIS% EQU 1 DEL /S *.lastcodeanalysissucceeded && ECHO deleting p
 IF %ERRORLEVEL% NEQ 0 (ECHO could not delete previous analysis results && GOTO ERROR) ELSE (ECHO previous analysis results deleted)
 
 IF DEFINED APPVEYOR (ECHO calling msbuild on %MAPNIK_PROJECT%) ELSE (ECHO calling msbuild on whole mapnik solution...)
+IF DEFINED APPVEYOR (ECHO enabling parallel compilation && SET _CL_=)
 msbuild ^
 .\build\mapnik.sln %MAPNIK_PROJECT% ^
-/nologo ^
-/m:%NUMBER_OF_PROCESSORS% ^
-/toolsversion:%TOOLS_VERSION% ^
-/p:BuildInParallel=true ^
-/p:Configuration=%BUILD_TYPE% ^
-/p:StopOnFirstFailure=true ^
-/p:Platform=%BUILDPLATFORM% %ANALYZE_MAPNIK% %MSBUILD_VERBOSITY% %MSBUILD_LOGS%
+%MSBUILD_COMMON% %MSBUILD_PARALLEL% %ANALYZE_MAPNIK%
 :: /t:rebuild
 :: /v:diag > build.log
+
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
