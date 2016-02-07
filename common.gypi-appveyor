@@ -87,7 +87,6 @@
             "DebugInformationFormat": "0", #0:disable 1:/Z7 3:/Zi 4:/ZI , see GenerateDebugInformation below, https://msdn.microsoft.com/en-us/library/958x11bc.aspx
             "MultiProcessorCompilation": "true",
             "AdditionalOptions": [
-              #"/MP", # compile across multiple CPUs
               "/bigobj", #compiling: x86 fatal error C1128: number of sections exceeded object file format limit: compile with /bigobj
               #"/Zm200", #prevent: Fatal Error C1060 compiler is out of heap space
             ],

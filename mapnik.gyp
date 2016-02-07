@@ -7,6 +7,7 @@
     "libs%":"",
     "configuration%":"",
     "platform%":"",
+    "buildbot%":"",
     "common_defines": [
       "WIN32_LEAN_AND_MEAN",
       "BIGINT",
@@ -41,6 +42,11 @@
       ["OS=='win'",
         {
           "conditions": [
+            ["'<!(IF DEFINED APPVEYOR ECHO %APPVEYOR%)' == 'True'",
+              {
+                  "buildbot":"appveyor"
+              }
+            ],
             ["configuration=='Debug'",
               {
                   "boost_filesystem_lib":"libboost_filesystem-<(boost_toolset)-mt-gd-<(boost_version).lib",
@@ -119,6 +125,19 @@
       ],
       "include_dirs":[
         "<@(common_includes)"
+      ],
+      "conditions": [
+        ["buildbot == 'appveyor'",
+          {
+            "msvs_settings": {
+              "VCCLCompilerTool": {
+                "AdditionalOptions": [
+                  "/MP1", # limit parallel compilation of memory-intensive sources
+                ]
+              }
+            }
+          }
+        ]
       ]
     },
     {
@@ -132,6 +151,19 @@
       ],
       "include_dirs":[
         "<@(common_includes)"
+      ],
+      "conditions": [
+        ["buildbot == 'appveyor'",
+          {
+            "msvs_settings": {
+              "VCCLCompilerTool": {
+                "AdditionalOptions": [
+                  "/MP1", # limit parallel compilation of memory-intensive sources
+                ]
+              }
+            }
+          }
+        ]
       ]
     },
     {
@@ -337,6 +369,17 @@
               "<(icuuc_lib)",
             ]
           }
+        ],
+        ["buildbot == 'appveyor'",
+          {
+            "msvs_settings": {
+              "VCCLCompilerTool": {
+                "AdditionalOptions": [
+                  "/MP2", # limit parallel compilation of memory-intensive sources
+                ]
+              }
+            }
+          }
         ]
       ]
     },
@@ -354,6 +397,17 @@
             "libraries": [
               "<(icuuc_lib)",
             ]
+          }
+        ],
+        ["buildbot == 'appveyor'",
+          {
+            "msvs_settings": {
+              "VCCLCompilerTool": {
+                "AdditionalOptions": [
+                  "/MP2", # limit parallel compilation of memory-intensive sources
+                ]
+              }
+            }
           }
         ]
       ]
@@ -392,6 +446,17 @@
               "<(icuuc_lib)",
               "harfbuzz.lib"
             ],
+          }
+        ],
+        ["buildbot == 'appveyor'",
+          {
+            "msvs_settings": {
+              "VCCLCompilerTool": {
+                "AdditionalOptions": [
+                  "/MP2", # limit parallel compilation of memory-intensive sources
+                ]
+              }
+            }
           }
         ]
       ]
