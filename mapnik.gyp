@@ -8,6 +8,7 @@
     "configuration%":"",
     "platform%":"",
     "buildbot%":"",
+    "limitcpu":"false",
     "common_defines": [
       "WIN32_LEAN_AND_MEAN",
       "BIGINT",
@@ -131,8 +132,18 @@
           {
             "msvs_settings": {
               "VCCLCompilerTool": {
-                "AdditionalOptions": [
-                  "/MP1", # limit parallel compilation of memory-intensive sources
+                "conditions": [
+                  ["limitcpu == 'true'",
+                    {
+                      "AdditionalOptions": [
+                        "/MP8", # limit parallel compilation of memory-intensive sources
+                      ]
+                    },{
+                      "AdditionalOptions": [
+                        "/MP", # full throttle
+                      ]
+                    }
+                  ]
                 ]
               }
             }
@@ -157,8 +168,18 @@
           {
             "msvs_settings": {
               "VCCLCompilerTool": {
-                "AdditionalOptions": [
-                  "/MP1", # limit parallel compilation of memory-intensive sources
+                "conditions": [
+                  ["limitcpu == 'true'",
+                    {
+                      "AdditionalOptions": [
+                        "/MP8", # limit parallel compilation of memory-intensive sources
+                      ]
+                    },{
+                      "AdditionalOptions": [
+                        "/MP", # full throttle
+                      ]
+                    }
+                  ]
                 ]
               }
             }
@@ -374,8 +395,18 @@
           {
             "msvs_settings": {
               "VCCLCompilerTool": {
-                "AdditionalOptions": [
-                  "/MP2", # limit parallel compilation of memory-intensive sources
+                "conditions": [
+                  ["limitcpu == 'true'",
+                    {
+                      "AdditionalOptions": [
+                        "/MP8", # limit parallel compilation of memory-intensive sources
+                      ]
+                    },{
+                      "AdditionalOptions": [
+                        "/MP", # full throttle
+                      ]
+                    }
+                  ]
                 ]
               }
             }
@@ -403,8 +434,18 @@
           {
             "msvs_settings": {
               "VCCLCompilerTool": {
-                "AdditionalOptions": [
-                  "/MP2", # limit parallel compilation of memory-intensive sources
+                "conditions": [
+                  ["limitcpu == 'true'",
+                    {
+                      "AdditionalOptions": [
+                        "/MP8", # limit parallel compilation of memory-intensive sources
+                      ]
+                    },{
+                      "AdditionalOptions": [
+                        "/MP", # full throttle
+                      ]
+                    }
+                  ]
                 ]
               }
             }
@@ -452,8 +493,18 @@
           {
             "msvs_settings": {
               "VCCLCompilerTool": {
-                "AdditionalOptions": [
-                  "/MP2", # limit parallel compilation of memory-intensive sources
+                "conditions": [
+                  ["limitcpu == 'true'",
+                    {
+                      "AdditionalOptions": [
+                        "/MP8", # limit parallel compilation of memory-intensive sources
+                      ]
+                    },{
+                      "AdditionalOptions": [
+                        "/MP", # full throttle
+                      ]
+                    }
+                  ]
                 ]
               }
             }

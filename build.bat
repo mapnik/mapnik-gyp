@@ -462,15 +462,16 @@ SET MSBUILD_COMMON=^
 /p:StopOnFirstFailure=true ^
 %MSBUILD_VERBOSITY% %MSBUILD_LOGS%
 
+SET /A HALF_NOF_PROCS=%NUMBER_OF_PROCESSORS%/2
 SET MSBUILD_PARALLEL=/maxcpucount:1
 IF %NUMBER_OF_PROCESSORS% GEQ 4 SET MSBUILD_PARALLEL=/p:BuildInParallel=true /maxcpucount:2
-IF %NUMBER_OF_PROCESSORS% GEQ 8 SET MSBUILD_PARALLEL=/p:BuildInParallel=true /maxcpucount:3
+IF %NUMBER_OF_PROCESSORS% GEQ 8 SET MSBUILD_PARALLEL=/p:BuildInParallel=true /maxcpucount:%HALF_NOF_PROCS%
 :: since any CL.EXE /MP is able to use all available processors (provided it is given enough
 :: sources to compile), using multiple MSBUILD workers only makes sense when you have more
 :: processors than sources per directory (because sources from different directories yield
 :: different /Fo paths, a separate CL.EXE /MP master process must be run for each directory)
 
-IF DEFINED APPVEYOR SET MSBUILD_PARALLEL=/maxcpucount:1
+IF DEFINED APPVEYOR IF %NUMBER_OF_PROCESSORS% LSS 8 SET MSBUILD_PARALLEL=/maxcpucount:1
 
 ::build heavy files single threaded
 
@@ -498,8 +499,8 @@ IF DEFINED APPVEYOR SET MSBUILD_PARALLEL=/maxcpucount:1
 ::COMPILER OPTIONS: https://msdn.microsoft.com/en-us/library/kezkeayy.aspx
 ::LINKER: /CGTHREADS:8
 ::COMPILER: /cgthreads8
-IF NOT DEFINED APPVEYOR SET CL=/cgthreads8 /Bt+
-IF NOT DEFINED APPVEYOR SET LINK=/CGTHREADS:8 /time+
+IF NOT %USERNAME%=="appveyor" IF %NUMBER_OF_PROCESSORS% GEQ 8 SET CL=/cgthreads8 /Bt+
+IF NOT %USERNAME%=="appveyor" IF %NUMBER_OF_PROCESSORS% GEQ 8 SET LINK=/CGTHREADS:8 /time+
 
 ::https://github.com/mapnik/mapnik/blob/master/Makefile
 
@@ -512,6 +513,9 @@ GOTO CURRENT
 
 :CURRENT
 
+ECHO CL^: %CL%
+ECHO LINK^: %LINK%
+
 SET HEAVY_SOURCES=^
 ..\..\src\renderer_common\render_group_symbolizer.cpp;^
 ..\..\src\renderer_common\render_markers_symbolizer.cpp;^
@@ -522,12 +526,15 @@ SET HEAVY_SOURCES=^
 ..\..\src\transform_expression_grammar.cpp
 
 ECHO building heavy files first...
-IF DEFINED APPVEYOR (ECHO disabling parallel compilation && SET _CL_=/MP1)
+IF DEFINED APPVEYOR IF %NUMBER_OF_PROCESSORS% LSS 8 (ECHO disabling parallel compilation && SET _CL_=/MP1)
+IF DEFINED APPVEYOR IF %NUMBER_OF_PROCESSORS% GEQ 8 (ECHO enabling parallel compilation && SET _CL_=/MP)
+ECHO _CL_^: %CL%
+
 msbuild ^
 .\build\mapnik.vcxproj ^
 /t:ClCompile ^
 /p:SelectedFiles="%HEAVY_SOURCES%" ^
-%MSBUILD_COMMON%
+%MSBUILD_COMMON% %MSBUILD_PARALLEL%
 
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
@@ -556,6 +563,8 @@ IF %ERRORLEVEL% NEQ 0 (ECHO could not delete previous analysis results && GOTO E
 
 IF DEFINED APPVEYOR (ECHO calling msbuild on %MAPNIK_PROJECT%) ELSE (ECHO calling msbuild on whole mapnik solution...)
 IF DEFINED APPVEYOR (ECHO enabling parallel compilation && SET _CL_=)
+ECHO MSBUILD_PARALLEL^: %MSBUILD_PARALLEL%
+ECHO _CL_^: %_CL_%
 msbuild ^
 .\build\mapnik.sln %MAPNIK_PROJECT% ^
 %MSBUILD_COMMON% %MSBUILD_PARALLEL% %ANALYZE_MAPNIK%
