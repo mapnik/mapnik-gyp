@@ -699,13 +699,20 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 :COLLATOR_ALREAY_DOWNLOADED
 
 
-::Python tests
-SET PYTHONPATH=%CD%\..\bindings\python
-:: all visual tests should pass on windows
-python ..\tests\visual_tests\test.py -q
-:: some python tests are expected to fail
-::python ..\tests\run_tests.py -q
 ECHO IGNOREFAILEDTESTS %IGNOREFAILEDTESTS%
+SET PATH=%MAPNIK_SDK%\lib;%PATH%
+SET PATH=%MAPNIK_SDK%\bin;%PATH%
+
+::Python tests
+::SET PYTHONPATH=%CD%\..\bindings\python;%PYTHONPATH%
+SET PYTHONPATH=%MAPNIK_SDK%\python\2.7\site-packages
+ECHO PYTHONPATH^: %PYTHONPATH%
+:: all visual tests should pass on windows
+python ..\bindings\python\test\visual.py -q
+IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+IF %IGNOREFAILEDTESTS% EQU 1 SET ERRORLEVEL=0
+:: some python tests are expected to fail
+python ..\bindings\python\test\run_tests.py -q
 IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 IF %IGNOREFAILEDTESTS% EQU 1 SET ERRORLEVEL=0
 
@@ -722,9 +729,6 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 ECHO ============================ running TESTS ==========================
 :: run tests
-SET PATH=%MAPNIK_SDK%\lib;%PATH%
-SET PATH=%MAPNIK_SDK%\bin;%PATH%
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ECHO ==== unit tests ===
 for %%t in (mapnik-gyp\build\test\*test.exe) do ( call %%t -d yes )
 IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
