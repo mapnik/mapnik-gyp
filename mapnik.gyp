@@ -844,10 +844,8 @@
             "python<(python_version2).lib"
           ],
           "defines":["HAVE_ROUND","HAVE_HYPOT"]
-
-
         }
-      ]}
-    ]
+      ]
+    }]
   ]
 }

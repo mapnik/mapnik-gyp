@@ -4,6 +4,7 @@ deps.7z
 mapnik-config.bat
 build
 gyp
+*.gypd
 mapnik-sdk
 msbuild-summary.txt
 msbuild-errors.txt

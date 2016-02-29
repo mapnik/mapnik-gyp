@@ -421,6 +421,23 @@ ECHO INCLUDE %INCLUDE%
 
 :GENERATE_SOLUTION
 
+
+::add path to Python lib at first position in %PATH%
+IF /I "%USERNAME%"=="appveyor" GOTO APPVEYOR_SET_PYTHON_LIB_PATH
+
+:: for https://github.com/mapbox/windows-builds
+IF /I "%PLATFORM%"=="x64" SET PATH=%ROOTDIR%\tmp-bin\python2;%PATH%
+IF /I "%PLATFORM%"=="x86" SET PATH=%ROOTDIR%\tmp-bin\python2-x86-32;%PATH%
+GOTO PYTHON_LIB_PATH_SET
+
+:SET APPVEYOR_SET_PYTHON_LIB_PATH
+IF /I "%PLATFORM%"=="x64" SET PATH=C:\Python27-x64;%PATH%
+IF /I "%PLATFORM%"=="x86" SET PATH=C:\Python27;%PATH%
+
+:PYTHON_LIB_PATH_SET
+
+
+
 ::generate a debug version of the gyp file: -f gypd -DOS=win
 ::  -f msvs -G msvs_version=2015 ^
 
@@ -539,11 +556,10 @@ IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build f
 ::GOTO DONE
 
 
-
 ::build everything else
 ::on AppVeyor just the mapnik project
 
-SET MAPNIK_LIBS=mapnik;mapnik-json;mapnik-wkt
+SET MAPNIK_LIBS=mapnik;mapnik-json;mapnik-wkt;_mapnik;mapnik-render;shapeindex;mapnik-index
 SET MAPNIK_PLUGINS=csv;gdal;geojson;ogr;pgraster;postgis;raster;shape;sqlite;topojson
 SET MAPNIK_TESTS=test
 SET MAPNIK_PROJECT=
@@ -567,10 +583,8 @@ msbuild ^
 :: /v:diag > build.log
 
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
-IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
+IF %ERRORLEVEL% NEQ 0 (ECHO error during build && WHERE python & GOTO ERROR) ELSE (ECHO build finished)
 
-
-IF NOT DEFINED LOCAL_BUILD_DONT_SKIP_TESTS IF DEFINED APPVEYOR ECHO on AppVeyor, skipping tests && GOTO DONE
 
 :: install command line tools
 xcopy /q /d .\build\bin\mapnik-render.exe %MAPNIK_SDK%\bin /Y
@@ -606,7 +620,7 @@ echo fontscollectionpath = join(mapniklibpath,'fonts') >> ..\bindings\python\map
 echo __all__ = [mapniklibpath,inputpluginspath,fontscollectionpath] >> ..\bindings\python\mapnik\paths.py
 
 ::copy python bindings
-xcopy /q /d ..\bindings\python\mapnik\*.*  %MAPNIK_SDK%\python\2.7\site-packages\mapnik\
+xcopy /y /q /d ..\bindings\python\mapnik\*.*  %MAPNIK_SDK%\python\2.7\site-packages\mapnik\
 
 
 :: plugins
@@ -703,6 +717,7 @@ ECHO IGNOREFAILEDTESTS %IGNOREFAILEDTESTS%
 SET PATH=%MAPNIK_SDK%\lib;%PATH%
 SET PATH=%MAPNIK_SDK%\bin;%PATH%
 
+ECHO running Python tests
 ::Python tests
 ::SET PYTHONPATH=%CD%\..\bindings\python;%PYTHONPATH%
 SET PYTHONPATH=%MAPNIK_SDK%\python\2.7\site-packages
@@ -715,6 +730,9 @@ IF %IGNOREFAILEDTESTS% EQU 1 SET ERRORLEVEL=0
 python ..\bindings\python\test\run_tests.py -q
 IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 IF %IGNOREFAILEDTESTS% EQU 1 SET ERRORLEVEL=0
+
+
+IF NOT DEFINED LOCAL_BUILD_DONT_SKIP_TESTS IF DEFINED APPVEYOR ECHO on AppVeyor, skipping other tests && GOTO DONE
 
 
 :: change into mapnik directory!!! TESTS!!
