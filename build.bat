@@ -48,7 +48,8 @@ IF NOT DEFINED PGUSER ECHO PGUSER not found, postgis errors might occur
 IF NOT DEFINED PGPASSWORD ECHO PGPASSWORD not found, postgis errors might occur
 ::check for postgres process
 tasklist /FI "IMAGENAME eq postgres.exe" 2>NUL | %windir%\system32\find /I /N "postgres.exe">NUL
-IF %ERRORLEVEL% NEQ 0 ECHO postgres.exe not running!!! some tests will fail && GOTO POSTGIS_TEMPLATE_FOUND
+IF %ERRORLEVEL% NEQ 0 ECHO postgres.exe not running!!! trying to start service && NET START postgresql-x64-9.4
+IF %ERRORLEVEL% NEQ 0 ECHO could not start postgresql service && GOTO ERROR
 SET TEMPLATE_EXISTS=
 SET TEMPLATE_NAME=template_postgis
 FOR /F "tokens=1 usebackq" %%i in (`psql -tAc "SELECT 1 FROM pg_database WHERE datname='%TEMPLATE_NAME%'"`) DO SET TEMPLATE_EXISTS=%%i
