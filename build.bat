@@ -41,6 +41,27 @@ SET DEPSDIR=..\..
 ECHO mapnik SDK directory^: %MAPNIK_SDK%
 ECHO DEPSDIR^: %DEPSDIR%
 
+::create postgis_template
+WHERE psql
+IF %ERRORLEVEL% NEQ 0 ECHO psql not found - some tests will fail && GOTO POSTGIS_TEMPLATE_FOUND
+IF NOT DEFINED PGUSER ECHO PGUSER not found, postgis errors might occur
+IF NOT DEFINED PGPASSWORD ECHO PGPASSWORD not found, postgis errors might occur
+SET TEMPLATE_EXISTS=
+SET TEMPLATE_NAME=template_postgis
+FOR /F "tokens=1 usebackq" %%i in (`psql -tAc "SELECT 1 FROM pg_database WHERE datname='%TEMPLATE_NAME%'"`) DO SET TEMPLATE_EXISTS=%%i
+IF %ERRORLEVEL% NEQ 0 ECHO error creating %TEMPLATE_NAME% && GOTO ERROR
+IF DEFINED TEMPLATE_EXISTS ECHO %TEMPLATE_NAME% EXISTS && GOTO POSTGIS_TEMPLATE_FOUND
+ECHO %TEMPLATE_NAME% not found
+ECHO creating %TEMPLATE_NAME%
+psql -c "create database %TEMPLATE_NAME%;"
+IF %ERRORLEVEL% NEQ 0 ECHO error creating %TEMPLATE_NAME% && GOTO ERROR
+ECHO creating extension postgis
+psql -c "CREATE EXTENSION IF NOT EXISTS postgis;" %TEMPLATE_NAME%
+IF %ERRORLEVEL% NEQ 0 ECHO error creating extension postgis && GOTO ERROR
+
+:POSTGIS_TEMPLATE_FOUND
+
+
 IF EXIST %MAPNIK_SDK% (ECHO SDK directory found && GOTO MAPNIK_SDK_DIR_CREATED)
 
 ECHO creating mapnik SDK directory
@@ -62,7 +83,7 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 :MAPNIK_SDK_DIR_CREATED
 ECHO label MAPNIK_SDK_DIR_CREATED
 
-IF DEFINED ICU_VERSION (FOR /f "delims=." %%G IN ("%ICU_VERSION%") DO SET ICU_VERSION=%%G) ELSE (SET ICU_VERSION=55)
+IF DEFINED ICU_VERSION (FOR /f "delims=." %%G IN ("%ICU_VERSION%") DO SET ICU_VERSION=%%G) ELSE (SET ICU_VERSION=56)
 
 SET PYTHON_DIR=%ROOTDIR%\tmp-bin\python2-x86-32
 IF /I "%PLATFORMX%"=="x64" SET PYTHON_DIR=%ROOTDIR%\tmp-bin\python2
