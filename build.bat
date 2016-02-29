@@ -698,22 +698,30 @@ if NOT EXIST %PROJ_LIB% (
 )
 SET ICU_DATA=%MAPNIK_SDK%\share\icu
 if NOT EXIST %ICU_DATA% (
+  ECHO creating ICU data directory %ICU_DATA%
   mkdir %ICU_DATA%
 )
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+ECHO ICU_DATA^: %ICU_DATA%
 
 ::download ICU collator
-IF EXIST %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat GOTO COLLATOR_ALREAY_DOWNLOADED
+SET ICU_DAT_NAME=icudt%ICU_VERSION%l.dat
+IF EXIST %MAPNIK_SDK%\share\icu\%ICU_DAT_NAME% ECHO already here^: %ICU_DAT_NAME% GOTO COLLATOR_ALREAY_DOWNLOADED
 
 ::wget --no-check-certificate -O %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat https://github.com/mapnik/mapnik-packaging/raw/master/osx/icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat
 ::use curl as it comes with git
-curl -o %MAPNIK_SDK%\share\icu\icudt%ICU_VERSION%l.dat https://raw.githubusercontent.com/mapnik/mapnik-packaging/master/osx/icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat
+SET ICU_DATA_DL_URL=https://raw.githubusercontent.com/mapnik/mapnik-packaging/master/osx/icudt%ICU_VERSION%l_only_collator_and_breakiterator.dat
+SET ICU_DATA_LOCAL=%MAPNIK_SDK%\share\icu\%ICU_DAT_NAME%
+ECHO downloading %ICU_DATA_DL_URL%
+ECHO to %ICU_DATA_LOCAL%
+curl -o %ICU_DATA_LOCAL% %ICU_DATA_DL_URL%
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 :COLLATOR_ALREAY_DOWNLOADED
 
 
 ECHO IGNOREFAILEDTESTS %IGNOREFAILEDTESTS%
+SET PATH=%ICU_DATA%;%PATH%
 SET PATH=%MAPNIK_SDK%\lib;%PATH%
 SET PATH=%MAPNIK_SDK%\bin;%PATH%
 
