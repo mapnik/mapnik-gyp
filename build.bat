@@ -426,8 +426,8 @@ ECHO INCLUDE %INCLUDE%
 IF /I "%USERNAME%"=="appveyor" GOTO APPVEYOR_SET_PYTHON_LIB_PATH
 
 :: for https://github.com/mapbox/windows-builds
-IF /I "%PLATFORM%"=="x64" SET PATH=%ROOTDIR%\tmp-bin\python2;%PATH%
-IF /I "%PLATFORM%"=="x86" SET PATH=%ROOTDIR%\tmp-bin\python2-x86-32;%PATH%
+IF /I "%PLATFORM%"=="x64" SET PATH=%ROOTDIR%\tmp-bin\python2;%ROOTDIR%\tmp-bin\python2\Scripts;%PATH%
+IF /I "%PLATFORM%"=="x86" SET PATH=%ROOTDIR%\tmp-bin\python2-x86-32;%ROOTDIR%\tmp-bin\python2-x86-32\Scripts;%PATH%
 GOTO PYTHON_LIB_PATH_SET
 
 :APPVEYOR_SET_PYTHON_LIB_PATH
