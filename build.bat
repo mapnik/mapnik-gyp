@@ -46,10 +46,27 @@ WHERE psql
 IF %ERRORLEVEL% NEQ 0 ECHO psql not found - some tests will fail && GOTO POSTGIS_TEMPLATE_FOUND
 IF NOT DEFINED PGUSER ECHO PGUSER not found, postgis errors might occur
 IF NOT DEFINED PGPASSWORD ECHO PGPASSWORD not found, postgis errors might occur
+
+
+::on AppVeyor install PostGIS manually
+
+IF NOT /I "%USERNAME%"=="appveyor" GOTO CHECK_POSTGRES_SERVICE
+ECHO on AppVeyor, installing PostGIS manually
+IF NOT EXIST pgis.zip curl -o pgis.zip http://download.osgeo.org/postgis/windows/pg94/postgis-bundle-pg94-2.2.1x64.zip
+IF %ERRORLEVEL% NEQ 0 ECHO failed to download PostGIS && GOTO CHECK_POSTGRES_SERVICE
+SET PG_PATH=C:\Program Files\PostgreSQL\9.4
+7z -y x pgis.zip | %windir%\system32\FIND "ing archive"
+IF %ERRORLEVEL% NEQ 0 ECHO failed to extract PostGIS && GOTO CHECK_POSTGRES_SERVICE
+XCOPY /Y /Q /S /E postgis-bundle-pg94-2.2.1x64\*.* "%PG_PATH%\"
+IF %ERRORLEVEL% NEQ 0 ECHO failed to copy PostGIS && GOTO CHECK_POSTGRES_SERVICE
+
+
+:CHECK_POSTGRES_SERVICE
+
 ::check for postgres process
 tasklist /FI "IMAGENAME eq postgres.exe" 2>NUL | %windir%\system32\find /I /N "postgres.exe">NUL
 IF %ERRORLEVEL% NEQ 0 ECHO postgres.exe not running!!! trying to start service && NET START postgresql-x64-9.4
-IF %ERRORLEVEL% NEQ 0 ECHO could not start postgresql service && GOTO ERROR
+IF %ERRORLEVEL% NEQ 0 ECHO could not start postgresql service - some tests will fail && GOTO POSTGIS_TEMPLATE_FOUND
 SET TEMPLATE_EXISTS=
 SET TEMPLATE_NAME=template_postgis
 FOR /F "tokens=1 usebackq" %%i in (`psql -tAc "SELECT 1 FROM pg_database WHERE datname='%TEMPLATE_NAME%'"`) DO SET TEMPLATE_EXISTS=%%i
