@@ -50,8 +50,7 @@ IF NOT DEFINED PGPASSWORD ECHO PGPASSWORD not found, postgis errors might occur
 
 ::on AppVeyor install PostGIS manually
 
-IF NOT /I "%USERNAME%"=="appveyor" GOTO CHECK_POSTGRES_SERVICE
-ECHO on AppVeyor, installing PostGIS manually
+IF /I "%USERNAME%"=="appveyor" (ECHO on AppVeyor, installing PostGIS manually) ELSE (GOTO CHECK_POSTGRES_SERVICE)
 IF NOT EXIST pgis.zip curl -o pgis.zip http://download.osgeo.org/postgis/windows/pg94/postgis-bundle-pg94-2.2.1x64.zip
 IF %ERRORLEVEL% NEQ 0 ECHO failed to download PostGIS && GOTO CHECK_POSTGRES_SERVICE
 SET PG_PATH=C:\Program Files\PostgreSQL\9.4
