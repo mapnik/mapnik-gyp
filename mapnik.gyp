@@ -127,11 +127,6 @@
         "<@(common_includes)"
       ],
       "conditions": [
-        ["OS=='win'",
-          {
-            "defines": ["MAPNIK_EXPORTS"]
-          }
-        ],
         ["buildbot == 'appveyor'",
           {
             "msvs_settings": {
@@ -158,11 +153,6 @@
         "<@(common_includes)"
       ],
       "conditions": [
-        ["OS=='win'",
-          {
-            "defines": ["MAPNIK_EXPORTS"]
-          }
-        ],
         ["buildbot == 'appveyor'",
           {
             "msvs_settings": {
