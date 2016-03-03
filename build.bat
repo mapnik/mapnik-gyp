@@ -624,7 +624,7 @@ msbuild ^
 :: /v:diag > build.log
 
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
-IF %ERRORLEVEL% NEQ 0 (ECHO error during build && WHERE python & GOTO ERROR) ELSE (ECHO build finished)
+IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
 
 :: install command line tools
