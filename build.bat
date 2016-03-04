@@ -34,6 +34,7 @@ IF DEFINED PACKAGEDEBUGSYMBOLS (ECHO PACKAGEDEBUGSYMBOLS %PACKAGEDEBUGSYMBOLS%) 
 IF DEFINED IGNOREFAILEDTESTS (ECHO IGNOREFAILEDTESTS %IGNOREFAILEDTESTS%) ELSE (SET IGNOREFAILEDTESTS=0)
 IF DEFINED FASTBUILD (ECHO FASTBUILD %FASTBUILD%) ELSE (SET FASTBUILD=0)
 IF DEFINED PACKAGEDEPS (ECHO PACKAGEDEPS %PACKAGEDEPS%) ELSE (SET PACKAGEDEPS=0)
+SET PYTHON_BUILD_FAILED=0
 
 SET MAPNIK_SDK=%CD%\mapnik-sdk
 SET DEPSDIR=..\..
@@ -600,7 +601,7 @@ IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build f
 ::build everything else
 ::on AppVeyor just the mapnik project
 
-SET MAPNIK_LIBS=mapnik;mapnik-json;mapnik-wkt;_mapnik;mapnik-render;shapeindex;mapnik-index
+SET MAPNIK_LIBS=mapnik;mapnik-json;mapnik-wkt;mapnik-render;shapeindex;mapnik-index
 SET MAPNIK_PLUGINS=csv;gdal;geojson;ogr;pgraster;postgis;raster;shape;sqlite;topojson
 SET MAPNIK_TESTS=test
 SET MAPNIK_PROJECT=
@@ -620,11 +621,16 @@ IF DEFINED APPVEYOR (ECHO enabling parallel compilation && SET _CL_=)
 msbuild ^
 .\build\mapnik.sln %MAPNIK_PROJECT% ^
 %MSBUILD_COMMON% %MSBUILD_PARALLEL% %ANALYZE_MAPNIK%
-:: /t:rebuild
-:: /v:diag > build.log
 
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
+
+
+msbuild ^
+.\build\mapnik.sln _mapnik ^
+%MSBUILD_COMMON% %MSBUILD_PARALLEL% %ANALYZE_MAPNIK%
+ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
+IF %ERRORLEVEL% NEQ 0 (ECHO error python build && SET PYTHON_BUILD_FAILED=1) ELSE (ECHO python build finished)
 
 
 :: install command line tools
@@ -842,6 +848,7 @@ echo ----------ERROR MAPNIK --------------
 echo ERRORLEVEL %ERRORLEVEL%
 
 :DONE
+IF %PYTHON_BUILD_FAILED% NEQ 0 ECHO !!!!!!! Python bindings failed to build !!!!!!
 echo DONE building Mapnik
 
 EXIT /b %ERRORLEVEL%
