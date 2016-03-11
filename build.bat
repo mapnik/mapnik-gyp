@@ -34,6 +34,7 @@ IF DEFINED PACKAGEDEBUGSYMBOLS (ECHO PACKAGEDEBUGSYMBOLS %PACKAGEDEBUGSYMBOLS%) 
 IF DEFINED IGNOREFAILEDTESTS (ECHO IGNOREFAILEDTESTS %IGNOREFAILEDTESTS%) ELSE (SET IGNOREFAILEDTESTS=0)
 IF DEFINED FASTBUILD (ECHO FASTBUILD %FASTBUILD%) ELSE (SET FASTBUILD=0)
 IF DEFINED PACKAGEDEPS (ECHO PACKAGEDEPS %PACKAGEDEPS%) ELSE (SET PACKAGEDEPS=0)
+SET PYTHON_BUILD_FAILED=0
 
 SET MAPNIK_SDK=%CD%\mapnik-sdk
 SET DEPSDIR=..\..
@@ -600,7 +601,7 @@ IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build f
 ::build everything else
 ::on AppVeyor just the mapnik project
 
-SET MAPNIK_LIBS=mapnik;mapnik-json;mapnik-wkt;_mapnik;mapnik-render;shapeindex;mapnik-index
+SET MAPNIK_LIBS=mapnik;mapnik-json;mapnik-wkt;mapnik-render;shapeindex;mapnik-index
 SET MAPNIK_PLUGINS=csv;gdal;geojson;ogr;pgraster;postgis;raster;shape;sqlite;topojson
 SET MAPNIK_TESTS=test
 SET MAPNIK_PROJECT=
@@ -620,11 +621,16 @@ IF DEFINED APPVEYOR (ECHO enabling parallel compilation && SET _CL_=)
 msbuild ^
 .\build\mapnik.sln %MAPNIK_PROJECT% ^
 %MSBUILD_COMMON% %MSBUILD_PARALLEL% %ANALYZE_MAPNIK%
-:: /t:rebuild
-:: /v:diag > build.log
 
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
-IF %ERRORLEVEL% NEQ 0 (ECHO error during build && WHERE python & GOTO ERROR) ELSE (ECHO build finished)
+IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
+
+
+msbuild ^
+.\build\mapnik.sln _mapnik ^
+%MSBUILD_COMMON% %MSBUILD_PARALLEL% %ANALYZE_MAPNIK%
+ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
+IF %ERRORLEVEL% NEQ 0 (ECHO error python build && SET PYTHON_BUILD_FAILED=1) ELSE (ECHO python build finished)
 
 
 :: install command line tools
@@ -766,6 +772,8 @@ SET PATH=%ICU_DATA%;%PATH%
 SET PATH=%MAPNIK_SDK%\lib;%PATH%
 SET PATH=%MAPNIK_SDK%\bin;%PATH%
 
+IF /I "%USERNAME%"=="appveyor" (ECHO on AppVeyor, skipping Python tests && GOTO AFTER_PYTHON_TESTS)
+
 ECHO running Python tests
 ::Python tests
 ::SET PYTHONPATH=%CD%\..\bindings\python;%PYTHONPATH%
@@ -780,8 +788,9 @@ python ..\bindings\python\test\run_tests.py -q
 IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 IF %IGNOREFAILEDTESTS% EQU 1 SET ERRORLEVEL=0
 
+:AFTER_PYTHON_TESTS
 
-IF NOT DEFINED LOCAL_BUILD_DONT_SKIP_TESTS IF DEFINED APPVEYOR ECHO on AppVeyor, skipping other tests && GOTO DONE
+::IF NOT DEFINED LOCAL_BUILD_DONT_SKIP_TESTS IF DEFINED APPVEYOR ECHO on AppVeyor, skipping other tests && GOTO DONE
 
 
 :: change into mapnik directory!!! TESTS!!
@@ -817,14 +826,19 @@ IF %IGNOREFAILEDTESTS% EQU 0 (IF %ERRORLEVEL% NEQ 0 GOTO ERROR) ELSE (SET ERRORL
 ECHO visual tests svg && mapnik-gyp\build\Release\test_visual_run.exe --svg --jobs=%V_TEST_JOBS%
 IF %IGNOREFAILEDTESTS% EQU 0 (IF %ERRORLEVEL% NEQ 0 GOTO ERROR) ELSE (SET ERRORLEVEL=0)
 
+
+IF /I "%USERNAME%"=="appveyor" (ECHO on AppVeyor, skipping benchmarks && GOTO AFTER_BENCHMARKS)
+
 ECHO ===== about to benchmark === && CALL mapnik-gyp\benchmark.bat
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+:AFTER_BENCHMARKS
 
 ECHO ============================ clean up after TESTS ==========================
 ECHO !!!!!!! !!!!! !!!!!! NOT REMOVING PLUGINS COPY DURING benchmark testing
 ECHO !!!!!!! !!!!! !!!!!! TODO: enable again! ! ! ! ! !
 ::DEL /F plugins\input\*.input
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+::IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 
 GOTO DONE
@@ -834,6 +848,7 @@ echo ----------ERROR MAPNIK --------------
 echo ERRORLEVEL %ERRORLEVEL%
 
 :DONE
+IF %PYTHON_BUILD_FAILED% NEQ 0 ECHO !!!!!!! Python bindings failed to build !!!!!!
 echo DONE building Mapnik
 
 EXIT /b %ERRORLEVEL%
