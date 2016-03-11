@@ -330,7 +330,7 @@
       "target_name": "mapnik-index",
       "type": "executable",
       "product_dir":"bin",
-      "dependencies": [ "mapnik", "mapnik-wkt", "mapnik-json" ],
+      "dependencies": [ "mapnik", "mapnik-wkt", "mapnik-json", "csv" ],
       "sources": [ '<!@(python glob-files.py "../utils/mapnik-index/*.cpp")' ],
       "include_dirs":[
         "<@(common_includes)"
