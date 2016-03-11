@@ -23,6 +23,11 @@
       "CLANG_CXX_LANGUAGE_STANDARD":"c++11",
       "GCC_VERSION": "com.apple.compilers.llvm.clang.1_0",
       "MACOSX_DEPLOYMENT_TARGET":"10.9",
+      'OTHER_CPLUSPLUSFLAGS':[
+        "-ftemplate-depth-300",
+        "-fvisibility=hidden",
+        "-fvisibility-inlines-hidden"
+      ],
       "WARNING_CFLAGS": [
         "-Wall",
         "-Wextra",
@@ -43,6 +48,9 @@
     },
     "cflags_cc": [
       "-std=c++11",
+      "-ftemplate-depth-300",
+      "-fvisibility=hidden",
+      "-fvisibility-inlines-hidden",
       "-fPIC", # so that we can link agg into libmapnik.so
       "-Wno-c++11-narrowing", # works around boost gil bug
       "-Wno-unsequenced",
