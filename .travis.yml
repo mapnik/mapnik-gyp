@@ -24,9 +24,13 @@ matrix:
       compiler: clang35-debug
       env: CONFIGURATION=Debug CXX="ccache clang++-3.5 -Qunused-arguments"
     - os: osx
+      # https://docs.travis-ci.com/user/languages/objective-c/#Supported-OS-X-iOS-SDK-versions
+      osx_image: xcode7.3 # upgrades clang from 6 -> 7
       compiler: clang
       env: CONFIGURATION=Release
     - os: osx
+      # https://docs.travis-ci.com/user/languages/objective-c/#Supported-OS-X-iOS-SDK-versions
+      osx_image: xcode7.3 # upgrades clang from 6 -> 7
       compiler: clang
       env: CONFIGURATION=Debug
 
