@@ -22,7 +22,8 @@
       "HAVE_CAIRO",
       "GRID_RENDERER",
       "SVG_RENDERER",
-      "BOOST_SPIRIT_USE_PHOENIX_V3=1"
+      "BOOST_SPIRIT_USE_PHOENIX_V3=1",
+      "BOOST_PHOENIX_NO_PREDEFINED_TERMINALS=1"
     ],
     "common_includes": [
       "../include", # mapnik
@@ -75,8 +76,6 @@
             ]
           ],
           "common_defines": [
-            "BOOST_VARIANT_DO_NOT_USE_VARIADIC_TEMPLATES",
-            'BOOST_MSVC_ENABLE_2014_JUN_CTP',
             "_WINDOWS"
           ],
           "common_libraries": [],
