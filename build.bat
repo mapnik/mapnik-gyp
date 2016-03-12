@@ -806,7 +806,7 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ECHO ============================ running TESTS ==========================
 :: run tests
 ECHO ==== unit tests ===
-for %%t in (mapnik-gyp\build\test\*test.exe) do ( call %%t -d yes )
+for %%t in (mapnik-gyp\build\test\*test.exe) do ( call %%t )
 IF %IGNOREFAILEDTESTS% EQU 0 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 IF %IGNOREFAILEDTESTS% EQU 1 SET ERRORLEVEL=0
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
@@ -816,7 +816,7 @@ ECHO ==== visual tests ===
 SET /A V_TEST_JOBS=%NUMBER_OF_PROCESSORS%-2
 IF %V_TEST_JOBS% LSS 1 SET V_TEST_JOBS=1
 ::fix to one for now
-SET V_TEST_JOBS=1
+::SET V_TEST_JOBS=1
 ECHO visual tests agg && mapnik-gyp\build\Release\test_visual_run.exe --agg --jobs=%V_TEST_JOBS%
 IF %IGNOREFAILEDTESTS% EQU 0 (IF %ERRORLEVEL% NEQ 0 GOTO ERROR) ELSE (SET ERRORLEVEL=0)
 ECHO visual tests cairo && mapnik-gyp\build\Release\test_visual_run.exe --cairo --jobs=%V_TEST_JOBS%
