@@ -333,7 +333,7 @@
       "dependencies": [ "mapnik", "mapnik-wkt", "mapnik-json", "csv" ],
       "sources": [
         '<!@(python glob-files.py "../utils/mapnik-index/*.cpp")',
-        "../../plugins/input/csv/csv_utils.cpp"
+        "../plugins/input/csv/csv_utils.cpp"
       ],
       "include_dirs":[
         "<@(common_includes)"
