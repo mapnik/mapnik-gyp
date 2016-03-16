@@ -45,19 +45,18 @@ private static bool doConfigure()
         if (!Directory.Exists(postgisBundleExtractDir)) { if (!sz.Extract("pgis.zip")) { return false; } } else { Console.WriteLine("pgis.zip already extracted."); }
         if (!pg.InstallPostGIS()) { return false; }
         if (!pg.InstallPostGISTemplate()) { return false; }
-        //on AppVeyor always use binary deps package
-        if (!Downloader.Download(depsUrl, "deps.7z", false)) { return false; }
-        if (!Directory.Exists("mapnik-sdk")) { if (!sz.Extract("deps.7z")) { return false; } } else { Console.WriteLine("deps.7z already extracted."); }
     }
-    if (useLocalDeps)
+    if (fastBuild || superFastBuild)
     {
-        if (!CopyDeps.Copy(dependencies)) { return false; }
+        if (!Downloader.Download(depsUrl, "deps.7z", false)) { return false; }
+        if (!Directory.Exists("mapnik-sdk")) { if (!sz.Extract("deps.7z")) { return false; } } else { Console.WriteLine("mapnik-sdk already extracted."); }
     }
     else
     {
-        if (!Downloader.Download(depsUrl, "deps.7z", false)) { return false; }
-        if (!Directory.Exists("mapnik-sdk")) { if (!sz.Extract("deps.7z")) { return false; } } else { Console.WriteLine("deps.7z already extracted."); }
+        if (!Deleter.Delete(new string[] { Path.Combine(Environment.CurrentDirectory, "mapnik-sdk") })) { return false; }
+        if (!CopyDeps.Copy(dependencies)) { return false; }
     }
+    if(packageDeps){WriteError("!!!TODO: package DEPS!!!");}
     return true;
 }
 
@@ -83,7 +82,7 @@ else
     {
         if (!doConfigure())
         {
-            Console.WriteLine("!!!!!!!!!!!!! CONFIGURE FAILED !!!!!!!!!!!");
+            WriteError("!!!!!!!!!!!!! CONFIGURE FAILED !!!!!!!!!!!");
             Environment.ExitCode = 1;
         }
     }
@@ -91,13 +90,13 @@ else
     {
         if (!doBuild())
         {
-            Console.WriteLine("!!!!!!!!!!!!! BUILD FAILED !!!!!!!!!!!");
+            WriteError("!!!!!!!!!!!!! BUILD FAILED !!!!!!!!!!!");
             Environment.ExitCode = 1;
         }
     }
     else
     {
-        Console.WriteLine("unknown command: [{0}]", cmd);
+        WriteError("unknown command: [{0}]", cmd);
         Environment.ExitCode = 1;
     }
 }

@@ -15,7 +15,7 @@ public static class SystemInfo
 
             foreach (ManagementObject queryObj in searcher.Get())
             {
-                Console.WriteLine("TotalPhysicalMemory       : {0}", queryObj["TotalPhysicalMemory"]);
+                Console.WriteLine("TotalPhysicalMemory       : {0}GB", ((UInt64)queryObj["TotalPhysicalMemory"])/(1024*1024*1024));
                 Console.WriteLine("NumberOfProcessors        : {0}", queryObj["NumberOfProcessors"]);
                 Console.WriteLine("NumberOfLogicalProcessors : {0}", queryObj["NumberOfLogicalProcessors"]);
             }
