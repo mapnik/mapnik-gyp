@@ -56,7 +56,7 @@ private static bool doConfigure()
         if (!Deleter.Delete(new string[] { Path.Combine(Environment.CurrentDirectory, "mapnik-sdk") })) { return false; }
         if (!CopyDeps.Copy(dependencies)) { return false; }
     }
-    if(packageDeps){WriteError("!!!TODO: package DEPS!!!");}
+    if (packageDeps) { WriteError("!!!TODO: package DEPS!!!"); }
     return true;
 }
 
