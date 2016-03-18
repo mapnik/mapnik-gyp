@@ -633,11 +633,12 @@ ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
 
+ECHO about to build Python bindings
 msbuild ^
-.\build\mapnik.sln _mapnik ^
+.\build\mapnik.sln /t:_mapnik ^
 %MSBUILD_COMMON% %MSBUILD_PARALLEL% %ANALYZE_MAPNIK%
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
-IF %ERRORLEVEL% NEQ 0 (ECHO error python build && SET PYTHON_BUILD_FAILED=1) ELSE (ECHO python build finished)
+IF %ERRORLEVEL% NEQ 0 (ECHO error, Python bindings failed to build && SET PYTHON_BUILD_FAILED=1) ELSE (ECHO Python build finished successfully)
 
 
 :: install command line tools
