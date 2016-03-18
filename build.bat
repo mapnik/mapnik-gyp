@@ -638,7 +638,7 @@ msbuild ^
 .\build\mapnik.sln /t:_mapnik ^
 %MSBUILD_COMMON% %MSBUILD_PARALLEL% %ANALYZE_MAPNIK%
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
-IF %ERRORLEVEL% NEQ 0 (ECHO error, Python bindings failed to build && SET PYTHON_BUILD_FAILED=1) ELSE (ECHO Python build finished successfully)
+IF %ERRORLEVEL% NEQ 0 (ECHO error, Python bindings failed to build && SET PYTHON_BUILD_FAILED=1) ELSE (ECHO Python bindings built successfully)
 
 
 :: install command line tools
@@ -857,7 +857,7 @@ echo ----------ERROR MAPNIK --------------
 echo ERRORLEVEL %ERRORLEVEL%
 
 :DONE
-IF %PYTHON_BUILD_FAILED% NEQ 0 ECHO !!!!!!! Python bindings failed to build !!!!!!!
+IF %PYTHON_BUILD_FAILED% NEQ 0 (ECHO !!!!!!! Python bindings failed to build !!!!!!!) ELSE (ECHO Python bindings built succesfully)
 IF %IGNOREFAILEDTESTS% EQU 1 ECHO !!!!!!! IGNOREFAILEDTESTS was set to 1^: check test results !!!!!!!
 echo DONE building Mapnik
 
