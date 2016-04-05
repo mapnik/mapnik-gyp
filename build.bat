@@ -824,7 +824,7 @@ ECHO ==== visual tests ===
 
 SET /A V_TEST_JOBS=%NUMBER_OF_PROCESSORS%-2
 IF %V_TEST_JOBS% LSS 1 SET V_TEST_JOBS=1
-::fix to one for now
+::concurrency should work after https://github.com/mapnik/mapnik/pull/3395
 ::SET V_TEST_JOBS=1
 ECHO visual tests agg && mapnik-gyp\build\Release\test_visual_run.exe --agg --jobs=%V_TEST_JOBS%
 IF %IGNOREFAILEDTESTS% EQU 0 (IF %ERRORLEVEL% NEQ 0 GOTO ERROR) ELSE (ECHO resetting ERRORLEVEL && SET ERRORLEVEL=0)
