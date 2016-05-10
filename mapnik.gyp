@@ -28,6 +28,7 @@
     "common_includes": [
       "../include", # mapnik
       "../deps/", # mapnik/sparsehash
+      "../deps/mapbox/variant/include",
       "../deps/agg/include/", # agg
       "../", # boost shim
       "<@(includes)/",
