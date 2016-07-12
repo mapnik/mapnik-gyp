@@ -632,9 +632,15 @@ IF %ERRORLEVEL% NEQ 0 (ECHO could not delete previous analysis results && GOTO E
 
 IF DEFINED APPVEYOR (ECHO calling msbuild on %MAPNIK_PROJECT%) ELSE (ECHO calling msbuild on whole mapnik solution...)
 IF DEFINED APPVEYOR (ECHO enabling parallel compilation && SET _CL_=)
+
+SET CL_prev=%CL%
+REM SET CL=%CL% /P /C /EP
+ECHO CL^:%CL%
 msbuild ^
 .\build\mapnik.sln %MAPNIK_PROJECT% ^
 %MSBUILD_COMMON% %MSBUILD_PARALLEL% %ANALYZE_MAPNIK%
+
+SET CL=%CL_prev%
 
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
@@ -712,6 +718,13 @@ xcopy /i /d /s /q ..\deps\agg\include %MAPNIK_SDK%\include\mapnik\agg /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /i /d /s /q ..\include\mapnik %MAPNIK_SDK%\include\mapnik /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+::copy mapbox headers
+IF EXIST ..\deps\mapbox\variant XCOPY /I /D /S /Q /Y ..\deps\mapbox\variant\include\mapbox\*.* %MAPNIK_SDK%\include\mapbox\
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+IF EXIST ..\deps\mapbox\geometry XCOPY /I /D /S /Q /Y ..\deps\mapbox\geometry\include\mapbox\*.* %MAPNIK_SDK%\include\mapbox\
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
 
 
 ::create and copy mapnik-config.bat
