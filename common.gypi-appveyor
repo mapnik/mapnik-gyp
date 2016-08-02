@@ -9,7 +9,8 @@
       4244, # should consider re-enabling now after https://github.com/mapnik/mapnik/issues/2907 (conversion from 'type1' to 'type2', possible loss of data)
       4005, # 'identifier' : macro redefinition
       4506, # no definition for inline function 'function'
-      4661  # no suitable definition provided for explicit template instantiation request
+      4661, # no suitable definition provided for explicit template instantiation request
+      4348, # redefinition of default parameter (pouring from boost::spirit::terminal)
     ],
     "msvs_settings": {
       "VCCLCompilerTool": {
