@@ -4,6 +4,7 @@
     "msvs_configuration_platform": "<(platform)",
     "msbuild_toolset":"v140",
     "msvs_disabled_warnings": [
+      4348, # coming from boost/spirit/home/support/terminal.hpp: redefinition of default parameter: parameter 4
       4910, # we should fix this, but do not know how yet:  (__declspec(dllexport)' and 'extern' are incompatible on an explicit instantiation)
       4068, # (unknown pragma)
       4244, # should consider re-enabling now after https://github.com/mapnik/mapnik/issues/2907 (conversion from 'type1' to 'type2', possible loss of data)
