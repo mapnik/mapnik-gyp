@@ -672,7 +672,7 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d .\build\lib\mapnik.dll %MAPNIK_SDK%\lib\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
-xcopy /q /d ..\fonts\dejavu-fonts-ttf-2.35\ttf\*ttf %MAPNIK_SDK%\lib\mapnik\fonts\ /Y
+xcopy /q /d ..\fonts\dejavu-fonts-ttf-2.37\ttf\*ttf %MAPNIK_SDK%\lib\mapnik\fonts\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 ::Python
