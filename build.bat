@@ -672,7 +672,8 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /q /d .\build\lib\mapnik.dll %MAPNIK_SDK%\lib\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
-xcopy /q /d ..\fonts\dejavu-fonts-ttf-2.37\ttf\*ttf %MAPNIK_SDK%\lib\mapnik\fonts\ /Y
+REM xcopy /q /d ..\fonts\dejavu-fonts-ttf-2.37\ttf\*ttf %MAPNIK_SDK%\lib\mapnik\fonts\ /Y
+for /f "delims=" %%a in ('dir /b/ad "..\fonts\dejavu-fonts-ttf-*" ') do xcopy /Q /D /Y "..\fonts\%%a\ttf\*ttf" %MAPNIK_SDK%\lib\mapnik\fonts\
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 ::Python
