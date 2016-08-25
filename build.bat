@@ -34,6 +34,10 @@ ECHO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ECHO ==================================
 SET IGNOREFAILEDTESTS=1
 
+IF /I "%USERNAME%"=="appveyor" ECHO on AppVeyor, disabling Python bindings && SET BUILDMAPNIKPYTHON=0
+IF NOT DEFINED BUILDMAPNIKPYTHON SET BUILDMAPNIKPYTHON=0
+IF %BUILDMAPNIKPYTHON% EQU 1 (ECHO building Python bindings) ELSE (ECHO not building Python bindings)
+
 IF NOT DEFINED MAPNIK_BUILD_TESTS SET MAPNIK_BUILD_TESTS=1
 IF %MAPNIK_BUILD_TESTS% EQU 1 (ECHO building tests) ELSE (ECHO not building tests)
 IF DEFINED RUNCODEANALYSIS (ECHO running code analysis, RUNCODEANALYSIS^:%RUNCODEANALYSIS%) ELSE (SET RUNCODEANALYSIS=0)
@@ -41,6 +45,7 @@ IF DEFINED PACKAGEDEBUGSYMBOLS (ECHO PACKAGEDEBUGSYMBOLS %PACKAGEDEBUGSYMBOLS%) 
 IF DEFINED IGNOREFAILEDTESTS (ECHO IGNOREFAILEDTESTS %IGNOREFAILEDTESTS%) ELSE (SET IGNOREFAILEDTESTS=0)
 IF DEFINED FASTBUILD (ECHO FASTBUILD %FASTBUILD%) ELSE (SET FASTBUILD=0)
 IF DEFINED PACKAGEDEPS (ECHO PACKAGEDEPS %PACKAGEDEPS%) ELSE (SET PACKAGEDEPS=0)
+
 SET PYTHON_BUILD_FAILED=0
 
 SET MAPNIK_SDK=%CD%\mapnik-sdk
@@ -130,12 +135,13 @@ IF %FASTBUILD% EQU 1 (ECHO doing a FASTBUILD && GOTO DOFASTBUILD) ELSE (ECHO doi
 :: includes
 ECHO copying deps header files...
 
+IF %BUILDMAPNIKPYTHON% EQU 0 GOTO SKIPPED_PYTHON_HEADERS_AND_LIB
 ECHO Python
 xcopy /Q /D /Y %PYTHON_DIR%\include\*.* %MAPNIK_SDK%\include\
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 xcopy /Q /D /Y %PYTHON_DIR%\libs\python27.lib %MAPNIK_SDK%\lib\
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-
+:SKIPPED_PYTHON_HEADERS_AND_LIB
 
 ECHO harfbuzz
 xcopy /q /d %DEPSDIR%\harfbuzz-build\harfbuzz\hb-version.h %MAPNIK_SDK%\include\harfbuzz\ /Y
@@ -623,6 +629,14 @@ IF DEFINED LOCAL_BUILD_DONT_SKIP_TESTS GOTO DO_MAPNIK_BUILD
 IF DEFINED APPVEYOR SET MAPNIK_PROJECT=/t:%MAPNIK_LIBS%;%MAPNIK_PLUGINS%;%MAPNIK_TESTS%
 IF %MAPNIK_BUILD_TESTS% EQU 0 SET MAPNIK_PROJECT=/t:%MAPNIK_LIBS%;%MAPNIK_PLUGINS%
 
+REM hack to not build python bindings until they work again on Windows
+IF DEFINED APPVEYOR GOTO PROJS_TO_BUILD_DEFINED
+SET MAPNIK_TESTS=%MAPNIK_TESTS%;test_expression_parse;test_face_ptr_creation;test_font_registration;test_offset_converter;test_proj_transform1;test_quad_tree
+SET MAPNIK_PROJECT=/t:%MAPNIK_LIBS%;%MAPNIK_PLUGINS%;%MAPNIK_TESTS%
+IF %BUILDMAPNIKPYTHON% EQU 1 SET %MAPNIK_PROJECT%;_mapnik
+:PROJS_TO_BUILD_DEFINED
+
+
 :DO_MAPNIK_BUILD
 
 SET ANALYZE_MAPNIK=
@@ -636,22 +650,28 @@ IF DEFINED APPVEYOR (ECHO enabling parallel compilation && SET _CL_=)
 SET CL_prev=%CL%
 REM SET CL=%CL% /P /C /EP
 ECHO CL^:%CL%
+
+REM quick'n' dirty hack to not build Python bindings when doing full local build
+REM use with '/p:SkipNonexistentProjects=true'
+REM IF %BUILDMAPNIKPYTHON% EQU 0 del build\_mapnik.vcxproj & del build\_mapnik.vcxproj.filters
+
 msbuild ^
 .\build\mapnik.sln %MAPNIK_PROJECT% ^
-%MSBUILD_COMMON% %MSBUILD_PARALLEL% %ANALYZE_MAPNIK%
+%MSBUILD_COMMON% %MSBUILD_PARALLEL% %ANALYZE_MAPNIK% /p:SkipNonexistentProjects=true
 
 SET CL=%CL_prev%
 
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error during build && GOTO ERROR) ELSE (ECHO build finished)
 
-
+IF %BUILDMAPNIKPYTHON% EQU 0 GOTO SKIPPED_PYTHON_BINDINGS_BUILD
 ECHO about to build Python bindings
 msbuild ^
 .\build\mapnik.sln /t:_mapnik ^
 %MSBUILD_COMMON% %MSBUILD_PARALLEL% %ANALYZE_MAPNIK%
 ECHO msbuild ERRORLEVEL^: %ERRORLEVEL%
 IF %ERRORLEVEL% NEQ 0 (ECHO error, Python bindings failed to build && SET PYTHON_BUILD_FAILED=1) ELSE (ECHO Python bindings built successfully)
+:SKIPPED_PYTHON_BINDINGS_BUILD
 
 
 :: install command line tools
