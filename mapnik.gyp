@@ -10,8 +10,10 @@
     "buildbot%":"",
     "common_defines": [
       "WIN32_LEAN_AND_MEAN",
-      "BIGINT",
       "BOOST_REGEX_HAS_ICU",
+      "BOOST_SPIRIT_USE_PHOENIX_V3=1",
+      "BOOST_PHOENIX_NO_PREDEFINED_TERMINALS=1"
+      "BIGINT",
       "HAVE_JPEG",
       "MAPNIK_USE_PROJ4",
       "MAPNIK_NO_ATEXIT",
@@ -21,9 +23,7 @@
       "MAPNIK_THREADSAFE",
       "HAVE_CAIRO",
       "GRID_RENDERER",
-      "SVG_RENDERER",
-      "BOOST_SPIRIT_USE_PHOENIX_V3=1",
-      "BOOST_PHOENIX_NO_PREDEFINED_TERMINALS=1"
+      "SVG_RENDERER"
     ],
     "common_includes": [
       "../include", # mapnik
