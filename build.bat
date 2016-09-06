@@ -472,7 +472,8 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 :RUNMAPNIKBUILD
 ECHO label RUNMAPNIKBUILD
 :: detect trouble with mimatched linking
-::dumpbin /directives %MAPNIK_SDK%\lib\*lib | grep LIBCMT
+dumpbin /DIRECTIVES %MAPNIK_SDK%\lib\*lib
+dumpbin /DEPENDENTS %MAPNIK_SDK%\lib\*lib
 
 ::msbuild /m:2 /t:mapnik /p:BuildInParallel=true .\build\mapnik.sln /p:Configuration=Release
 
@@ -685,10 +686,19 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 :: install mapnik libs
 xcopy /q /d .\build\%BUILD_TYPE%\mapnik.lib %MAPNIK_SDK%\lib\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+dumpbin /DIRECTIVES %MAPNIK_SDK%\lib\mapnik.lib
+dumpbin /DEPENDENTS %MAPNIK_SDK%\lib\mapnik.lib
+
 xcopy /q /d .\build\%BUILD_TYPE%\lib\mapnik-json.lib %MAPNIK_SDK%\lib\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+dumpbin /DIRECTIVES %MAPNIK_SDK%\lib\mapnik-json.lib
+dumpbin /DEPENDENTS %MAPNIK_SDK%\lib\mapnik-json.lib
+
 xcopy /q /d .\build\%BUILD_TYPE%\lib\mapnik-wkt.lib %MAPNIK_SDK%\lib\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+dumpbin /DIRECTIVES %MAPNIK_SDK%\lib\mapnik-wkt.lib
+dumpbin /DEPENDENTS %MAPNIK_SDK%\lib\mapnik-wkt.lib
+
 xcopy /q /d .\build\lib\mapnik.dll %MAPNIK_SDK%\lib\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
