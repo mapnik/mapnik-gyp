@@ -65,12 +65,12 @@ IF NOT DEFINED PGPASSWORD ECHO PGPASSWORD not found, postgis errors might occur
 
 IF /I "%USERNAME%"=="appveyor" (ECHO on AppVeyor, installing PostGIS manually) ELSE (GOTO CHECK_POSTGRES_SERVICE)
 
-REM SET POSTGIS_DL_URL=http://download.osgeo.org/postgis/windows/pg94/postgis-bundle-pg94-2.2.1x64.zip
-REM SET POSTGIS_ZIP_FOLDER=postgis-bundle-pg94-2.2.1x64
+SET POSTGIS_DL_URL=http://download.osgeo.org/postgis/windows/pg94/archive/postgis-bundle-pg94-2.2.1x64.zip
+SET POSTGIS_ZIP_FOLDER=postgis-bundle-pg94-2.2.1x64
 REM Use experimental postgis 2.3.0 dev build to work around curl issue
 REM ERROR:  could not load library "C:/Program Files/PostgreSQL/9.4/lib/rtpostgis-2.2.dll": The specified procedure could not be found.
-SET POSTGIS_ZIP_FOLDER=postgis-pg94-binaries-2.3.0w64gcc48
-SET POSTGIS_DL_URL=http://winnie.postgis.net/download/windows/pg94/buildbot/%POSTGIS_ZIP_FOLDER%.zip
+REM SET POSTGIS_ZIP_FOLDER=postgis-pg94-binaries-2.3.0w64gcc48
+REM SET POSTGIS_DL_URL=http://winnie.postgis.net/download/windows/pg94/buildbot/%POSTGIS_ZIP_FOLDER%.zip
 IF NOT EXIST pgis.zip curl -o pgis.zip %POSTGIS_DL_URL%
 IF %ERRORLEVEL% NEQ 0 ECHO failed to download PostGIS && GOTO CHECK_POSTGRES_SERVICE
 SET PG_PATH=C:\Program Files\PostgreSQL\9.4
