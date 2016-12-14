@@ -78,8 +78,8 @@ SET PG_PATH=C:\Program Files\PostgreSQL\9.4
 IF %ERRORLEVEL% NEQ 0 ECHO failed to extract PostGIS && GOTO CHECK_POSTGRES_SERVICE
 XCOPY /Y /Q /S /E %POSTGIS_ZIP_FOLDER%\*.* "%PG_PATH%\"
 IF %ERRORLEVEL% NEQ 0 ECHO failed to copy PostGIS && GOTO CHECK_POSTGRES_SERVICE
-dumpbin /DIRECTIVES C:\Program Files\PostgreSQL\9.4\lib\*
-dumpbin /DEPENDENTS C:\Program Files\PostgreSQL\9.4\lib\*
+dumpbin /DIRECTIVES "C:\Program Files\PostgreSQL\9.4\lib\*"
+dumpbin /DEPENDENTS "C:\Program Files\PostgreSQL\9.4\lib\*"
 
 
 :CHECK_POSTGRES_SERVICE
