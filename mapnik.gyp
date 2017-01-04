@@ -37,7 +37,8 @@
       "<@(includes)/freetype2",
       "<@(includes)/cairo"
     ],
-    "boost_toolset":"vc140",
+    "boost_toolset":"vc150",
+    #"boost_toolset":"vc140",
     "python_version": '<!(python -c "import sys;print(\'%s.%s\' % (sys.version_info.major,sys.version_info.minor))")',
     "python_version2": '<!(python -c "import sys;print(\'%s%s\' % (sys.version_info.major,sys.version_info.minor))")',
     "python_root": '<!(python -c "import sys,ntpath,posixpath;print(sys.prefix).replace(ntpath.sep,posixpath.sep)")', # note: single quotes needed for windows
