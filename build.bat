@@ -242,7 +242,7 @@ ECHO protobuf
 xcopy /i /d /s /q %DEPSDIR%\protobuf\src\google %MAPNIK_SDK%\include\google /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ECHO mapbox variant
-XCOPY /i /d /q ..\deps\mapbox\variant\*.hpp %MAPNIK_SDK%\include\mapbox\variant\ /Y
+XCOPY /i /d /q ..\deps\mapbox\variant\include\mapbox\*.hpp %MAPNIK_SDK%\include\mapbox\variant\ /Y
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 
@@ -589,7 +589,7 @@ IF NOT DEFINED APPVEYOR SET LINK=/CGTHREADS:8 /time+
 
 ::create empty directory structure, otherwise compilation of single files will fail
 ::seems, that directories don't get created for single file compile
-XCOPY /T /E ..\src build\Release\src\
+XCOPY /T /E ..\src build\%BUILD_TYPE%\src\
 IF %ERRORLEVEL% NEQ 0 (ECHO error during creating empty directory structure && GOTO ERROR) ELSE (ECHO empty directory structure created)
 
 GOTO CURRENT
@@ -641,6 +641,7 @@ IF %BUILDMAPNIKPYTHON% EQU 1 SET %MAPNIK_PROJECT%;_mapnik
 
 
 :DO_MAPNIK_BUILD
+ECHO -----DO_MAPNIK_BUILD (%ERRORLEVEL%)----- 
 
 SET ANALYZE_MAPNIK=
 IF %RUNCODEANALYSIS% EQU 1 SET ANALYZE_MAPNIK=/p:RunCodeAnalysis=true
@@ -879,7 +880,7 @@ IF %V_TEST_JOBS% LSS 1 SET V_TEST_JOBS=1
 
 ECHO ==== visual tests with %V_TEST_JOBS% concurrency===
 
-ECHO visual test && mapnik-gyp\build\Release\test_visual_run.exe --jobs=%V_TEST_JOBS%
+ECHO visual test && mapnik-gyp\build\%BUILD_TYPE%\test_visual_run.exe --jobs=%V_TEST_JOBS%
 IF %IGNOREFAILEDTESTS% EQU 0 (IF %ERRORLEVEL% NEQ 0 GOTO ERROR) ELSE (ECHO resetting ERRORLEVEL && SET ERRORLEVEL=0)
 
 
