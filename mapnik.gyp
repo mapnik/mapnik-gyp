@@ -37,7 +37,7 @@
       "<@(includes)/freetype2",
       "<@(includes)/cairo"
     ],
-    "boost_toolset":"vc150",
+    "boost_toolset":"vc141",
     #"boost_toolset":"vc140",
     "python_version": '<!(python -c "import sys;print(\'%s.%s\' % (sys.version_info.major,sys.version_info.minor))")',
     "python_version2": '<!(python -c "import sys;print(\'%s%s\' % (sys.version_info.major,sys.version_info.minor))")',
