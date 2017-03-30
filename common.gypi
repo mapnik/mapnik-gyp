@@ -2,7 +2,7 @@
   "target_defaults": {
     "default_configuration": "<(configuration)",
     "msvs_configuration_platform": "<(platform)",
-    "msbuild_toolset":"v150",
+    "msbuild_toolset":"v141",
     #"msbuild_toolset":"v140",
     "msvs_disabled_warnings": [
       4348, # coming from boost/spirit/home/support/terminal.hpp: redefinition of default parameter: parameter 4
