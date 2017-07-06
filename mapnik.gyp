@@ -178,6 +178,7 @@
         '<!@(python glob-files.py "../src/agg/*.cpp")',
         '<!@(python glob-files.py "../src/cairo/*.cpp")',
         '<!@(python glob-files.py "../src/grid/*.cpp")',
+        '<!@(python glob-files.py "../src/geometry/*.cpp")',
         '<!@(python glob-files.py "../src/group/*.cpp")',
         '<!@(python glob-files.py "../src/renderer_common/*.cpp")',
         '<!@(python glob-files.py "../src/svg/*.cpp")',
@@ -780,6 +781,7 @@
       "sources": [
         "../test/visual/report.cpp",
         "../test/visual/runner.cpp",
+        "../test/visual/parse_map_sizes.cpp",
         "../test/visual/run.cpp"
       ],
       "include_dirs":[
